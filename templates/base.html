@@ -3,6 +3,10 @@
     <head>
         <meta charset="utf-8">
         <title>My Blog</title>
+        {% block css %}
+        <link rel="stylesheet" href="{{ get_url(path="site.css", trailing_slash=false)  }}">
+        {% endblock css %}
+
     </head>
 
     <body>
