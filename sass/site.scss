@@ -1,1 +1,15 @@
+$body-width: 800px;
+
+@mixin min-screen($min-width: $body-width) {
+    @media screen and (min-width: $min-width) {
+        @content;
+    }
+}
+
+@mixin max-screen($max-width: $body-width) {
+    @media screen and (max-width: $max-width) {
+        @content;
+    }
+}
+
 @import "base"

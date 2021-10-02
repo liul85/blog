@@ -1,12 +1,26 @@
 html {
     font-size: 16px;
 }
+
+body {
+    background: #fefefe;
+}
+
 .container {
     width: 800px;
     margin: 0 auto;
     padding-bottom: 4rem;
 }
 
+@include max-screen() {
+    body {
+    }
+
+    .container {
+        width: 90%;
+        padding: 0 20px;
+    }
+}
 pre {
     display: block;
     padding: 1rem;
