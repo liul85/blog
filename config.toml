@@ -13,8 +13,4 @@ highlight_code = true
 build_search_index = true
 
 [extra]
-menu_items = [
-  {url="$BASE_URL", name = "Home"},
-  {url="$BASE_URL/categories", name = "Categories"},
-  {url="$BASE_URL/about", name = "About"},
-]
+twitter_id = "liul85" 
