@@ -1,10 +1,10 @@
 {% extends "base.html" %}
 
 {% block content %}
-<ul>
+<ul class="post-list">
     {% for page in section.pages %}
     <li>
-        <a href="{{ page.permalink | safe }}">{{ page.title }}</a>
+        <a href="{{ page.permalink | safe }}">{{ page.title }}</a><span class="post-date">{{ page.date }}</span>
         <div class="description">{{ page.description }}</div>
     </li>
     {% endfor %}

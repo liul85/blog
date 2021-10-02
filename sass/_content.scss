@@ -1,10 +1,15 @@
 .section .content {
-    ul {
+    .post-list {
         list-style: none;
         padding-left: 0;
 
         li {
             padding: 10px 0;
+        }
+
+        .post-date {
+            padding-left: 10px;
+            font-size: 13px;
         }
     }
 
@@ -12,6 +17,14 @@
         font-size: 13px;
         padding-left: 20px;
     }
+} 
+
+p {
+    color: #2b2b2b;
+}
+
+li {
+    color: #2b2b2b;
 }
 
 pre {

@@ -2,7 +2,7 @@
 <html lang="en">
     <head>
         <meta charset="utf-8">
-        <title>My Blog</title>
+        <title>{{ config.title }}</title>
         {% block css %}
         <link rel="stylesheet" href="{{ get_url(path="site.css", trailing_slash=false)  }}">
         {% endblock css %}
@@ -13,17 +13,6 @@
         <div class="container">
           <header class="header">
               <div class="logo"><a href="{{ config.base_url }}">{{ config.title }}</a></div>
-              <nav class="menu">
-                  <ul>
-                      {% for item in config.extra.menu_items %}
-                      <li>
-                          <a href="{{item.url | replace(from="$BASE_URL", to=config.base_url) }}">
-                              {{ item.name }}
-                          </a>
-                      </li>
-                      {% endfor %}
-                  </ul>
-              </nav>
           </header>
           <section class="section">
               <div class="content">
