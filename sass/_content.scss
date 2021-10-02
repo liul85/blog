@@ -1,0 +1,24 @@
+.section .content {
+    ul {
+        list-style: none;
+        padding-left: 0;
+
+        li {
+            padding: 10px 0;
+        }
+    }
+
+    .description {
+        font-size: 13px;
+        padding-left: 20px;
+    }
+}
+
+pre {
+    display: block;
+    padding: 1rem;
+}
+
+pre, code {
+    font-size: 90%;
+}

@@ -13,19 +13,9 @@ body {
 }
 
 @include max-screen() {
-    body {
-    }
-
     .container {
         width: 90%;
         padding: 0 20px;
     }
 }
-pre {
-    display: block;
-    padding: 1rem;
-}
 
-pre, code {
-    font-size: 90%;
-}

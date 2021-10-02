@@ -1,0 +1,23 @@
+.header {
+    padding: 20px 0;
+    display: flex;
+    justify-content: space-between;
+
+    .logo {
+        a {
+            font-size: 30px;
+        }
+    }
+
+    .menu {
+        align-self: flex-start;
+        margin-right: 200px;
+        ul {
+            display: inline-block;
+            li {
+                display: inline-block;
+                margin-right: 5px;
+            }
+        }
+    }
+}
