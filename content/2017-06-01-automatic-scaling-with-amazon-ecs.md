@@ -1,7 +1,7 @@
 +++
 date =  2017-06-01
 title = "使用AWS ECS部署应用并自动扩展"
-description = "deploy to AWS ECS"
+description = "how to deploy to AWS ECS"
 +++
 
 最近在写一些nodejs的东西，尝试用docker去部署，研究了一下如何用AWS ECS做部署和自动扩展，跟传统的使用EC2来做部署使用ASG做扩展还是有一些不同的。

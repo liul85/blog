@@ -1,6 +1,7 @@
 +++
 date = 2017-04-11
 title = "函数式编程笔记(2)-Hindley-Milner类型签名"
+description = "function signature"
 +++
 
 刚接触函数式编程的人总是搞不明白函数类型签名，我记得去年同事有分享过一次FP的session，用Hashkell来做题，其中的类型签名当时就不太搞明白。类型是让不同背景的人高效沟通的元语言，大部分都是以一种叫`Hindley Milner`系统来表述的。
