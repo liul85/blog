@@ -1,7 +1,11 @@
 +++
 date = 2013-08-12
 description = "与小伙伴们出去玩"
-title = "happy Koln-->Boen-->königswinter"
+title = "happy Koln -> Boen -> königswinter"
+
+[taxonomies]
+categories = ["Travel"]
+tags = ["Koln", "Boen", "königswinte"]
 +++
 
 周末到了，又该计划出游了，这周我们打算去科隆逛逛，刚好凑够5个人，于是可以买周末的5人天票，非常便宜，德国境内火车随便坐，当然除了ICE和CE外。出去玩总得先做一下功课，貌似我们几个人没人愿意做功课，大家都想跟组织一路溜达玩，当然包括我也是这样，前几周出去玩都是跟着其他人，来了快1个月了，也有点混熟了，我就决定自己研究路线，也是为我自己后面好几个月的周游欧洲列国做准备吧。 

@@ -2,6 +2,10 @@
 date = 2013-10-02
 description = "twitter-bootstrap notes"
 title = "Use twitter-bootstrap in a rails project"
+
+[taxonomies]
+categories = ["Programming"]
+tags = ["Ruby", "Rails"]
 +++
 
 昨天在看[Railscasts](http://railscasts.com/)上看到了这个[视频](http://railscasts.com/episodes/328-twitter-bootstrap-basics)，于是实践一把，新建一个demo项目

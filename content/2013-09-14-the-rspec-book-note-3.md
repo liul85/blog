@@ -2,6 +2,10 @@
 date = 2013-09-14
 description = "rspec learning notes"
 title = "The rspec book note 3"
+
+[taxonomies]
+categories = ["Programming"]
+tags = ["Ruby", "Rspec", "Cucumber"]
 +++
 
 BDD行为驱动开发，一般是指从软件的外在行为出发进行功能描述，从而推动代码开发并最终实现软件交付的过程。首先我们需要从客户的角度去理解需求，去搞清楚他们面临的问题，从他们对期望的软件描述中来获取有价值的信息。其次我们不要只关注主要客户的需求，任何对于我们将要做的项目有浓厚兴趣并提出一些看法的人我们都需要理解他们的意见。

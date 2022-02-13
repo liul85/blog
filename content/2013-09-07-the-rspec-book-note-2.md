@@ -2,6 +2,10 @@
 date = 2013-09-07
 description = "rspec learning notes"
 title = "The rspec book note 2"
+
+[taxonomies]
+categories = ["Programming"]
+tags = ["Ruby", "Rspec", "Cucumber"]
 +++
 
 在上一节中我们通过cucumber从外部对我们的Codebreaker程序行为进行了描述测试，通过step_definitions来描述了每个场景的步骤，在最后我们遗留了一个失败，我们期望Game向output发送一个消息，但是得到的结果消息是空的。这一节我们要用rspec来更细节的描述Game类的实例对象的行为。

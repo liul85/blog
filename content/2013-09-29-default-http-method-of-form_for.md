@@ -2,6 +2,10 @@
 date = 2013-09-29
 description = "rails learning notes"
 title = "Default http method of form_for"
+
+[taxonomies]
+categories = ["Programming"]
+tags = ["Ruby", "Rails"]
 +++
 
 在看RubyonRails Guides时候，在posts的new视图里用到了form_for方法来向控制器提交表单，在做了这节之后一直不明白这个表单是在哪里定义提交给控制器中的create动作的，因为我没有看到任何地方写了这个是提交给create动作.

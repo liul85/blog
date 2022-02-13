@@ -2,6 +2,10 @@
 date = 2013-11-10
 description = "rails learning notes"
 title = "Strong parameters in rails4"
+
+[taxonomies]
+categories = ["Programming"]
+tags = ["Rails"]
 +++
 
 在rails中有很多安全相关的特性保证我们的web应用足够安全，今天在学习rails时候碰到了这个，当我试图用一个create方法创建一个新话题的时候，我遇到了麻烦，我的controller如下：

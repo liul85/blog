@@ -2,6 +2,10 @@
 date = 2013-08-02
 description = "travelling in Dusseldorf"
 title = "杜塞街景"
+
+[taxonomies]
+categories = ["Travel"]
+tags = ["Dusseldorf"]
 +++
 
 每次一个人到一个陌生的地方，我都喜欢徒步走遍每条街道，现在在欧洲最大的村里->杜村这个再适合不过了，周六周日都出去走走看看，天气很不错，空气清新，天空湛蓝。

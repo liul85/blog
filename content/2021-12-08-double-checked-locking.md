@@ -2,6 +2,10 @@
 title = "Double-checked locking问题"
 date = 2021-12-08
 description = ""
+
+[taxonomies]
+categories = ["Programming"]
+tags = ["synchronized", "java", "multi-thread"]
 +++
 
 今天在处理 Fortify 扫描出来的 report 的时候，有个 issue 觉得挺有必要去研究一下的，写个文章记录一下。

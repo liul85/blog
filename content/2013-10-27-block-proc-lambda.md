@@ -2,6 +2,10 @@
 date = 2013-10-27
 description = "ruby learning notes"
 title = "block, proc, lambda"
+
+[taxonomies]
+categories = ["Programming"]
+tags = ["Ruby"]
 +++
 
 ## block  

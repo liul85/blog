@@ -2,6 +2,10 @@
 date = 2013-10-15
 description = "manage time, work effectively"
 title = "Pomodoro time technique"
+
+[taxonomies]
+categories = ["Learn"]
+tags = ["Pomodoro"]
 +++
 
 如果你经常在工作学习的时候总是被各种事情分心，忍不住各种社交应用的诱惑，总是在多个事情之间来回跳转，一上午过去了你突然感觉到自己什么也没完成，番茄工作法应该比较适合你。

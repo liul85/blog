@@ -2,6 +2,10 @@
 date = 2014-05-26
 title = "Understanding rake task"
 description = "ruby learning notes"
+
+[taxonomies]
+categories = ["Programming"]
+tags = ["Ruby"]
 +++
 
 在新项目中接触ruby的Rake任务很多，自己还是不太了解Rake，闲了找了一些资料学习一下，做一些笔记。

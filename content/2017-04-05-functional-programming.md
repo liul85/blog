@@ -2,6 +2,10 @@
 date = 2017-04-05
 title = "函数式编程笔记(1)-基本概念"
 description = "functional programming concepts"
+
+[taxonomies]
+categories = ["Programming"]
+tags = ["function"]
 +++
 
 ## 一等公民

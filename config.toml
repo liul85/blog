@@ -1,16 +1,43 @@
 # The URL the site will be built for
 base_url = "https://liangliu.me"
-title = "亮"
+title = "Nothing here"
 
 # Whether to automatically compile all Sass files in the sass directory
 compile_sass = true
 
-# Whether to do syntax highlighting
-# Theme can be customised by setting the `highlight_theme` variable to a theme supported by Zola
-highlight_code = true
-
 # Whether to build a search index to be used later on by a JavaScript library
 build_search_index = true
 
+theme = "dinkleberg"
+taxonomies = [
+ {name = "categories"},
+ {name = "tags"},
+]
+
+[markdown]
+highlight_code = true
+
 [extra]
-twitter_id = "liul85" 
+blog_title="10x"
+label_tags = "Tags"
+label_tag = "Tag"
+label_categories = "Categories"
+label_category = "Category"
+label_relative_posts = "Relative Posts"
+label_next = "Next"
+label_previous = "Previous"
+label_page = "Page"
+label_of = "of"
+label_minutes = "minutes"
+
+og_image="https://user-images.githubusercontent.com/10289071/40806112-dd79ae78-64f6-11e8-8f24-63f387d5bb8f.jpg" # Image that will appear on social media
+og_alt_image="Gotcha dinkleberg" # Alt for og_image
+og_site_name="Dinkleberg Theme" # Site Name for Open Graphic
+keywords="dinkleberg, theme, gutenberg, rust" # Keywords for SEO
+
+sidebar = [
+    {name = "Social", urls=[
+        {name="Twitter", url="https://twitter.com/liul85"},
+    ]}
+]
+

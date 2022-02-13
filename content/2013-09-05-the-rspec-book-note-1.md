@@ -2,6 +2,10 @@
 date = 2013-09-05
 description = "rspec learning notes"
 title = "The rspec book note 1"
+
+[taxonomies]
+categories = ["Programming"]
+tags = ["Ruby", "Rspec", "Cucumber"]
 +++
 
 最近在看The rspec book这本书，由于平时工作不是这方面的，自己只是非常有兴趣，而且私下时间也不多，只靠每晚学习看的容易忘记，就在这里写一些笔记做复习。
