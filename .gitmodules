@@ -1,0 +1,3 @@
+[submodule "themes/dinkleberg"]
+	path = themes/dinkleberg
+	url = git@github.com:liul85/dinkleberg.git
