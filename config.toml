@@ -1,6 +1,6 @@
 # The URL the site will be built for
-base_url = "https://liangliu.me"
-title = "Nothing here"
+base_url = "https://liul85.github.io"
+title = "Liang's blog"
 
 # Whether to automatically compile all Sass files in the sass directory
 compile_sass = true
@@ -18,7 +18,7 @@ taxonomies = [
 highlight_code = true
 
 [extra]
-blog_title="10x"
+blog_title="Liang's blog"
 label_tags = "Tags"
 label_tag = "Tag"
 label_categories = "Categories"
