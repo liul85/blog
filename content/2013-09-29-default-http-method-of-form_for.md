@@ -63,7 +63,7 @@ edit_post GET    /posts/:id/edit(.:format) posts#edit
 ```
 
 这个在文档中说明如下，同时可以参考[form_helpers](http://guides.rubyonrails.org/form_helpers.html)文档。
-```text
+```
 The method: :patch option tells Rails that we want this form to be submitted via the PATCH HTTP method which is the HTTP method you are expected to use to update resources according to the REST protocol.
 By default forms built with the form_for helper are sent via POST.
 ```

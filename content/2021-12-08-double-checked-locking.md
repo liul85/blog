@@ -63,7 +63,7 @@ class Foo {
 
 文中给出了一个例子
 
-```shell
+```bash
     to the following (note that the Symantec JIT using a handle-based object allocation system).
 
     0206106A   mov         eax,0F97E78h

@@ -37,7 +37,7 @@ cucumber主要是由features目录下的多个.feature文件构成BDD场景测�
 
 接下来就可以写cucumber场景测试，首先在features目录下创建一个codebreaker_starts_game.feature，这里我们要测试的是游戏启动:
 
-```gherkin
+```
 Feature: code-breaker starts the game
          As a code-breaker
          I want to start a game
@@ -52,7 +52,7 @@ Feature: code-breaker starts the game
 
 再创建一个codebreaker_submits_guess.feature，来测试输入猜想的数字，并看到结果:
 
-```gherkin
+```
 Feature: code-breaker submits guess
 	In order to play this game
 	As a code breaker
@@ -82,7 +82,7 @@ Feature: code-breaker submits guess
 
 这样看来，没写几个测试场景呢，用例就已经很复杂了，而且很重复，DRY，我们可以用Scenario Outline来实现简洁:
 
-```gherkin
+```
 Feature: code-breaker submits guess
 	In order to play this game
 	As a code breaker
@@ -172,7 +172,7 @@ end
 
 再进行测试我们会看到提示输出与期望的不一致
 
-```gherkin
+```
 Scenario: start game
         Given I am not yet playing
         When I start a new game

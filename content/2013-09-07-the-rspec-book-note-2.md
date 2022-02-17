@@ -34,7 +34,7 @@ describe方法是RSpec的一个API，会返回一个RSpec::Core::ExampleGroup的
 
 然后在终端执行命令：
 
-```shell
+```bash
 rspec spec/codebreaker/game_rspec.rb --format doc
 ```
 

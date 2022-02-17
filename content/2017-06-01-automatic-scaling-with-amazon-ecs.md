@@ -51,7 +51,7 @@ CMD ["yarn", "start"]
 
 成功后push到ECR中 
 
-```shell
+```bash
 $ aws ecr get-login --region ap-southeast-1
 $ docker push 12345678.dkr.ecr.ap-northeast-1.amazonaws.com/demo:0.0.1
 ```
