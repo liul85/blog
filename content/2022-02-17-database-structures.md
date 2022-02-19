@@ -1,6 +1,7 @@
 +++
 date = 2022-02-17
 title = "数据库背后的数据结构"
+description = "DDIA读书笔记"
 
 [taxonomies]
 categories = ["Database"]
@@ -49,6 +50,8 @@ a,A
 * 每次append写入新的记录的时候也要去更新这个hash表
 * 查找时候，先在hash表里找到这个key的偏移量，然后读入存储文件，通过偏移量快速找到对应数据的开始位置。
 
+![hash table index](ddia_0301.png)
+
 这个其实就是`Riak`的存储引擎`Bitcask`的基本实现原理
 * Bitcask提供了高性能的读写操作
 * 数据从硬盘加载只需要一次寻址，效率很高
@@ -66,6 +69,12 @@ a,A
 * 读请求这个时候可以切换到新的segment文件上，原始的那些文件可以删除。
 * 查询时候先查最新的hash表，如果没有，则查找次新的，以此类推。
 * 压缩和合并的操作会让segment的数量相对非常少，因此这个查找过程也不会查太多的hash表。
+
+![压缩一个数据segment，只保留最新的值](ddia_0302.png)
+压缩一个数据segment，只保留最新的
+
+![压缩和合并多个segments](ddia_0303.png)
+压缩和合并多个segment
 	
 实际中还有很多细节来保证这个设计的正常工作
 * 文件格式 - CSV并不是记录数据的最合适格式，计算出String的字节长度后存储在二进制文件中会更快也更简单。
@@ -88,7 +97,9 @@ a,A
 
 SSTable对比使用hash表的log segment来说有很多优势：
 * 合并segments非常简单和高效，同时从多个segment文件中读取记录，对比每个文件读入的当前key，根据排序规则找到排序在前的那个key，拷贝到新的segment中，不断重复。这样新生成的那个segment文件也是按照key来排序的。如果一个key在多个文件中都有，那么我们只取最新的segment里面的那个，把老的都丢弃。
+![merging SSTables](ddia_0304.png)
 * 对于查找来说，我们的hash表不需要包含每一个key了，只需要包含少量的key可以，比如每5kb的数据只保存其中一个key和它在segment中的偏移量。在查找时候，根据查找的key和排序顺序找到在hash表里离它最近的前面key和后面那个key，然后去扫描这两个偏移量的区间就可以了。
+![SSTable and in-memory index](ddia_0305.png)
 * 由于查找操作需要去扫描一个区间的数据，我们可以把这个区间的数据放到一起作为一个块压缩，然后写到磁盘上，这样每个hash表中的偏移量就是某个压缩块的起始点，这样可以节约磁盘空间，减少磁盘IO。
 
 可是数据库接受的数据写入请求顺序都是随机的，那么如何在一开始就能够有按照key来排序的segment呢？ 其实在内存中维护一个有序的数据结构是比较简单的，有很多树结构都可以使用，比如红黑树，AVL树，我们可以以任意顺序写入数据，读取时候可以读到排序后的数据。
@@ -99,6 +110,8 @@ SSTable对比使用hash表的log segment来说有很多优势：
 * 对于读请求，首先尝试去`memtable`中查找，如果没有，再去磁盘上最新的segment中查找，以此类推。
 * 在后台定时的执行合并和压缩segment文件，以节省磁盘空间。
 
+_这里有个问题：所以每个segment都对应一个hash table，对吗？_
+
 不过这里我们还是能看到一个问题，最新的数据其实都是在`memtable`里保存着，如果数据库挂了，那么最新写入的数据还没来得及写到磁盘中，就会丢失了。为了避免这个问题，我们可以在磁盘上额外保存一个log文件，每一个写操作到`memtable`都会立即在这个log里记录，在这个log文件里是不需要排序的，只是用来恢复数据用的。当`memtable`中的数据写入到磁盘后，对应的log文件也就可以删掉了。
 
 这样的数据库设计其实跟`LevelDB`和`RocksDB`的实现原理是一样的，这些KV存储库被设计为嵌入到其他应用程序里工作。LevelDB可以用在Riak里作为存储引擎替换Bitcask，类似的存储引擎同样也被用在Cassandra和HBase里，他们都是受Google的Bigtable的论文启发而设计实现的，在Google的论文中首次提出了`SSTable`和`memtable`的概念。
@@ -106,3 +119,13 @@ SSTable对比使用hash表的log segment来说有很多优势：
 这种索引结构是Patrick O'Neil首次以[`Log-Structured Merge-Tree`](https://en.wikipedia.org/wiki/Log-structured_merge-tree)的名字提出的，基于这种压缩合并有序文件的存储引擎经常被称作LSM存储引擎。
 
 这里还是有很多细节需要考虑才能让这个设计应用到实际中，例如当要查的key在数据库中不存在的时候会非常慢，因为我们要检查memtable, 然后所有的segments，一一从磁盘中加载然后查找最后都查完发现这个key不存在。为了优化这个场景，数据库通常使用一个叫[`Bloom Filters`](https://dl.acm.org/doi/10.1145/362686.362692)的东西来帮助我们检查一个key是否在数据库中。在实际应用中也会有不同的策略来决定key的排序方式和压缩合并的时间，例如常用的选项有`size-tiered`和`leveled`，在`size-tired`下，新的和小的SSTTable会被合并到老的和大的SSTable中去。在Leveled压缩算法下，key的区间范围会被分成更小的SSTable，同时旧的数据会被转移到其他level，这样会让压缩是增量式的，减少磁盘使用。
+
+### B-Tree平衡树
+LSM索引确实有它的优点，但是实际上应用最广泛的索引数据结构是`B-Tree`，几乎所有的关系型数据库和很多非关系型数据库都用这个实现。跟SSTable类似，B-tree也按照key的排序保存数据，这样可以提供高效的查找和区间查询，但是B-tree使用了完全不同的设计思想。
+
+B-tree把数据拆分成固定大小的块或者分页，一般是4KB大小，一次只读写一个块或者分页，每个分页都有自己的地址，其他的分页都可以通过这个地址来引用并找到它，跟指针类似。这样用这些地址引用就可以构建一个包含多个分页的树。
+![B-tree index](ddia_0306.png)
+
+参考文献：
+1. [«Designing Data-Intensive Applications»](http://shop.oreilly.com/product/0636920032175.do) 作者: Martin Kleppmann
+2. 文中的图也是从这本书中截取的
