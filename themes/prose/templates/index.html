@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="{% if lang %}{{ lang }}{% else %}en{% endif %}">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="HandheldFriendly" content="True">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="referrer" content="no-referrer-when-downgrade">
+
+  <title>{% block title %}{{ config.title }}{% endblock title %}</title>
+  <meta name="description" content="{{ config.description }}">
+
+  <link rel="stylesheet" href="{{ get_url(path='main.css', trailing_slash=false) }}">
+
+  {% if config.generate_feed %}
+  <link rel="alternate" type={% if config.feed_filename=="atom.xml" %}"application/atom+xml"{% else
+    %}"application/rss+xml"{% endif %} title="RSS" href="{{ get_url(path=config.feed_filename) | safe }}">
+  {% endif %}
+</head>
+
+<body>
+  <header class="text-center">
+    <h1 class="title">{{ config.title }}</h1>
+    <nav>
+      {% block sidebar_nav %}
+      {% for link in config.extra.menu_links %}
+      <a class="nav-link" target="_blank" href="{{ link.url }}">{{ link.name }}</a>
+      |
+      {% endfor %}
+      <a class="nav-link" href="/atom.xml">rss</a>
+      {% endblock sidebar_nav %}
+    </nav>
+  </header>
+  <hr>
+  <main id="main">
+    <section class="posts">
+      {% for page in section.pages %}
+      <article class="article">
+        <span class="post-date">{{ page.date }}</span> <a class="post-title" href="{{ page.permalink }}">{{ page.title
+          }}</a>
+      </article>
+      {% endfor %}
+    </section>
+  </main>
+  <footer>
+    <hr>
+    <p class="copyright">
+      © {{config.title}} · Powered by <a target="_blank" href="https://getzola.org/">Zola</a>
+    </p>
+  </footer>
+</body>
+
+</html>

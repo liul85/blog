@@ -1,0 +1,67 @@
+body {
+  margin: 0 auto;
+  max-width: 42rem;
+  font-family: "Helvetica Neue", "Apple Color Emoji"
+}
+
+header {
+  margin: 1em auto;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.title {
+  font-weight: bold;
+  font-size: 1.5rem;
+  line-height: 1.15;
+}
+
+hr {
+  border: 0;
+  height: 1px;
+  background: #ccc;
+  margin: 2em auto;
+  text-align: center;
+}
+
+footer {
+  text-align: center;
+  margin-bottom: 4em;
+  hr {
+    margin: 2em 0 0 1em;
+  }
+}
+
+.post-date {
+  margin-right: 3em;
+}
+
+.article {
+  margin: 0.5em auto;
+}
+
+.post-title {
+  font-weight: bold;
+}
+
+a:visited {
+  color: #6f42c1;
+}
+
+a {
+  text-decoration: none;
+}
+
+.nav-link {
+  margin: auto 0.5em;
+}
+
+.page-title {
+  font-size: 1.5rem;
+}
+
+article img {
+  max-width: 100%;
+}

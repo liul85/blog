@@ -1,14 +1,14 @@
 base_url = "https://liul85.github.io"
 title = "Liang's blog"
 
-theme = "anpu"
-taxonomies = [{ name = "categories" }, { name = "tags" }]
+theme = "prose"
+compile_sass = true
+generate_feed = true
 
 [markdown]
 highlight_code = true
 
 [extra]
-anpu_menu_links = [
-    { url = "$BASE_URL/tags/", name = "Tags" },
-    { url = "https://twitter.com/liul85", name = "Twitter" },
+menu_links = [
+    { url = "https://twitter.com/liul85", name = "twitter" },
 ]
