@@ -42,16 +42,16 @@ footer {
   margin: 0.5em auto;
 }
 
-.post-title {
-  font-weight: bold;
-}
-
 a:visited {
   color: #6f42c1;
 }
 
 a {
   text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
 }
 
 .nav-link {
