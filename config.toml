@@ -7,6 +7,7 @@ generate_feed = true
 
 [markdown]
 highlight_code = true
+highlight_theme = "gruvbox-dark"
 
 [extra]
 menu_links = [
