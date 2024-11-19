@@ -3,7 +3,7 @@ title = "Liang's blog"
 
 theme = "prose"
 compile_sass = true
-generate_feed = true
+generate_feeds = true
 
 [markdown]
 highlight_code = true
