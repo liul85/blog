@@ -13,8 +13,8 @@
     <link rel="stylesheet" href="{{ get_url(path='main.css', trailing_slash=false) }}">
 
     {% if config.generate_feed %}
-    <link rel="alternate" type={% if config.feed_filename=="atom.xml" %}"application/atom+xml"{% else
-        %}"application/rss+xml"{% endif %} title="RSS" href="{{ get_url(path=config.feed_filename) | safe }}">
+    <link rel="alternate" type={% if config.feed_filenames=="atom.xml" %}"application/atom+xml"{% else
+        %}"application/rss+xml"{% endif %} title="RSS" href="{{ get_url(path=config.feed_filenames[0]) | safe }}">
     {% endif %}
 </head>
 
