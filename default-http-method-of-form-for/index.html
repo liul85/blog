@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+<meta content="text/html; charset=UTF-8" http-equiv="content-type"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+<meta name="robots" content="index, follow">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<title>Default http method of form_for</title>
+
+
+
+
+<meta name="title" content="Default http method of form_for">
+
+
+<meta name="description" content="rails learning notes">
+
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://blog.liangliu.me/default-http-method-of-form-for/">
+
+<meta property="og:site_name" content="Liang&#x27;s blog">
+
+
+<meta property="og:title" content="Default http method of form_for">
+
+
+<meta property="og:description" content="rails learning notes">
+
+
+<link rel="canonical" href="https://blog.liangliu.me/default-http-method-of-form-for/">
+
+
+
+
+<link rel="alternate" type="application/atom+xml" title="RSS" href="https://blog.liangliu.me/rss.xml"> 
+
+
+
+
+<link rel="stylesheet" type="text/css" href="https://blog.liangliu.me/main.css">
+
+
+
+    </head>
+    <body>
+	<header>
+	    
+                <a class="title" href="https:&#x2F;&#x2F;blog.liangliu.me">
+                    <h1>Liang&#x27;s blog</h1>
+                </a>
+                <nav>
+                    <p>
+                    <a href="https:&#x2F;&#x2F;blog.liangliu.me">Home</a>
+                    <a href="/about">Me</a>
+                    <a href="/rss.xml">Rss</a>
+                    </p>
+                </nav>
+	    
+	</header>
+	<main>
+	    
+<h1 class="page-title">Default http method of form_for</h1>
+<p>
+    <span>2013-09-29</span>
+</p>
+
+<p>在看RubyonRails Guides时候，在posts的new视图里用到了form_for方法来向控制器提交表单，在做了这节之后一直不明白这个表单是在哪里定义提交给控制器中的create动作的，因为我没有看到任何地方写了这个是提交给create动作.</p>
+<pre data-lang="erb" style="background-color:#282828;color:#fdf4c1aa;" class="language-erb "><code class="language-erb" data-lang="erb"><span style="color:#fdf4c1;">&lt;%= form_for :post, url: posts_path </span><span style="color:#fa5c4b;">do </span><span style="color:#fdf4c1;">|f| %&gt;
+</span><span>  </span><span style="color:#fdf4c1;">&lt;% </span><span style="color:#fa5c4b;">if </span><span style="color:#fdf4c1;">@post.errors.any? %&gt;
+</span><span>  </span><span style="color:#83a598;">&lt;</span><span style="font-weight:bold;color:#8ec07c;">div </span><span style="color:#b8bb26;">id</span><span style="color:#8ec07c;">=</span><span style="color:#b8bb26;">&quot;errorExplanation&quot;</span><span style="color:#83a598;">&gt;
+</span><span>    </span><span style="color:#83a598;">&lt;</span><span style="font-weight:bold;color:#8ec07c;">h2</span><span style="color:#83a598;">&gt;</span><span style="color:#fdf4c1;">&lt;%= pluralize(@post.errors.count, </span><span style="color:#b8bb26;">&quot;error&quot;</span><span style="color:#fdf4c1;">) %&gt;</span><span> prohibited
+</span><span>      this post from being saved:</span><span style="color:#83a598;">&lt;/</span><span style="font-weight:bold;color:#8ec07c;">h2</span><span style="color:#83a598;">&gt;
+</span><span>    </span><span style="color:#83a598;">&lt;</span><span style="font-weight:bold;color:#8ec07c;">ul</span><span style="color:#83a598;">&gt;
+</span><span>    </span><span style="color:#fdf4c1;">&lt;% @post.errors.full_messages.each </span><span style="color:#fa5c4b;">do </span><span style="color:#fdf4c1;">|msg| %&gt;
+</span><span>      </span><span style="color:#83a598;">&lt;</span><span style="font-weight:bold;color:#8ec07c;">li</span><span style="color:#83a598;">&gt;</span><span style="color:#fdf4c1;">&lt;%= msg %&gt;</span><span style="color:#83a598;">&lt;/</span><span style="font-weight:bold;color:#8ec07c;">li</span><span style="color:#83a598;">&gt;
+</span><span>    </span><span style="color:#fdf4c1;">&lt;% </span><span style="color:#fa5c4b;">end </span><span style="color:#fdf4c1;">%&gt;
+</span><span>    </span><span style="color:#83a598;">&lt;/</span><span style="font-weight:bold;color:#8ec07c;">ul</span><span style="color:#83a598;">&gt;
+</span><span>  </span><span style="color:#83a598;">&lt;/</span><span style="font-weight:bold;color:#8ec07c;">div</span><span style="color:#83a598;">&gt;
+</span><span>  </span><span style="color:#fdf4c1;">&lt;% </span><span style="color:#fa5c4b;">end </span><span style="color:#fdf4c1;">%&gt;
+</span><span>  </span><span style="color:#83a598;">&lt;</span><span style="font-weight:bold;color:#8ec07c;">p</span><span style="color:#83a598;">&gt;
+</span><span>    </span><span style="color:#fdf4c1;">&lt;%= f.label :title %&gt;</span><span style="color:#83a598;">&lt;</span><span style="font-weight:bold;color:#8ec07c;">br</span><span style="color:#83a598;">&gt;
+</span><span>    </span><span style="color:#fdf4c1;">&lt;%= f.text_field :title %&gt;
+</span><span>  </span><span style="color:#83a598;">&lt;/</span><span style="font-weight:bold;color:#8ec07c;">p</span><span style="color:#83a598;">&gt;
+</span><span> 
+</span><span>  </span><span style="color:#83a598;">&lt;</span><span style="font-weight:bold;color:#8ec07c;">p</span><span style="color:#83a598;">&gt;
+</span><span>    </span><span style="color:#fdf4c1;">&lt;%= f.label :text %&gt;</span><span style="color:#83a598;">&lt;</span><span style="font-weight:bold;color:#8ec07c;">br</span><span style="color:#83a598;">&gt;
+</span><span>    </span><span style="color:#fdf4c1;">&lt;%= f.text_area :text %&gt;
+</span><span>  </span><span style="color:#83a598;">&lt;/</span><span style="font-weight:bold;color:#8ec07c;">p</span><span style="color:#83a598;">&gt;
+</span><span> 
+</span><span>  </span><span style="color:#83a598;">&lt;</span><span style="font-weight:bold;color:#8ec07c;">p</span><span style="color:#83a598;">&gt;
+</span><span>    </span><span style="color:#fdf4c1;">&lt;%= f.submit %&gt;
+</span><span>  </span><span style="color:#83a598;">&lt;/</span><span style="font-weight:bold;color:#8ec07c;">p</span><span style="color:#83a598;">&gt;
+</span><span style="color:#fdf4c1;">&lt;% </span><span style="color:#fa5c4b;">end </span><span style="color:#fdf4c1;">%&gt;
+</span><span> 
+</span><span style="color:#fdf4c1;">&lt;%= link_to </span><span style="color:#b8bb26;">&#39;Back&#39;</span><span style="color:#fdf4c1;">, posts_path %&gt;
+</span></code></pre>
+<p>当再看到Updating Posts章节的时候，才看到一些解释，原来默认form_for是向POST提交表单，而如果我们用rake routes来看路由设置的话，会看到POST对应的就是控制器中的create方法。</p>
+<pre data-lang="sh" style="background-color:#282828;color:#fdf4c1aa;" class="language-sh "><code class="language-sh" data-lang="sh"><span style="color:#fdf4c1;">iul85:blog MAC$ rake routes
+</span><span>   </span><span style="color:#fdf4c1;">Prefix Verb   URI Pattern               Controller#Action
+</span><span>    </span><span style="color:#fdf4c1;">posts GET    /posts(.:format</span><span>)          </span><span style="color:#fdf4c1;">posts#index
+</span><span>          </span><span style="color:#fdf4c1;">POST   /posts(.:format</span><span>)          </span><span style="color:#fdf4c1;">posts#create
+</span><span> </span><span style="color:#fdf4c1;">new_post GET    /posts/new(.:format</span><span>)      </span><span style="color:#fdf4c1;">posts#new
+</span><span style="color:#fdf4c1;">edit_post GET    /posts/:id/edit(.:format</span><span>) </span><span style="color:#fdf4c1;">posts#edit
+</span><span>     </span><span style="color:#fdf4c1;">post GET    /posts/:id(.:format</span><span>)      </span><span style="color:#fdf4c1;">posts#show
+</span><span>          </span><span style="color:#fdf4c1;">PATCH  /posts/:id(.:format</span><span>)      </span><span style="color:#fdf4c1;">posts#update
+</span><span>          </span><span style="color:#fdf4c1;">PUT    /posts/:id(.:format</span><span>)      </span><span style="color:#fdf4c1;">posts#update
+</span><span>          </span><span style="color:#fdf4c1;">DELETE /posts/:id(.:format</span><span>)      </span><span style="color:#fdf4c1;">posts#destroy
+</span><span>     </span><span style="color:#fdf4c1;">root GET    /                         welcome#index
+</span></code></pre>
+<p>同时也可以在form_for中指定要提交的方法，比如在update的时候，我们是提交给PATCH，转向用户的这条blog，可以这么写，在form_for中添加method，指定提交的方法就可以了，不过要注意method和后面url的对应关系，用update和destroy时候需要指定对象来操作.</p>
+<pre data-lang="erb" style="background-color:#282828;color:#fdf4c1aa;" class="language-erb "><code class="language-erb" data-lang="erb"><span style="color:#fdf4c1;">&lt;%= form_for :post, url: post_path(@post.id) }, method: :patch </span><span style="color:#fa5c4b;">do </span><span style="color:#fdf4c1;">|f| %&gt;
+</span></code></pre>
+<p>这个在文档中说明如下，同时可以参考<a href="http://guides.rubyonrails.org/form_helpers.html">form_helpers</a>文档。</p>
+<pre style="background-color:#282828;color:#fdf4c1aa;"><code><span>The method: :patch option tells Rails that we want this form to be submitted via the PATCH HTTP method which is the HTTP method you are expected to use to update resources according to the REST protocol.
+</span><span>By default forms built with the form_for helper are sent via POST.
+</span></code></pre>
+
+
+<p class="tags-data">
+
+
+<a href="/tags/ruby">#Ruby</a>
+
+<a href="/tags/rails">#Rails</a>
+
+
+</p>
+
+	</main>
+	<footer>
+	    <span class="copyright">© Liang&#x27;s blog · Powered by <a target="_blank" href="https://getzola.org/">Zola</a></span>
+
+	</footer>
+    </body>
+</html>

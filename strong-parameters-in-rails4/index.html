@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+<meta content="text/html; charset=UTF-8" http-equiv="content-type"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+<meta name="robots" content="index, follow">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<title>Strong parameters in rails4</title>
+
+
+
+
+<meta name="title" content="Strong parameters in rails4">
+
+
+<meta name="description" content="rails learning notes">
+
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://blog.liangliu.me/strong-parameters-in-rails4/">
+
+<meta property="og:site_name" content="Liang&#x27;s blog">
+
+
+<meta property="og:title" content="Strong parameters in rails4">
+
+
+<meta property="og:description" content="rails learning notes">
+
+
+<link rel="canonical" href="https://blog.liangliu.me/strong-parameters-in-rails4/">
+
+
+
+
+<link rel="alternate" type="application/atom+xml" title="RSS" href="https://blog.liangliu.me/rss.xml"> 
+
+
+
+
+<link rel="stylesheet" type="text/css" href="https://blog.liangliu.me/main.css">
+
+
+
+    </head>
+    <body>
+	<header>
+	    
+                <a class="title" href="https:&#x2F;&#x2F;blog.liangliu.me">
+                    <h1>Liang&#x27;s blog</h1>
+                </a>
+                <nav>
+                    <p>
+                    <a href="https:&#x2F;&#x2F;blog.liangliu.me">Home</a>
+                    <a href="/about">Me</a>
+                    <a href="/rss.xml">Rss</a>
+                    </p>
+                </nav>
+	    
+	</header>
+	<main>
+	    
+<h1 class="page-title">Strong parameters in rails4</h1>
+<p>
+    <span>2013-11-10</span>
+</p>
+
+<p>在rails中有很多安全相关的特性保证我们的web应用足够安全，今天在学习rails时候碰到了这个，当我试图用一个create方法创建一个新话题的时候，我遇到了麻烦，我的controller如下：</p>
+<pre data-lang="ruby" style="background-color:#282828;color:#fdf4c1aa;" class="language-ruby "><code class="language-ruby" data-lang="ruby"><span style="color:#fa5c4b;">def </span><span style="color:#8ec07c;">new
+</span><span>  </span><span style="color:#fdf4c1;">@topic </span><span style="color:#fe8019;">= </span><span style="color:#8ec07c;">Topic</span><span>.</span><span style="color:#fa5c4b;">new
+</span><span style="color:#fa5c4b;">end
+</span><span>
+</span><span style="color:#fa5c4b;">def </span><span style="color:#8ec07c;">create
+</span><span>  </span><span style="color:#8ec07c;">Topic</span><span>.create(params[</span><span style="color:#fdf4c1;">:topic</span><span>])
+</span><span>  redirect_to root_path
+</span><span style="color:#fa5c4b;">end
+</span></code></pre>
+<p>在用户提交新的话题后，rails会报错提示</p>
+<p><code>ActiveModel::ForbiddenAttributesError</code></p>
+<p>在查阅了railsguides后才知道，这里不能直接使用create(params[:topic])，因为如果这样写，在web应用中这样可以随便让任何参数都传进来从而导致不安全的结果。在这里我们要用的是strong_parameters，我们需要指定controller只允许接受哪几个参数</p>
+<pre data-lang="ruby" style="background-color:#282828;color:#fdf4c1aa;" class="language-ruby "><code class="language-ruby" data-lang="ruby"><span style="color:#fa5c4b;">def </span><span style="color:#8ec07c;">create
+</span><span>  </span><span style="color:#8ec07c;">Topic</span><span>.create(params[</span><span style="color:#fdf4c1;">:topic</span><span>].permit(</span><span style="color:#fdf4c1;">:title</span><span>, </span><span style="color:#fdf4c1;">:content</span><span>, </span><span style="color:#fdf4c1;">:node_id</span><span>))
+</span><span style="color:#fa5c4b;">end
+</span></code></pre>
+<p>这样再刷新页面应该就ok了。不过在这个过程中我还遇到了一个问题，我当时只传入了title和content 2个参数，忘了把node_id传过去了，结果刷新页面就报错，怎么也找不到问题，后来尝试把默认传过去的参数打印出来，像这样</p>
+<pre data-lang="ruby" style="background-color:#282828;color:#fdf4c1aa;" class="language-ruby "><code class="language-ruby" data-lang="ruby"><span style="color:#fa5c4b;">def </span><span style="color:#8ec07c;">create
+</span><span>  render </span><span style="color:#fdf4c1;">text:</span><span> params[</span><span style="color:#fdf4c1;">:topic</span><span>].</span><span style="color:#fabd2f;">inspect
+</span><span style="color:#fa5c4b;">end
+</span></code></pre>
+<p>在提交之后就能在浏览器中看到传过去的参数以及取值，再来考虑create方法中应该怎么写了。</p>
+<p>但其实上面那个还不是最好的写法，你应该这样写</p>
+<pre data-lang="ruby" style="background-color:#282828;color:#fdf4c1aa;" class="language-ruby "><code class="language-ruby" data-lang="ruby"><span style="color:#fa5c4b;">def </span><span style="color:#8ec07c;">create
+</span><span>  </span><span style="color:#8ec07c;">Topic</span><span>.create(topic_params)
+</span><span style="color:#fa5c4b;">end
+</span><span>
+</span><span style="color:#fa5c4b;">private
+</span><span>  </span><span style="color:#fa5c4b;">def </span><span style="color:#8ec07c;">topic_params
+</span><span>    params.</span><span style="color:#fa5c4b;">require</span><span>(</span><span style="color:#fdf4c1;">:topic</span><span>).permit(</span><span style="color:#fdf4c1;">:title</span><span>, </span><span style="color:#fdf4c1;">:content</span><span>, </span><span style="color:#fdf4c1;">:node_id</span><span>)
+</span><span>  </span><span style="color:#fa5c4b;">end
+</span></code></pre>
+<p>在这里我们定义一个私有方法<code>topic_params</code>，然后在create里调用这个方法来实现topic所带的参数的传递，这样就避免了通过修改hash传递给model来设置model属性的风险。更多的可以参考<a href="http://weblog.rubyonrails.org/2012/3/21/strong-parameters/">这里</a>。</p>
+
+
+<p class="tags-data">
+
+
+<a href="/tags/rails">#Rails</a>
+
+
+</p>
+
+	</main>
+	<footer>
+	    <span class="copyright">© Liang&#x27;s blog · Powered by <a target="_blank" href="https://getzola.org/">Zola</a></span>
+
+	</footer>
+    </body>
+</html>

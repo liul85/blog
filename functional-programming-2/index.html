@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+<meta content="text/html; charset=UTF-8" http-equiv="content-type"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+<meta name="robots" content="index, follow">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<title>函数式编程笔记(2)-Hindley-Milner类型签名</title>
+
+
+
+
+<meta name="title" content="函数式编程笔记(2)-Hindley-Milner类型签名">
+
+
+<meta name="description" content="function signature">
+
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://blog.liangliu.me/functional-programming-2/">
+
+<meta property="og:site_name" content="Liang&#x27;s blog">
+
+
+<meta property="og:title" content="函数式编程笔记(2)-Hindley-Milner类型签名">
+
+
+<meta property="og:description" content="function signature">
+
+
+<link rel="canonical" href="https://blog.liangliu.me/functional-programming-2/">
+
+
+
+
+<link rel="alternate" type="application/atom+xml" title="RSS" href="https://blog.liangliu.me/rss.xml"> 
+
+
+
+
+<link rel="stylesheet" type="text/css" href="https://blog.liangliu.me/main.css">
+
+
+
+    </head>
+    <body>
+	<header>
+	    
+                <a class="title" href="https:&#x2F;&#x2F;blog.liangliu.me">
+                    <h1>Liang&#x27;s blog</h1>
+                </a>
+                <nav>
+                    <p>
+                    <a href="https:&#x2F;&#x2F;blog.liangliu.me">Home</a>
+                    <a href="/about">Me</a>
+                    <a href="/rss.xml">Rss</a>
+                    </p>
+                </nav>
+	    
+	</header>
+	<main>
+	    
+<h1 class="page-title">函数式编程笔记(2)-Hindley-Milner类型签名</h1>
+<p>
+    <span>2017-04-11</span>
+</p>
+
+<p>刚接触函数式编程的人总是搞不明白函数类型签名，我记得去年同事有分享过一次FP的session，用Hashkell来做题，其中的类型签名当时就不太搞明白。类型是让不同背景的人高效沟通的元语言，大部分都是以一种叫<code>Hindley Milner</code>系统来表述的。</p>
+<p>类型签名的主要作用:</p>
+<ul>
+<li>标明函数输入和输出</li>
+<li>让函数保持通用，抽象</li>
+<li>可以用于编译时候检查</li>
+<li>是代码最好的文档</li>
+</ul>
+<h1 id="hindley-milner-story">Hindley-Milner story</h1>
+<p>其实Hindley Miler并不是一个很复杂的系统，不过我们需要一些学习和练习过程来熟悉和掌握它。</p>
+<pre data-lang="javascript" style="background-color:#282828;color:#fdf4c1aa;" class="language-javascript "><code class="language-javascript" data-lang="javascript"><span style="font-style:italic;color:#928374;">//  capitalize :: String -&gt; String
+</span><span style="color:#fa5c4b;">var </span><span style="color:#8ec07c;">capitalize </span><span style="color:#fe8019;">= </span><span style="color:#fdf4c1;">s </span><span style="color:#fa5c4b;">=&gt; </span><span>{
+</span><span>  </span><span style="color:#fa5c4b;">return </span><span style="color:#8ec07c;">toUpperCase</span><span>(</span><span style="color:#8ec07c;">head</span><span>(</span><span style="color:#fdf4c1;">s</span><span>)) </span><span style="color:#fe8019;">+ </span><span style="color:#8ec07c;">toLowerCase</span><span>(</span><span style="color:#8ec07c;">tail</span><span>(</span><span style="color:#fdf4c1;">s</span><span>));
+</span><span>}
+</span><span>
+</span><span style="font-style:italic;color:#928374;">//=&gt; &quot;Smurf&quot;
+</span><span style="color:#8ec07c;">capitalize</span><span>(</span><span style="color:#b8bb26;">&quot;smurf&quot;</span><span>);
+</span></code></pre>
+<p>这里定义了一个函数capitalize，它接收一个string，然后返回一个string，在HM系统中，函数都写成a -&gt; b这样，所以这个函数的签名<code>capitalize :: String -&gt; String</code>可以理解为一个接受string并返回string的函数。</p>
+<p>再来一些例子：</p>
+<pre data-lang="javascript" style="background-color:#282828;color:#fdf4c1aa;" class="language-javascript "><code class="language-javascript" data-lang="javascript"><span style="font-style:italic;color:#928374;">//  len :: String -&gt; Number
+</span><span style="color:#fa5c4b;">var </span><span style="color:#8ec07c;">len </span><span style="color:#fe8019;">= </span><span style="color:#fa5c4b;">function</span><span>(</span><span style="color:#fdf4c1;">s</span><span>){
+</span><span>  </span><span style="color:#fa5c4b;">return </span><span style="color:#fdf4c1;">s</span><span>.</span><span style="color:#fabd2f;">length</span><span>;
+</span><span>}
+</span><span>
+</span><span style="font-style:italic;color:#928374;">//  join :: String -&gt; [String] -&gt; String
+</span><span style="color:#fa5c4b;">var </span><span style="color:#fdf4c1;">join </span><span style="color:#fe8019;">= </span><span style="color:#8ec07c;">curry</span><span>(</span><span style="color:#fa5c4b;">function</span><span>(</span><span style="color:#fdf4c1;">delimiter</span><span>, </span><span style="color:#fdf4c1;">data</span><span>){
+</span><span>  </span><span style="color:#fa5c4b;">return </span><span style="color:#fdf4c1;">data.</span><span style="color:#fabd2f;">join</span><span>(</span><span style="color:#fdf4c1;">delimiter</span><span>);
+</span><span>});
+</span><span>
+</span><span style="font-style:italic;color:#928374;">//  match :: Regex -&gt; String -&gt; [String]
+</span><span style="color:#fa5c4b;">var </span><span style="color:#fdf4c1;">match </span><span style="color:#fe8019;">= </span><span style="color:#8ec07c;">curry</span><span>(</span><span style="color:#fa5c4b;">function</span><span>(</span><span style="color:#fdf4c1;">reg</span><span>, </span><span style="color:#fdf4c1;">s</span><span>){
+</span><span>  </span><span style="color:#fa5c4b;">return </span><span style="color:#fdf4c1;">s.</span><span style="color:#fabd2f;">match</span><span>(</span><span style="color:#fdf4c1;">reg</span><span>);
+</span><span>});
+</span><span>
+</span><span style="font-style:italic;color:#928374;">//  replace :: Regex -&gt; String -&gt; String -&gt; String
+</span><span style="color:#fa5c4b;">var </span><span style="color:#fdf4c1;">replace </span><span style="color:#fe8019;">= </span><span style="color:#8ec07c;">curry</span><span>(</span><span style="color:#fa5c4b;">function</span><span>(</span><span style="color:#fdf4c1;">reg</span><span>, </span><span style="color:#fdf4c1;">sub</span><span>, </span><span style="color:#fdf4c1;">s</span><span>){
+</span><span>  </span><span style="color:#fa5c4b;">return </span><span style="color:#fdf4c1;">s.</span><span style="color:#fabd2f;">replace</span><span>(</span><span style="color:#fdf4c1;">reg</span><span>, </span><span style="color:#fdf4c1;">sub</span><span>);
+</span><span>});
+</span></code></pre>
+<p>对于稍微复杂的函数类型签名，我们开始可以这么理解，把最后一个类型看作是它的返回值，其他的都看作是参数，那么join就是接受一个string和array，然后返回一个string，match就是接受一个正则和string，返回一个array，replace就是接受一个正则，二个string，返回一个string，这样看起来就比较简单啦。</p>
+<p>不过这只是帮助我们理解函数签名的开始，下面我们再看一个有意思的理解：</p>
+<p>对于join，我们把它的签名分组一下，<code>join :: String -&gt; ([String] -&gt; String)</code>，join接受一个string参数，返回一个接受array，返回string的函数，这样会更容易帮助我们深入理解柯里化的作用。</p>
+<p>对于replace，分组一下类型签名， <code>replace :: Regex -&gt; (String -&gt; (String -&gt; String))</code>, 它接受一个正则，返回一个接受一个string，再返回一个接受string，返回string的新函数，这个新函数调用后，又返回一个接受一个string，最后返回一个string的函数，最后一个函数调用后返回最终结果。</p>
+<p>因为柯里化就是这样，如果一个函数接受多个参数，那么当它被柯里化之后，如果你调用时候只传入一个参数，那么它将返回一个新的接受剩余参数的柯里化函数，这样从函数签名角度来看，当你每传入一个参数，就弹出类型签名最前面的那个类型，这样就很容易理解了。</p>
+<p>当然你也可以一次性传入全部参数，那么将返回最终结果。</p>
+<p>在HM系统中，一般约定俗成用a, b类似这样的来代表类型，a引用代表的一定是同一个类型，a和b一定是不同的类型，比如</p>
+<ul>
+<li><code>len :: a -&gt; a</code></li>
+<li><code>join :: a -&gt; [a] -&gt; a</code></li>
+<li><code>match :: a -&gt; b -&gt; [b]</code></li>
+<li><code>replace :: a -&gt; b -&gt; b -&gt; b</code></li>
+</ul>
+<p>类型签名能够一字一句地告诉我们函数做了什么事情，读懂类型签名是在函数式编程过程中一项非常重要的技能，会让你受益无穷。</p>
+<p>再来两个练习试试</p>
+<pre data-lang="javascript" style="background-color:#282828;color:#fdf4c1aa;" class="language-javascript "><code class="language-javascript" data-lang="javascript"><span style="font-style:italic;color:#928374;">//  filter :: (a -&gt; Bool) -&gt; [a] -&gt; [a]
+</span><span style="color:#fa5c4b;">var </span><span style="color:#fdf4c1;">filter </span><span style="color:#fe8019;">= </span><span style="color:#8ec07c;">curry</span><span>(</span><span style="color:#fa5c4b;">function</span><span>(</span><span style="color:#fdf4c1;">f</span><span>, </span><span style="color:#fdf4c1;">xs</span><span>){
+</span><span>  </span><span style="color:#fa5c4b;">return </span><span style="color:#fdf4c1;">xs.</span><span style="color:#8ec07c;">filter</span><span>(</span><span style="color:#fdf4c1;">f</span><span>);
+</span><span>});
+</span><span>
+</span><span style="font-style:italic;color:#928374;">//  reduce :: (b -&gt; a -&gt; b) -&gt; b -&gt; [a] -&gt; b
+</span><span style="color:#fa5c4b;">var </span><span style="color:#fdf4c1;">reduce </span><span style="color:#fe8019;">= </span><span style="color:#8ec07c;">curry</span><span>(</span><span style="color:#fa5c4b;">function</span><span>(</span><span style="color:#fdf4c1;">f</span><span>, </span><span style="color:#fdf4c1;">x</span><span>, </span><span style="color:#fdf4c1;">xs</span><span>){
+</span><span>  </span><span style="color:#fa5c4b;">return </span><span style="color:#fdf4c1;">xs.</span><span style="color:#8ec07c;">reduce</span><span>(</span><span style="color:#fdf4c1;">f</span><span>, </span><span style="color:#fdf4c1;">x</span><span>);
+</span><span>});
+</span></code></pre>
+<h1 id="parametricity">Parametricity</h1>
+<p>在上面看到的类型签名中，有各种不同的类型，这就会引入一个程序语言特性叫<a href="http://en.wikipedia.org/wiki/Parametricity">parametricity</a>。这个特性表明函数将会以一种统一的行为作用于所有的类型。</p>
+<p>看一个这样的类型签名： <code>head :: [a] -&gt; a</code>， 从类型签名上我们可以得到这个函数它接受一个元素是类型a的数组，返回一个类型a的元素。类型a可以是任意类型，比如Number，String，Boolean等，那么这个函数对不同的任意类型的作用都是保持统一的，这就是parametricity的含义。这个函数可能返回数组的第一个元素，可能是最后一个，也可能是随机的一个，这时候函数的名字会有更多的信息给我们，不管是哪种情况，在这里类型a的多态性会大幅度缩小函数可能性的范围，保证在多态性的情况下，函数的作用都是统一的。</p>
+<h1 id="free-theorems">Free theorems</h1>
+<p>看个简单例子</p>
+<pre data-lang="javascript" style="background-color:#282828;color:#fdf4c1aa;" class="language-javascript "><code class="language-javascript" data-lang="javascript"><span style="font-style:italic;color:#928374;">// head :: [a] -&gt; a
+</span><span style="color:#8ec07c;">compose</span><span>(</span><span style="color:#fdf4c1;">f</span><span>, </span><span style="color:#fdf4c1;">head</span><span>) </span><span style="color:#fe8019;">== </span><span style="color:#8ec07c;">compose</span><span>(</span><span style="color:#fdf4c1;">head</span><span>, </span><span style="color:#8ec07c;">map</span><span>(</span><span style="color:#fdf4c1;">f</span><span>));
+</span></code></pre>
+<p>在这个例子中，左边的操作是，先对数组a进行head操作，得到一个a，然后再对它调用f函数得到结果。右边的操作是，先对数组a所有元素都调用f函数得到一个新数组，然后再对新数组做head操作得到结果。这两个操作最终结果是相等的，只不过左边的效率要高一些。</p>
+<p>这种被称为自由定理，可以应用到多态类型的签名上。</p>
+<h1 id="type-constrains">Type constrains</h1>
+<p>类型签名可以把类型限制在一个特定的接口上，</p>
+<pre data-lang="javascript" style="background-color:#282828;color:#fdf4c1aa;" class="language-javascript "><code class="language-javascript" data-lang="javascript"><span style="color:#8ec07c;">reverse </span><span>:: </span><span style="color:#fdf4c1;">Ord a </span><span style="color:#fa5c4b;">=&gt; </span><span>[</span><span style="color:#fdf4c1;">a</span><span>] </span><span style="color:#fe8019;">-&gt; </span><span>[</span><span style="color:#fdf4c1;">a</span><span>]
+</span></code></pre>
+<p>在这里<code>Ord a</code>约束了a必须是一个Ord对象，或者a必须实现Ord接口，这样就限制了函数的作用范围，这样的声明被称作类型约束。</p>
+<h4 id="can-kao">参考</h4>
+<p>https://drboolean.gitbooks.io/mostly-adequate-guide/content/ch7.html</p>
+
+
+<p class="tags-data">
+
+
+<a href="/tags/function">#function</a>
+
+
+</p>
+
+	</main>
+	<footer>
+	    <span class="copyright">© Liang&#x27;s blog · Powered by <a target="_blank" href="https://getzola.org/">Zola</a></span>
+
+	</footer>
+    </body>
+</html>

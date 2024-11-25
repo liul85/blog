@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+<meta content="text/html; charset=UTF-8" http-equiv="content-type"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+<meta name="robots" content="index, follow">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<title>The rspec book note 2</title>
+
+
+
+
+<meta name="title" content="The rspec book note 2">
+
+
+<meta name="description" content="rspec learning notes">
+
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://blog.liangliu.me/the-rspec-book-note-2/">
+
+<meta property="og:site_name" content="Liang&#x27;s blog">
+
+
+<meta property="og:title" content="The rspec book note 2">
+
+
+<meta property="og:description" content="rspec learning notes">
+
+
+<link rel="canonical" href="https://blog.liangliu.me/the-rspec-book-note-2/">
+
+
+
+
+<link rel="alternate" type="application/atom+xml" title="RSS" href="https://blog.liangliu.me/rss.xml"> 
+
+
+
+
+<link rel="stylesheet" type="text/css" href="https://blog.liangliu.me/main.css">
+
+
+
+    </head>
+    <body>
+	<header>
+	    
+                <a class="title" href="https:&#x2F;&#x2F;blog.liangliu.me">
+                    <h1>Liang&#x27;s blog</h1>
+                </a>
+                <nav>
+                    <p>
+                    <a href="https:&#x2F;&#x2F;blog.liangliu.me">Home</a>
+                    <a href="/about">Me</a>
+                    <a href="/rss.xml">Rss</a>
+                    </p>
+                </nav>
+	    
+	</header>
+	<main>
+	    
+<h1 class="page-title">The rspec book note 2</h1>
+<p>
+    <span>2013-09-07</span>
+</p>
+
+<p>在上一节中我们通过cucumber从外部对我们的Codebreaker程序行为进行了描述测试，通过step_definitions来描述了每个场景的步骤，在最后我们遗留了一个失败，我们期望Game向output发送一个消息，但是得到的结果消息是空的。这一节我们要用rspec来更细节的描述Game类的实例对象的行为。</p>
+<p>在工程目录下创建一个rspec目录，再创建一个codebreaker子目录，然后创建game_spec.rb文件，加入如下内容：</p>
+<pre data-lang="ruby" style="background-color:#282828;color:#fdf4c1aa;" class="language-ruby "><code class="language-ruby" data-lang="ruby"><span style="color:#fa5c4b;">require </span><span style="color:#b8bb26;">&#39;spec_helper&#39;
+</span><span style="color:#fa5c4b;">module </span><span style="color:#8ec07c;">Codebreaker
+</span><span>    describe </span><span style="color:#fdf4c1;">Game </span><span style="color:#fa5c4b;">do
+</span><span>	describe </span><span style="color:#b8bb26;">&quot;#start&quot; </span><span style="color:#fa5c4b;">do
+</span><span>	    it </span><span style="color:#b8bb26;">&quot;sends a welcome message&quot;
+</span><span>	    it </span><span style="color:#b8bb26;">&quot;prompts for the first guess&quot;
+</span><span>	</span><span style="color:#fa5c4b;">end
+</span><span>    </span><span style="color:#fa5c4b;">end
+</span><span style="color:#fa5c4b;">end
+</span></code></pre>
+<p>在这个文件我们首先require了一个文件叫spec_helper，这个文件我们创建后保存在spec的目录下，rspec会自动将这个spec目录添加到$LOAD_PATH中。</p>
+<p>接下来我们定义了一个叫Codebreakder的module，个人感觉这个模块意义就是指出测试的是哪个代码吧。</p>
+<p>describe方法是RSpec的一个API，会返回一个RSpec::Core::ExampleGroup的子类，这里描述的就是一个Game对象的各种行为集合。然后it方法创建了一个行为，来描述具体的一个动作。</p>
+<p>接下来我们要做的就是将我们的rspec测试集与我们的代码连接起来，在第二行，我们需要加入<code>require 'game'</code>，这样将我们的代码引用到了rspec测试集中。</p>
+<p>然后在终端执行命令：</p>
+<pre data-lang="bash" style="background-color:#282828;color:#fdf4c1aa;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#fdf4c1;">rspec spec/codebreaker/game_rspec.rb --format doc
+</span></code></pre>
+<p>我们会看到下面的输出：</p>
+<pre data-lang="ruby" style="background-color:#282828;color:#fdf4c1aa;" class="language-ruby "><code class="language-ruby" data-lang="ruby"><span style="color:#8ec07c;">Codebreaker</span><span>::Game
+</span><span style="font-style:italic;color:#928374;">#start
+</span><span>sends a welcome message (</span><span style="color:#fdf4c1;">PENDING: Not Yet Implemented</span><span>)
+</span><span>prompts </span><span style="color:#fa5c4b;">for</span><span> the first guess (</span><span style="color:#fdf4c1;">PENDING: Not Yet Implemented</span><span>)
+</span><span style="color:#fdf4c1;">Pending:
+</span><span>  </span><span style="color:#8ec07c;">Codebreaker</span><span>::Game</span><span style="font-style:italic;color:#928374;">#start sends a welcome message
+</span><span>    </span><span style="font-style:italic;color:#928374;"># Not Yet Implemented
+</span><span>    </span><span style="font-style:italic;color:#928374;"># ./spec/codebreaker/game_spec.rb:6
+</span><span>  </span><span style="color:#8ec07c;">Codebreaker</span><span>::Game</span><span style="font-style:italic;color:#928374;">#start prompts for the first guess
+</span><span>    </span><span style="font-style:italic;color:#928374;"># Not Yet Implemented
+</span><span>    </span><span style="font-style:italic;color:#928374;"># ./spec/codebreaker/game_spec.rb:7
+</span></code></pre>
+<p><code>--format doc</code>参数让rspec按照我们spec文件中的格式来输出结果。在输出结果中我们可以看到<code>"PENDING: Not yet implemented"</code>，这是因为我们只是写了个测试标题而已，接下来我们补充第一个测试：</p>
+<pre data-lang="ruby" style="background-color:#282828;color:#fdf4c1aa;" class="language-ruby "><code class="language-ruby" data-lang="ruby"><span style="color:#fa5c4b;">require </span><span style="color:#b8bb26;">&#39;spec_helper&#39;
+</span><span style="color:#fa5c4b;">require </span><span style="color:#b8bb26;">&#39;game&#39;
+</span><span>
+</span><span style="color:#fa5c4b;">module </span><span style="color:#8ec07c;">Codebreaker
+</span><span>    describe </span><span style="color:#fdf4c1;">Game </span><span style="color:#fa5c4b;">do
+</span><span>	describe </span><span style="color:#b8bb26;">&quot;#start&quot; </span><span style="color:#fa5c4b;">do
+</span><span>	    it </span><span style="color:#b8bb26;">&quot;sends a welcome message&quot; </span><span style="color:#fa5c4b;">do
+</span><span>		output </span><span style="color:#fe8019;">=</span><span> double(</span><span style="color:#b8bb26;">&#39;output&#39;</span><span>)
+</span><span>		game </span><span style="color:#fe8019;">= </span><span style="color:#8ec07c;">Game</span><span>.</span><span style="color:#fa5c4b;">new</span><span>(output)
+</span><span>		output.should_receive(</span><span style="color:#fdf4c1;">:puts</span><span>).with(</span><span style="color:#b8bb26;">&#39;Welcome to Codebreaker!&#39;</span><span>)
+</span><span>		game.start
+</span><span>	    </span><span style="color:#fa5c4b;">end
+</span><span>
+</span><span>	    it </span><span style="color:#b8bb26;">&quot;prompt for the first guess&quot;
+</span><span>	</span><span style="color:#fa5c4b;">end
+</span><span>    </span><span style="color:#fa5c4b;">end
+</span><span style="color:#fa5c4b;">end
+</span></code></pre>
+<p>这里用到了RSpec中的动态double测试框架，很显然我现在还不知道这个是怎么用的，不过我先跳过。然后创建了一个Game的对象，把output传给它，接下来是期望output能够接收到<code>'Welcome to Codebreaker!'</code>的输出消息。最后调用start方法让game跑起来，这样我们就能接收到消息。</p>
+<p>现在再跑一下rspec测试，加上--color参数，我们会看到输出显示</p>
+<p><code>sends a welcome message (FAILED - 1)</code></p>
+<p>很显然我们得到了一个红色的失败的结果，因为我们的代码还没有任何实现。一旦我们的到一个红色，我们就必须让他变绿~</p>
+<p>然后我们打开game.rb，来添加代码</p>
+<pre data-lang="ruby" style="background-color:#282828;color:#fdf4c1aa;" class="language-ruby "><code class="language-ruby" data-lang="ruby"><span style="color:#fa5c4b;">module </span><span style="color:#8ec07c;">Codebreaker
+</span><span>    </span><span style="color:#fa5c4b;">class </span><span style="color:#8ec07c;">Game
+</span><span>        </span><span style="color:#fa5c4b;">def </span><span style="color:#8ec07c;">initialize</span><span>(</span><span style="color:#fdf4c1;">output</span><span>)
+</span><span>	    </span><span style="color:#fdf4c1;">@output </span><span style="color:#fe8019;">=</span><span> output
+</span><span>        </span><span style="color:#fa5c4b;">end
+</span><span>        </span><span style="color:#fa5c4b;">def </span><span style="color:#8ec07c;">start
+</span><span>            </span><span style="color:#fdf4c1;">@output</span><span>.</span><span style="color:#fabd2f;">puts </span><span style="color:#b8bb26;">&#39;Welcome to Codebreaker!&#39;
+</span><span>        </span><span style="color:#fa5c4b;">end
+</span><span>    </span><span style="color:#fa5c4b;">end
+</span><span style="color:#fa5c4b;">end
+</span></code></pre>
+<p>我们创建了initialize和start方法，再进行一次rspec测试，yeah，我们得到了第一个通过的测试，接下来我们应该进行重构，但是由于当前我们代码还没有任何重复，所以先不做。</p>
+<p>接着再执行一下上一节遗留的cucumber feature，可以看到Then语句已经通过啦。</p>
+<p>第二个测试我们还没有完成，我们需要再修改game_rspec.rb加以下代码</p>
+<pre data-lang="ruby" style="background-color:#282828;color:#fdf4c1aa;" class="language-ruby "><code class="language-ruby" data-lang="ruby"><span>it </span><span style="color:#b8bb26;">&quot;prompts for the first guess&quot; </span><span style="color:#fa5c4b;">do
+</span><span>    output </span><span style="color:#fe8019;">=</span><span> double(</span><span style="color:#b8bb26;">&#39;output&#39;</span><span>)
+</span><span>    game </span><span style="color:#fe8019;">= </span><span style="color:#8ec07c;">Game</span><span>.</span><span style="color:#fa5c4b;">new</span><span>(output)
+</span><span>    output.should_receive(</span><span style="color:#fdf4c1;">:puts</span><span>).with(</span><span style="color:#b8bb26;">&#39;Enter guess:&#39;</span><span>)
+</span><span>    game.start
+</span><span style="color:#fa5c4b;">end
+</span></code></pre>
+<p>再进行rspec测试，我们会得到第二个红色，我们来修改game.rb代码，在start方法中再加一行输出</p>
+<pre data-lang="ruby" style="background-color:#282828;color:#fdf4c1aa;" class="language-ruby "><code class="language-ruby" data-lang="ruby"><span style="color:#fa5c4b;">def </span><span style="color:#8ec07c;">start
+</span><span>    </span><span style="color:#fdf4c1;">@output</span><span>.</span><span style="color:#fabd2f;">puts </span><span style="color:#b8bb26;">&#39;Welcome to Codebreaker!&#39;
+</span><span>    </span><span style="color:#fdf4c1;">@output</span><span>.</span><span style="color:#fabd2f;">puts </span><span style="color:#b8bb26;">&#39;Enter guess:&#39;
+</span><span style="color:#fa5c4b;">end
+</span></code></pre>
+<p>这样我们兴高采烈的再跑一次rspec测试，期待得到2个绿色，结果发现却2个测试全都红了，shit！</p>
+<p>让我们来看看到底哪里出了问题，我们发现在2个测试中我们期望输出的是不同的字符，我们程序输出对于2个测试也都是满足的，但是我们发现这2个字符在game.start后是会一起输出的，而我们的2个测试只能识别自己期望的部分，如果多出来的部分就不能识别的，就报失败了。</p>
+<p>我们使用RSpec框架中的<code>as_null_object()</code>方法来解决这个问题，使output匹配时候忽略其他字符，在2个测试中的double方法后面再引用<code>as_null_object</code>方法</p>
+<pre data-lang="ruby" style="background-color:#282828;color:#fdf4c1aa;" class="language-ruby "><code class="language-ruby" data-lang="ruby"><span>output </span><span style="color:#fe8019;">=</span><span> double(</span><span style="color:#b8bb26;">&#39;output&#39;</span><span>).as_null_object
+</span></code></pre>
+<p>这样再跑一次RSpec测试，我们得到了2个绿色~</p>
+<pre data-lang="ruby" style="background-color:#282828;color:#fdf4c1aa;" class="language-ruby "><code class="language-ruby" data-lang="ruby"><span style="color:#8ec07c;">Codebreaker</span><span>::Game
+</span><span>  </span><span style="font-style:italic;color:#928374;">#start
+</span><span>    sends a welcome message
+</span><span>    prompt </span><span style="color:#fa5c4b;">for</span><span> the first guess
+</span><span>
+</span><span style="color:#fdf4c1;">Finished </span><span style="color:#fa5c4b;">in </span><span style="color:#d3869b;">0.00128</span><span> seconds
+</span><span style="color:#d3869b;">2</span><span> examples, </span><span style="color:#d3869b;">0</span><span> failures
+</span></code></pre>
+<ul>
+<li>Red -&gt; Green -&gt; Refactory</li>
+</ul>
+<h2 id="zhong-gou">重构</h2>
+<p>很明显，我们要开始考虑重构了，Martin Fowler在他的《重构》这本书里写道：“重构就是在不改变代码外部行为的前提下对内部代码的优化。” 那么我们怎么知道重构后没有改变代码的外在行为呢？这就依靠完整的测试保证，所以完整的测试是进行重构的前提。每当我们重构一处代码，我们跑一下测试得到绿色，说明我们的重构是成功的。</p>
+<p>最基本的重构就是消除重复代码，我们来看看game_spec.rb的代码，基本上每一个测试的前2行都是类似的，这也是某种意义上的重复，我们需要修改掉</p>
+<h3 id="before-each">before(:each)</h3>
+<pre data-lang="ruby" style="background-color:#282828;color:#fdf4c1aa;" class="language-ruby "><code class="language-ruby" data-lang="ruby"><span style="color:#fa5c4b;">require </span><span style="color:#b8bb26;">&#39;spec_helper&#39;
+</span><span style="color:#fa5c4b;">require </span><span style="color:#b8bb26;">&#39;game&#39;
+</span><span>
+</span><span style="color:#fa5c4b;">module </span><span style="color:#8ec07c;">Codebreaker
+</span><span>    describe </span><span style="color:#fdf4c1;">Game </span><span style="color:#fa5c4b;">do
+</span><span>    	describe </span><span style="color:#b8bb26;">&quot;#start&quot; </span><span style="color:#fa5c4b;">do
+</span><span>    	    before(</span><span style="color:#fdf4c1;">:each</span><span>) </span><span style="color:#fa5c4b;">do
+</span><span>    	    	</span><span style="color:#fdf4c1;">@output </span><span style="color:#fe8019;">=</span><span> double(</span><span style="color:#b8bb26;">&#39;output&#39;</span><span>).as_null_object
+</span><span>    	    	</span><span style="color:#fdf4c1;">@game </span><span style="color:#fe8019;">= </span><span style="color:#8ec07c;">Game</span><span>.</span><span style="color:#fa5c4b;">new</span><span>(</span><span style="color:#fdf4c1;">@output</span><span>)
+</span><span>    	    </span><span style="color:#fa5c4b;">end
+</span><span>    
+</span><span>    	    it </span><span style="color:#b8bb26;">&quot;sends a welcome message&quot; </span><span style="color:#fa5c4b;">do
+</span><span>    	        </span><span style="color:#fdf4c1;">@output</span><span>.should_receive(</span><span style="color:#fdf4c1;">:puts</span><span>).with(</span><span style="color:#b8bb26;">&#39;Welcome to Codebreaker!&#39;</span><span>)
+</span><span>    	        </span><span style="color:#fdf4c1;">@game</span><span>.start
+</span><span>    	    </span><span style="color:#fa5c4b;">end
+</span><span>    
+</span><span>    	    it </span><span style="color:#b8bb26;">&quot;prompt for the first guess&quot; </span><span style="color:#fa5c4b;">do
+</span><span>    	        </span><span style="color:#fdf4c1;">@output</span><span>.should_receive(</span><span style="color:#fdf4c1;">:puts</span><span>).with(</span><span style="color:#b8bb26;">&#39;Enter guess:&#39;</span><span>)
+</span><span>    	        </span><span style="color:#fdf4c1;">@game</span><span>.start
+</span><span>    	    </span><span style="color:#fa5c4b;">end
+</span><span>    	</span><span style="color:#fa5c4b;">end
+</span><span>    </span><span style="color:#fa5c4b;">end
+</span><span style="color:#fa5c4b;">end
+</span></code></pre>
+<p>这里我们引入了before方法，把每个测试前面的初始化实例放到了前面，这样在rspec执行每个测试之前，都会执行一下before来创建实例对象。</p>
+<h3 id="let-method">let(:method)</h3>
+<p>一般当before块中的代码只是初始化实例对象和赋值的时候，我们会用RSpec的let(:method)方法，let方法用一个词语来代替要用的方法和代码块</p>
+<pre data-lang="ruby" style="background-color:#282828;color:#fdf4c1aa;" class="language-ruby "><code class="language-ruby" data-lang="ruby"><span style="color:#fa5c4b;">require </span><span style="color:#b8bb26;">&#39;spec_helper&#39;
+</span><span style="color:#fa5c4b;">require </span><span style="color:#b8bb26;">&#39;game&#39;
+</span><span>
+</span><span style="color:#fa5c4b;">module </span><span style="color:#8ec07c;">Codebreaker
+</span><span>    describe </span><span style="color:#fdf4c1;">Game </span><span style="color:#fa5c4b;">do
+</span><span>    	describe </span><span style="color:#b8bb26;">&quot;#start&quot; </span><span style="color:#fa5c4b;">do
+</span><span>	    let(</span><span style="color:#fdf4c1;">:output</span><span>) { double(</span><span style="color:#b8bb26;">&#39;output&#39;</span><span>).as_null_object }
+</span><span>	    let(</span><span style="color:#fdf4c1;">:game</span><span>)   { </span><span style="color:#8ec07c;">Game</span><span>.</span><span style="color:#fa5c4b;">new</span><span>(output) }
+</span><span>    
+</span><span>    	    it </span><span style="color:#b8bb26;">&quot;sends a welcome message&quot; </span><span style="color:#fa5c4b;">do
+</span><span>    	        output.should_receive(</span><span style="color:#fdf4c1;">:puts</span><span>).with(</span><span style="color:#b8bb26;">&#39;Welcome to Codebreaker!&#39;</span><span>)
+</span><span>    	        game.start
+</span><span>    	    </span><span style="color:#fa5c4b;">end
+</span><span>    
+</span><span>    	    it </span><span style="color:#b8bb26;">&quot;prompt for the first guess&quot; </span><span style="color:#fa5c4b;">do
+</span><span>    	        output.should_receive(</span><span style="color:#fdf4c1;">:puts</span><span>).with(</span><span style="color:#b8bb26;">&#39;Enter guess:&#39;</span><span>)
+</span><span>    	        game.start
+</span><span>    	    </span><span style="color:#fa5c4b;">end
+</span><span>    	</span><span style="color:#fa5c4b;">end
+</span><span>    </span><span style="color:#fa5c4b;">end
+</span><span style="color:#fa5c4b;">end
+</span></code></pre>
+<p>然后我们跑一下cucumber的测试，会看到第一个场景的用例已经通过了。
+总结一下：我们从上节遗留的cucumber的失败场景开始，遵循TDD的red，green，refactor的模式用RSpec写了2个测试，学习了按照BDD的cycle从程序外部行为的cucumber测试进入到代码内部的rspec测试。</p>
+
+
+<p class="tags-data">
+
+
+<a href="/tags/ruby">#Ruby</a>
+
+<a href="/tags/rspec">#Rspec</a>
+
+<a href="/tags/cucumber">#Cucumber</a>
+
+
+</p>
+
+	</main>
+	<footer>
+	    <span class="copyright">© Liang&#x27;s blog · Powered by <a target="_blank" href="https://getzola.org/">Zola</a></span>
+
+	</footer>
+    </body>
+</html>

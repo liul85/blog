@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+<meta content="text/html; charset=UTF-8" http-equiv="content-type"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+<meta name="robots" content="index, follow">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<title>Use twitter-bootstrap in a rails project</title>
+
+
+
+
+<meta name="title" content="Use twitter-bootstrap in a rails project">
+
+
+<meta name="description" content="twitter-bootstrap notes">
+
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://blog.liangliu.me/use-twitter-bootstrap-in-a-rails-project/">
+
+<meta property="og:site_name" content="Liang&#x27;s blog">
+
+
+<meta property="og:title" content="Use twitter-bootstrap in a rails project">
+
+
+<meta property="og:description" content="twitter-bootstrap notes">
+
+
+<link rel="canonical" href="https://blog.liangliu.me/use-twitter-bootstrap-in-a-rails-project/">
+
+
+
+
+<link rel="alternate" type="application/atom+xml" title="RSS" href="https://blog.liangliu.me/rss.xml"> 
+
+
+
+
+<link rel="stylesheet" type="text/css" href="https://blog.liangliu.me/main.css">
+
+
+
+    </head>
+    <body>
+	<header>
+	    
+                <a class="title" href="https:&#x2F;&#x2F;blog.liangliu.me">
+                    <h1>Liang&#x27;s blog</h1>
+                </a>
+                <nav>
+                    <p>
+                    <a href="https:&#x2F;&#x2F;blog.liangliu.me">Home</a>
+                    <a href="/about">Me</a>
+                    <a href="/rss.xml">Rss</a>
+                    </p>
+                </nav>
+	    
+	</header>
+	<main>
+	    
+<h1 class="page-title">Use twitter-bootstrap in a rails project</h1>
+<p>
+    <span>2013-10-02</span>
+</p>
+
+<p>昨天在看<a href="http://railscasts.com/">Railscasts</a>上看到了这个<a href="http://railscasts.com/episodes/328-twitter-bootstrap-basics">视频</a>，于是实践一把，新建一个demo项目</p>
+<pre data-lang="sh" style="background-color:#282828;color:#fdf4c1aa;" class="language-sh "><code class="language-sh" data-lang="sh"><span style="color:#fdf4c1;">liul85:RubyOnRails MAC$ rails new demo
+</span><span>      </span><span style="color:#fdf4c1;">create
+</span><span>      </span><span style="color:#fdf4c1;">create  README.rdoc
+</span><span>      </span><span style="color:#fdf4c1;">create  Rakefile
+</span><span>      </span><span style="color:#fdf4c1;">create  config.ru
+</span><span>      </span><span style="color:#fdf4c1;">create  .gitignore
+</span><span>      </span><span style="color:#fdf4c1;">create  Gemfile
+</span><span>      </span><span style="color:#fdf4c1;">create  app
+</span><span>      </span><span style="color:#fdf4c1;">create  app/assets/javascripts/application.js
+</span><span>      </span><span style="color:#fdf4c1;">create  app/assets/stylesheets/application.css
+</span><span>      </span><span style="color:#fdf4c1;">create  app/controllers/application_controller.rb
+</span><span>      </span><span style="color:#fdf4c1;">create  app/helpers/application_helper.rb
+</span><span>      </span><span style="color:#fdf4c1;">create  app/views/layouts/application.html.erb
+</span><span>      </span><span style="color:#fdf4c1;">......
+</span><span>      </span><span style="color:#fdf4c1;">......
+</span><span style="color:#fdf4c1;">Using sdoc (0.3.20</span><span>)
+</span><span style="color:#fdf4c1;">Using sqlite3 (1.3.8</span><span>)
+</span><span style="color:#fdf4c1;">Using turbolinks (1.3.0</span><span>)
+</span><span style="color:#fdf4c1;">Using uglifier (2.2.1</span><span>)
+</span><span style="color:#fdf4c1;">Your bundle is complete!
+</span><span style="color:#fdf4c1;">Use `bundle show </span><span style="color:#fa5c4b;">[</span><span style="color:#fdf4c1;">gemname</span><span style="color:#fa5c4b;">]</span><span style="color:#fdf4c1;">` to see where a bundled gem is installed.
+</span></code></pre>
+<p>然后编辑Gemfile在其中加入bootstrap，再运行bundle安装gem</p>
+<pre data-lang="ruby" style="background-color:#282828;color:#fdf4c1aa;" class="language-ruby "><code class="language-ruby" data-lang="ruby"><span style="color:#fa5c4b;">gem </span><span style="color:#b8bb26;">&#39;twitter-bootstrap-rails&#39;
+</span><span style="color:#fa5c4b;">gem </span><span style="color:#b8bb26;">&quot;therubyracer&quot;
+</span><span style="color:#fa5c4b;">gem </span><span style="color:#b8bb26;">&quot;less-rails&quot;
+</span></code></pre>
+<p>接下来可以进行自己的项目，比如利用脚手架创建一个简单的微博</p>
+<pre data-lang="sh" style="background-color:#282828;color:#fdf4c1aa;" class="language-sh "><code class="language-sh" data-lang="sh"><span style="color:#fdf4c1;">liul85:demo MAC$ rails g scaffold post title:string content:text --skip-stylesheets
+</span><span>      </span><span style="color:#fdf4c1;">invoke  active_record
+</span><span>      </span><span style="color:#fdf4c1;">create    db/migrate/20131002193338_create_posts.rb
+</span><span>      </span><span style="color:#fdf4c1;">create    app/models/post.rb
+</span><span>      </span><span style="color:#fdf4c1;">invoke    test_unit
+</span><span>      </span><span style="color:#fdf4c1;">create      test/models/post_test.rb
+</span><span>      </span><span style="color:#fdf4c1;">create      test/fixtures/posts.yml
+</span><span>      </span><span style="color:#fdf4c1;">invoke  resource_route
+</span><span>       </span><span style="color:#fdf4c1;">route    resources :posts
+</span><span>      </span><span style="color:#fdf4c1;">invoke  scaffold_controller
+</span><span>      </span><span style="color:#fdf4c1;">create    app/controllers/posts_controller.rb
+</span><span>      </span><span style="color:#fdf4c1;">invoke    erb
+</span><span>      </span><span style="color:#fdf4c1;">create      app/views/posts
+</span><span>      </span><span style="color:#fdf4c1;">create      app/views/posts/index.html.erb
+</span><span>      </span><span style="color:#fdf4c1;">create      app/views/posts/edit.html.erb
+</span><span>      </span><span style="color:#fdf4c1;">create      app/views/posts/show.html.erb
+</span><span>      </span><span style="color:#fdf4c1;">create      app/views/posts/new.html.erb
+</span><span>      </span><span style="color:#fdf4c1;">create      app/views/posts/_form.html.erb
+</span><span>      </span><span style="color:#fdf4c1;">invoke    test_unit
+</span><span>      </span><span style="color:#fdf4c1;">create      test/controllers/posts_controller_test.rb
+</span><span>      </span><span style="color:#fdf4c1;">invoke    helper
+</span><span>      </span><span style="color:#fdf4c1;">create      app/helpers/posts_helper.rb
+</span><span>      </span><span style="color:#fdf4c1;">invoke      test_unit
+</span><span>      </span><span style="color:#fdf4c1;">create        test/helpers/posts_helper_test.rb
+</span><span>      </span><span style="color:#fdf4c1;">invoke    jbuilder
+</span><span>      </span><span style="color:#fdf4c1;">create      app/views/posts/index.json.jbuilder
+</span><span>      </span><span style="color:#fdf4c1;">create      app/views/posts/show.json.jbuilder
+</span><span>      </span><span style="color:#fdf4c1;">invoke  assets
+</span><span>      </span><span style="color:#fdf4c1;">invoke    coffee
+</span><span>      </span><span style="color:#fdf4c1;">create      app/assets/javascripts/posts.js.coffee
+</span><span>      </span><span style="color:#fdf4c1;">invoke    scss
+</span><span style="color:#fdf4c1;">liul85:demo MAC$
+</span></code></pre>
+<p>别忘了运行dg:migrate来创建迁移</p>
+<pre data-lang="sh" style="background-color:#282828;color:#fdf4c1aa;" class="language-sh "><code class="language-sh" data-lang="sh"><span style="color:#fdf4c1;">liul85:demo MAC$ rake db:migrate
+</span><span style="color:#fe8019;">=</span><span style="color:#b8bb26;">=  </span><span style="color:#fdf4c1;">CreatePosts: migrating ====================================================
+</span><span style="color:#fdf4c1;">-- create_table(:posts</span><span>)
+</span><span>   </span><span style="color:#fdf4c1;">-</span><span style="color:#fe8019;">&gt; </span><span style="color:#d3869b;">0</span><span style="color:#fdf4c1;">.0019s
+</span><span style="color:#fe8019;">=</span><span style="color:#b8bb26;">=  </span><span style="color:#fdf4c1;">CreatePosts: migrated (0.0020s</span><span>) </span><span style="color:#fe8019;">=</span><span style="color:#b8bb26;">==========================================
+</span></code></pre>
+<p>启动rails服务，你看到的是一个没有任何前端的页面，很土</p>
+<p>下来我们在assets中安装bootstrap-rails</p>
+<pre data-lang="sh" style="background-color:#282828;color:#fdf4c1aa;" class="language-sh "><code class="language-sh" data-lang="sh"><span style="color:#fdf4c1;">liul85:demo MAC$ rails g bootstrap:install
+</span><span>      </span><span style="color:#fdf4c1;">insert  app/assets/javascripts/application.js
+</span><span>      </span><span style="color:#fdf4c1;">create  app/assets/javascripts/bootstrap.js.coffee
+</span><span>      </span><span style="color:#fdf4c1;">create  app/assets/stylesheets/bootstrap_and_overrides.css.less
+</span><span>      </span><span style="color:#fdf4c1;">create  config/locales/en.bootstrap.yml
+</span><span>        </span><span style="color:#fdf4c1;">gsub  app/assets/stylesheets/application.css
+</span><span>        </span><span style="color:#fdf4c1;">gsub  app/assets/stylesheets/application.css
+</span><span style="color:#fdf4c1;">liul85:demo MAC$
+</span></code></pre>
+<p>在我们的项目中使用全局布局，会提示与rails本身生成的布局视图有冲突，我们选择替换</p>
+<pre data-lang="sh" style="background-color:#282828;color:#fdf4c1aa;" class="language-sh "><code class="language-sh" data-lang="sh"><span style="color:#fdf4c1;">iul85:demo MAC$ rails g bootstrap:layout application fixed
+</span><span>    </span><span style="color:#fdf4c1;">conflict  app/views/layouts/application.html.erb
+</span><span style="color:#fdf4c1;">Overwrite /Users/MAC/Documents/RubyOnRails/demo/app/views/layouts/application.html.erb</span><span style="color:#fe8019;">?</span><span style="color:#fdf4c1;"> (enter </span><span style="color:#b8bb26;">&quot;h&quot;</span><span style="color:#fdf4c1;"> for help</span><span>) </span><span style="color:#fdf4c1;">[Ynaqdh] y
+</span><span>       </span><span style="color:#fdf4c1;">force  app/views/layouts/application.html.erb
+</span><span style="color:#fdf4c1;">liul85:demo MAC$
+</span></code></pre>
+<p>然后重启rails s，是不是发现立马看到页面显示高端大气上档次了</p>
+<p>这样，bootstrap的基本使用就学会了，它提供了很方便的前端效果，对于学习rails的初学者来说很有用。接下来可以再修改bootstrap_and_overides.css.less文件来提升前端效果了。</p>
+<p>更多内容可以参考<a href="https://github.com/seyhunak/twitter-bootstrap-rails">这里</a></p>
+
+
+<p class="tags-data">
+
+
+<a href="/tags/ruby">#Ruby</a>
+
+<a href="/tags/rails">#Rails</a>
+
+
+</p>
+
+	</main>
+	<footer>
+	    <span class="copyright">© Liang&#x27;s blog · Powered by <a target="_blank" href="https://getzola.org/">Zola</a></span>
+
+	</footer>
+    </body>
+</html>

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+      <title>Liang&#x27;s blog - synchronized</title>
+      <link>https://blog.liangliu.me</link>
+      <description></description>
+      <generator>Zola</generator>
+      <language>en</language>
+      <atom:link href="https://blog.liangliu.me/tags/synchronized/rss.xml" rel="self" type="application/rss+xml"/>
+      <lastBuildDate>Wed, 08 Dec 2021 00:00:00 +0000</lastBuildDate>
+      <item>
+          <title>Double-checked locking问题</title>
+          <pubDate>Wed, 08 Dec 2021 00:00:00 +0000</pubDate>
+          <author>Unknown</author>
+          <link>https://blog.liangliu.me/double-checked-locking/</link>
+          <guid>https://blog.liangliu.me/double-checked-locking/</guid>
+          <description xml:base="https://blog.liangliu.me/double-checked-locking/">&lt;p&gt;今天在处理 Fortify 扫描出来的 report 的时候，有个 issue 觉得挺有必要去研究一下的，写个文章记录一下。
+issue 里面报告了一个&lt;code&gt;Double-checked locking&lt;&#x2F;code&gt;的问题，对应的代码如下&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;java&quot; style=&quot;background-color:#282828;color:#fdf4c1aa;&quot; class=&quot;language-java &quot;&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span style=&quot;color:#8ec07c;&quot;&gt;Class A &lt;&#x2F;span&gt;&lt;span&gt;{
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;private final &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8ec07c;&quot;&gt;Map&lt;&#x2F;span&gt;&lt;span&gt;&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8ec07c;&quot;&gt;String&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8ec07c;&quot;&gt;B&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt; configMap;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;public &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8ec07c;&quot;&gt;A &lt;&#x2F;span&gt;&lt;span&gt;{
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;this&lt;&#x2F;span&gt;&lt;span&gt;.configMap &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fe8019;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;new &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8ec07c;&quot;&gt;HashMap&lt;&#x2F;span&gt;&lt;span&gt;();
+&lt;&#x2F;span&gt;&lt;span&gt;    }
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;public &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8ec07c;&quot;&gt;B &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;getB(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8ec07c;&quot;&gt;String&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt; name) &lt;&#x2F;span&gt;&lt;span&gt;{
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;if &lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fe8019;&quot;&gt;!&lt;&#x2F;span&gt;&lt;span&gt;configMap.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;contains(name)&lt;&#x2F;span&gt;&lt;span&gt;) {
+&lt;&#x2F;span&gt;&lt;span&gt;            &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;synchronized &lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;this&lt;&#x2F;span&gt;&lt;span&gt;) {
+&lt;&#x2F;span&gt;&lt;span&gt;                &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;if &lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fe8019;&quot;&gt;!&lt;&#x2F;span&gt;&lt;span&gt;configMap.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;contains(name)&lt;&#x2F;span&gt;&lt;span&gt;) {
+&lt;&#x2F;span&gt;&lt;span&gt;                    configMap.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;put(name, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;new &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8ec07c;&quot;&gt;B&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;())&lt;&#x2F;span&gt;&lt;span&gt;;
+&lt;&#x2F;span&gt;&lt;span&gt;                }
+&lt;&#x2F;span&gt;&lt;span&gt;            }
+&lt;&#x2F;span&gt;&lt;span&gt;        }
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;return&lt;&#x2F;span&gt;&lt;span&gt; configMap.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;get(name)&lt;&#x2F;span&gt;&lt;span&gt;;
+&lt;&#x2F;span&gt;&lt;span&gt;    }
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;为了保证在多线程环境下相同的 name，不生成多个 B 的实例，这里使用了 Java 程序员经常会使用的双重检测同步代码块来保证对相同的 name，对应的 B 实例只会初始化一次，并且不用去锁住整个方法。&lt;&#x2F;p&gt;
+&lt;p&gt;但是为什么这里 Fortify 会报这个错误呢？&lt;&#x2F;p&gt;
+&lt;p&gt;去查了一下 Fortify 官方对这个的说明，简单说就是这是一个错误的用法，并不会达到想要的效果，参考引用的 David Bacon 等人的 &lt;a href=&quot;http:&#x2F;&#x2F;www.cs.umd.edu&#x2F;~pugh&#x2F;java&#x2F;memoryModel&#x2F;DoubleCheckedLocking.html&quot;&gt;文章&lt;&#x2F;a&gt; 我们来看看&lt;&#x2F;p&gt;
+&lt;p&gt;这样的代码在编译器有优化或者多处理器共享内存的情况下，并不能达到期望的结果&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;java&quot; style=&quot;background-color:#282828;color:#fdf4c1aa;&quot; class=&quot;language-java &quot;&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span style=&quot;font-style:italic;color:#928374;&quot;&gt;&#x2F;&#x2F; Broken multithreaded version
+&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#928374;&quot;&gt;&#x2F;&#x2F; &amp;quot;Double-Checked Locking&amp;quot; idiom
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;class &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8ec07c;&quot;&gt;Foo &lt;&#x2F;span&gt;&lt;span&gt;{
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;private &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8ec07c;&quot;&gt;Helper &lt;&#x2F;span&gt;&lt;span&gt;helper &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fe8019;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d3869b;&quot;&gt;null&lt;&#x2F;span&gt;&lt;span&gt;;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;public &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8ec07c;&quot;&gt;Helper getHelper&lt;&#x2F;span&gt;&lt;span&gt;() {
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;if &lt;&#x2F;span&gt;&lt;span&gt;(helper &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fe8019;&quot;&gt;== &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d3869b;&quot;&gt;null&lt;&#x2F;span&gt;&lt;span&gt;)
+&lt;&#x2F;span&gt;&lt;span&gt;            &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;synchronized&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;this&lt;&#x2F;span&gt;&lt;span&gt;) {
+&lt;&#x2F;span&gt;&lt;span&gt;                &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;if &lt;&#x2F;span&gt;&lt;span&gt;(helper &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fe8019;&quot;&gt;== &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d3869b;&quot;&gt;null&lt;&#x2F;span&gt;&lt;span&gt;)
+&lt;&#x2F;span&gt;&lt;span&gt;                helper &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fe8019;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;new &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8ec07c;&quot;&gt;Helper&lt;&#x2F;span&gt;&lt;span&gt;();
+&lt;&#x2F;span&gt;&lt;span&gt;            }
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;return&lt;&#x2F;span&gt;&lt;span&gt; helper;
+&lt;&#x2F;span&gt;&lt;span&gt;        }
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#928374;&quot;&gt;&#x2F;&#x2F; other functions and members...
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;第一个原因就是&lt;code&gt;new Helper()&lt;&#x2F;code&gt;这个操作和把这个对象赋值给&lt;code&gt;helper&lt;&#x2F;code&gt;变量这个操作并不会按照顺序执行，很有可能&lt;code&gt;new Helper()&lt;&#x2F;code&gt;会在将&lt;code&gt;helper&lt;&#x2F;code&gt;这个变量指向分配的内存之后，比如线程 A 调用&lt;code&gt;getHelper()&lt;&#x2F;code&gt;方法之后，由于指令重排，导致&lt;code&gt;helper&lt;&#x2F;code&gt;变量已经指向了一块分配出来的内存，这个时候它并不是&lt;code&gt;null&lt;&#x2F;code&gt;，但是&lt;code&gt;new Helper()&lt;&#x2F;code&gt;这个还没有执行，这个时候如果线程 B 也执行了&lt;code&gt;getHelper()&lt;&#x2F;code&gt;方法，会导致 B 拿到一个没完全初始化的&lt;code&gt;helper&lt;&#x2F;code&gt;，可能是个默认值，也有可能指向一个错误的内存地址，导致安全问题或者程序 crash。&lt;&#x2F;p&gt;
+&lt;p&gt;如果编译器没有进行指令重排，在多核 CPU 平台上 CPU 或者内存系统也可能进行指令重排，也会导致这个问题。&lt;&#x2F;p&gt;
+&lt;p&gt;文中给出了一个例子&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;bash&quot; style=&quot;background-color:#282828;color:#fdf4c1aa;&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;to the following (note that the Symantec JIT using a handle-based object allocation system&lt;&#x2F;span&gt;&lt;span&gt;)&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fabd2f;&quot;&gt;.
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;0206106A   mov         eax,0F97E78h
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;0206106F   call        01F6B210                  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fe8019;&quot;&gt;; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;allocate space for
+&lt;&#x2F;span&gt;&lt;span&gt;                                                    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fe8019;&quot;&gt;; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;Singleton, return result in eax
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;02061074   mov         dword ptr &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;ebp&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;]&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;,eax       &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fe8019;&quot;&gt;; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;EBP is &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fe8019;&quot;&gt;&amp;amp;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;singletons[i].reference
+&lt;&#x2F;span&gt;&lt;span&gt;                                                    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fe8019;&quot;&gt;; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;store the unconstructed object here.
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;02061077   mov         ecx,dword ptr &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;eax&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;]       &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fe8019;&quot;&gt;; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;dereference the handle to
+&lt;&#x2F;span&gt;&lt;span&gt;                                                    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fe8019;&quot;&gt;; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;get the raw pointer
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;02061079   mov         dword ptr &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;ecx&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;]&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;,100h      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fe8019;&quot;&gt;; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;Next 4 lines are
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;0206107F   mov         dword ptr &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;ecx+4&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;]&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;,200h    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fe8019;&quot;&gt;; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;Singleton&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b8bb26;&quot;&gt;&amp;#39;s inlined constructor
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b8bb26;&quot;&gt;    02061086   mov         dword ptr [ecx+8],400h
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b8bb26;&quot;&gt;    0206108D   mov         dword ptr [ecx+0Ch],0F84030h
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;可以看出会先分配内存，然后赋值给变量，这个时候变量指向的就是一个未初始化的对象，然后才会执行构造函数初始化这个对象。&lt;&#x2F;p&gt;
+&lt;p&gt;在 Java5 之后，可以使用&lt;code&gt;volatile&lt;&#x2F;code&gt;原语，声明&lt;code&gt;helper&lt;&#x2F;code&gt;这个 field 为&lt;code&gt;volatile&lt;&#x2F;code&gt;，这样对于这个 field 的写操作与它之前的任何读写操作不会进行指令重排。对于读操作也不会与之后的任何读写操作指令重排。&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;java&quot; style=&quot;background-color:#282828;color:#fdf4c1aa;&quot; class=&quot;language-java &quot;&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;class &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8ec07c;&quot;&gt;Foo &lt;&#x2F;span&gt;&lt;span&gt;{
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;private volatile &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8ec07c;&quot;&gt;Helper &lt;&#x2F;span&gt;&lt;span&gt;helper;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;public &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8ec07c;&quot;&gt;Helper getHelper&lt;&#x2F;span&gt;&lt;span&gt;() {
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;if &lt;&#x2F;span&gt;&lt;span&gt;(helper &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fe8019;&quot;&gt;== &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d3869b;&quot;&gt;null&lt;&#x2F;span&gt;&lt;span&gt;)
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;synchronized&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;this&lt;&#x2F;span&gt;&lt;span&gt;) {
+&lt;&#x2F;span&gt;&lt;span&gt;            &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;if &lt;&#x2F;span&gt;&lt;span&gt;(helper &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fe8019;&quot;&gt;== &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d3869b;&quot;&gt;null&lt;&#x2F;span&gt;&lt;span&gt;)
+&lt;&#x2F;span&gt;&lt;span&gt;            helper &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fe8019;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;new &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8ec07c;&quot;&gt;Helper&lt;&#x2F;span&gt;&lt;span&gt;();
+&lt;&#x2F;span&gt;&lt;span&gt;        }
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;return&lt;&#x2F;span&gt;&lt;span&gt; helper;
+&lt;&#x2F;span&gt;&lt;span&gt;    }
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#928374;&quot;&gt;&#x2F;&#x2F; other functions and members...
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;再回到我们的代码，我们这里是一个 map，在构造函数里已经初始化了，在加锁的这个 block 里只是生成一个 B 的对象，然后 put 进这个 map 里，这里不会有像&lt;code&gt;helper&lt;&#x2F;code&gt;那样未初始化的问题。另外就是在 map 上加了 volatile，并不会解决类似这样的问题，因为 volatile 是作用给了 map 本身，map 本身在这里的引用并没有变化，我们只是在更新它内部的状态。&lt;&#x2F;p&gt;
+&lt;p&gt;参考&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;http:&#x2F;&#x2F;www.cs.umd.edu&#x2F;~pugh&#x2F;java&#x2F;memoryModel&#x2F;DoubleCheckedLocking.html&lt;&#x2F;li&gt;
+&lt;li&gt;http:&#x2F;&#x2F;gee.cs.oswego.edu&#x2F;dl&#x2F;cpj&#x2F;jmm.html&lt;&#x2F;li&gt;
+&lt;li&gt;http:&#x2F;&#x2F;www.cs.umd.edu&#x2F;~pugh&#x2F;java&#x2F;memoryModel&#x2F;&lt;&#x2F;li&gt;
+&lt;li&gt;http:&#x2F;&#x2F;jeremymanson.blogspot.com&#x2F;2008&#x2F;05&#x2F;double-checked-locking.html&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+</description>
+      </item>
+    </channel>
+</rss>

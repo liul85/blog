@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+<meta content="text/html; charset=UTF-8" http-equiv="content-type"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+<meta name="robots" content="index, follow">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<title>The rspec book note 1</title>
+
+
+
+
+<meta name="title" content="The rspec book note 1">
+
+
+<meta name="description" content="rspec learning notes">
+
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://blog.liangliu.me/the-rspec-book-note-1/">
+
+<meta property="og:site_name" content="Liang&#x27;s blog">
+
+
+<meta property="og:title" content="The rspec book note 1">
+
+
+<meta property="og:description" content="rspec learning notes">
+
+
+<link rel="canonical" href="https://blog.liangliu.me/the-rspec-book-note-1/">
+
+
+
+
+<link rel="alternate" type="application/atom+xml" title="RSS" href="https://blog.liangliu.me/rss.xml"> 
+
+
+
+
+<link rel="stylesheet" type="text/css" href="https://blog.liangliu.me/main.css">
+
+
+
+    </head>
+    <body>
+	<header>
+	    
+                <a class="title" href="https:&#x2F;&#x2F;blog.liangliu.me">
+                    <h1>Liang&#x27;s blog</h1>
+                </a>
+                <nav>
+                    <p>
+                    <a href="https:&#x2F;&#x2F;blog.liangliu.me">Home</a>
+                    <a href="/about">Me</a>
+                    <a href="/rss.xml">Rss</a>
+                    </p>
+                </nav>
+	    
+	</header>
+	<main>
+	    
+<h1 class="page-title">The rspec book note 1</h1>
+<p>
+    <span>2013-09-05</span>
+</p>
+
+<p>最近在看The rspec book这本书，由于平时工作不是这方面的，自己只是非常有兴趣，而且私下时间也不多，只靠每晚学习看的容易忘记，就在这里写一些笔记做复习。</p>
+<p>cucumber主要是由features目录下的多个.feature文件构成BDD场景测试内容，然后针对其中的Given,When,Then,And等语句在featurs目录下的step_definitions子目录中增加ruby语法的行为步骤定义，来实现针对场景的测试执行。</p>
+<p>参照书中的例子，逐步进行学习。</p>
+<p>首先选择一个有趣的游戏--&gt; Codebreaker</p>
+<p>原文对游戏的介绍:</p>
+<blockquote>
+<p>Codebreaker is a logic game in which a code-breaker tries to break a secret code created by a code-maker. The code-maker, which will be played by the application we’re going to write, creates a secret code of four numbers between 1 and 6.</p>
+</blockquote>
+<blockquote>
+<p>The code-breaker then gets some number of chances to break the code. In each turn, the code-breaker makes a guess of four numbers (again, 1 to 6). The code-maker then marks the guess with up to four + and - signs.</p>
+</blockquote>
+<blockquote>
+<p>A + indicates an exact match: one of the numbers in the guess is the same as one of the numbers in the secret code and in the same position.</p>
+</blockquote>
+<blockquote>
+<p>A - indicates a number match: one of the numbers in the guess is the same as one of the numbers in the secret code but in a different position.</p>
+</blockquote>
+<blockquote>
+<p>For example, given a secret code 1234, a guess with 4256 would earn a +-. The + is for the 2 in the second position in the guess, which matches the 2 in the secret code in both number and position: an exact match. The - is for the 4 in the first position in the guess, which matches the 4 in the code but not in the same position: a number match.</p>
+</blockquote>
+<p>简单的说就是计算机给出一个4位的随机数，然后我们输入我们猜想的数字，如果其中有数字和位置都匹配上，那么会返回一个+号，如果只有数字匹配上，那么则返回一个-号。</p>
+<p>然后开始我们的迭代一，选定以下story进行交付:</p>
+<ol>
+<li>Code-breaker starts game</li>
+<li>Code-breaker submits guess</li>
+</ol>
+<p>接下来就可以写cucumber场景测试，首先在features目录下创建一个codebreaker_starts_game.feature，这里我们要测试的是游戏启动:</p>
+<pre style="background-color:#282828;color:#fdf4c1aa;"><code><span>Feature: code-breaker starts the game
+</span><span>         As a code-breaker
+</span><span>         I want to start a game
+</span><span>         So that I can break the code
+</span><span>
+</span><span>         Scenario: start game
+</span><span>	    Given I am not yet playing
+</span><span>	    When I start a new game
+</span><span>	    Then I should see &quot;Welcome to Codebreaker!&quot;
+</span><span>	    And I should see &quot;Enter guess:&quot;
+</span></code></pre>
+<p>再创建一个codebreaker_submits_guess.feature，来测试输入猜想的数字，并看到结果:</p>
+<pre style="background-color:#282828;color:#fdf4c1aa;"><code><span>Feature: code-breaker submits guess
+</span><span>	In order to play this game
+</span><span>	As a code breaker
+</span><span>	I want to submit a guess
+</span><span>	So that I can try to breake the code
+</span><span>
+</span><span>        Scenario: all exact matches
+</span><span>          Given the secret code is &quot;1234&quot;
+</span><span>          When I guess &quot;1234&quot;
+</span><span>          Then the mark should be &quot;++++&quot;
+</span><span>            
+</span><span>        Scenario: 2 exact matches and 2 number matches
+</span><span>          Given the secret code is &quot;1234&quot;
+</span><span>          When I guess &quot;1243&quot;
+</span><span>          Then the mark should be &quot;++--&quot;
+</span><span>            
+</span><span>        Scenario: 1 exact match and 3 number matches
+</span><span>          Given the secret code is &quot;1234&quot;
+</span><span>          When I guess &quot;1342&quot;
+</span><span>          Then the mark should be &quot;+---&quot;
+</span><span>            
+</span><span>        Scenario: 4 number matches
+</span><span>          Given the secret code is &quot;1234&quot;
+</span><span>          When I guess &quot;4321&quot;
+</span><span>          Then the mark should be &quot;----&quot;
+</span></code></pre>
+<p>这样看来，没写几个测试场景呢，用例就已经很复杂了，而且很重复，DRY，我们可以用Scenario Outline来实现简洁:</p>
+<pre style="background-color:#282828;color:#fdf4c1aa;"><code><span>Feature: code-breaker submits guess
+</span><span>	In order to play this game
+</span><span>	As a code breaker
+</span><span>	I want to submit a guess
+</span><span>	So that I can try to breake the code
+</span><span>
+</span><span>	Scenario Outline: submit guess
+</span><span>	    Given the secret code is &quot;&lt;code&gt;&quot;
+</span><span>	    When I guess &quot;&lt;guess&gt;&quot;
+</span><span>	    Then the mark should be &quot;&lt;mark&gt;&quot;
+</span><span>
+</span><span>	    Scenarios: no matches
+</span><span>	      | code | guess | mark |
+</span><span>	      | 1234 | 5678  |      |
+</span><span>
+</span><span>	    Scenarios: 1 number correct
+</span><span>	      | code | guess | mark |
+</span><span>	      | 1234 | 1555  | +    |
+</span><span>	      | 1234 | 2555  | _    |
+</span><span>
+</span><span>	    Scenarios: 2 number correct
+</span><span>	      | code | guess | mark |
+</span><span>	      | 1234 | 5254  | ++   |
+</span><span>	      | 1234 | 5154  | +-   |
+</span><span>	      | 1234 | 2545  | --   |
+</span><span>
+</span><span>	    Scenarios: 3 mumber correct
+</span><span>	      | code | guess | mark |
+</span><span>	      | 1234 | 5234  | +++  |
+</span><span>	      | 1234 | 5134  | ++-  |
+</span><span>	      | 1234 | 5124  | +--  |
+</span><span>	      | 1234 | 5123  | ---  |
+</span><span>
+</span><span>	    Scenarios: all number correct
+</span><span>	      | code | guess | mark |
+</span><span>	      | 1234 | 1234  | ++++ |
+</span><span>	      | 1234 | 1243  | ++-- |
+</span><span>	      | 1234 | 1423  | +--- |
+</span><span>	      | 1234 | 4321  | ---- |
+</span></code></pre>
+<p>这样就好多了，容易读也好理解，就算是非技术人员也能看懂了。</p>
+<p>接下来我们要定义测试步骤了，在features目录下建立子文件夹step_definitions,再建立codebreaker_steps.rb文件。</p>
+<pre data-lang="ruby" style="background-color:#282828;color:#fdf4c1aa;" class="language-ruby "><code class="language-ruby" data-lang="ruby"><span style="color:#fdf4c1;">Given </span><span style="color:#b8bb26;">/^I am not yet playing$/ </span><span style="color:#fa5c4b;">do
+</span><span style="color:#fa5c4b;">end
+</span><span>
+</span><span style="color:#fdf4c1;">When </span><span style="color:#b8bb26;">/^I start a new game$/ </span><span style="color:#fa5c4b;">do
+</span><span>    game </span><span style="color:#fe8019;">= </span><span style="color:#8ec07c;">Codebreaker</span><span>::</span><span style="color:#8ec07c;">Game</span><span>.</span><span style="color:#fa5c4b;">new</span><span>(output)
+</span><span>    game.start
+</span><span style="color:#fa5c4b;">end
+</span><span>
+</span><span style="color:#fdf4c1;">Then </span><span style="color:#b8bb26;">/^I should see &quot;([^&quot;]*)&quot;$/ </span><span style="color:#fa5c4b;">do </span><span>|</span><span style="color:#fdf4c1;">message</span><span>|
+</span><span>    output.messages.should </span><span style="color:#fa5c4b;">include</span><span>(message)
+</span><span style="color:#fa5c4b;">end
+</span><span>
+</span><span style="color:#fa5c4b;">class </span><span style="color:#8ec07c;">Output
+</span><span>    </span><span style="color:#fa5c4b;">def </span><span style="color:#8ec07c;">messages
+</span><span>      </span><span style="color:#fdf4c1;">@messages </span><span style="color:#fe8019;">||= </span><span>[]
+</span><span>    </span><span style="color:#fa5c4b;">end
+</span><span>
+</span><span>    </span><span style="color:#fa5c4b;">def </span><span style="color:#8ec07c;">puts</span><span>(</span><span style="color:#fdf4c1;">message</span><span>)
+</span><span>      messages </span><span style="color:#fe8019;">&lt;&lt;</span><span> message
+</span><span>    </span><span style="color:#fa5c4b;">end
+</span><span style="color:#fa5c4b;">end
+</span><span>
+</span><span style="color:#fa5c4b;">def </span><span style="color:#8ec07c;">output
+</span><span>    </span><span style="color:#fdf4c1;">@output </span><span style="color:#fe8019;">||= </span><span style="color:#8ec07c;">Output</span><span>.</span><span style="color:#fa5c4b;">new
+</span><span style="color:#fa5c4b;">end
+</span></code></pre>
+<p>测试会失败，我们需要写我们game.rb程序了</p>
+<pre data-lang="ruby" style="background-color:#282828;color:#fdf4c1aa;" class="language-ruby "><code class="language-ruby" data-lang="ruby"><span style="color:#fa5c4b;">module </span><span style="color:#8ec07c;">Codebreaker
+</span><span>    </span><span style="color:#fa5c4b;">class </span><span style="color:#8ec07c;">Game
+</span><span>    	</span><span style="color:#fa5c4b;">def </span><span style="color:#8ec07c;">initialize</span><span>(</span><span style="color:#fdf4c1;">output</span><span>)
+</span><span>    	</span><span style="color:#fa5c4b;">end
+</span><span>
+</span><span>    	</span><span style="color:#fa5c4b;">def </span><span style="color:#8ec07c;">start
+</span><span>    	</span><span style="color:#fa5c4b;">end
+</span><span>    </span><span style="color:#fa5c4b;">end
+</span><span style="color:#fa5c4b;">end
+</span></code></pre>
+<p>再进行测试我们会看到提示输出与期望的不一致</p>
+<pre style="background-color:#282828;color:#fdf4c1aa;"><code><span>Scenario: start game
+</span><span>        Given I am not yet playing
+</span><span>        When I start a new game
+</span><span>        Then I should see &quot;Welcome to Codebreaker!&quot;
+</span><span>          expected [] to include &quot;Welcome to Codebreaker!&quot;
+</span></code></pre>
+<p>至于这里怎么再修改，我们会在后面进行学习。</p>
+<p>总结一下：这里我们了解了cucumber的基本目录结构，学习了gherkin语法，包括feature, Scenario, Given, When, Then以及Scenario Outline的用法，到此我们已经从Codebreaker游戏的行为出发点来用cucumber语法进行描述测试，下一节我们会学习使用rspec对每个独立对象的行为进行分析。</p>
+
+
+<p class="tags-data">
+
+
+<a href="/tags/ruby">#Ruby</a>
+
+<a href="/tags/rspec">#Rspec</a>
+
+<a href="/tags/cucumber">#Cucumber</a>
+
+
+</p>
+
+	</main>
+	<footer>
+	    <span class="copyright">© Liang&#x27;s blog · Powered by <a target="_blank" href="https://getzola.org/">Zola</a></span>
+
+	</footer>
+    </body>
+</html>

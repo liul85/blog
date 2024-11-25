@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+      <title>Liang&#x27;s blog - Rails</title>
+      <link>https://blog.liangliu.me</link>
+      <description></description>
+      <generator>Zola</generator>
+      <language>en</language>
+      <atom:link href="https://blog.liangliu.me/tags/rails/rss.xml" rel="self" type="application/rss+xml"/>
+      <lastBuildDate>Sun, 10 Nov 2013 00:00:00 +0000</lastBuildDate>
+      <item>
+          <title>Strong parameters in rails4</title>
+          <pubDate>Sun, 10 Nov 2013 00:00:00 +0000</pubDate>
+          <author>Unknown</author>
+          <link>https://blog.liangliu.me/strong-parameters-in-rails4/</link>
+          <guid>https://blog.liangliu.me/strong-parameters-in-rails4/</guid>
+          <description xml:base="https://blog.liangliu.me/strong-parameters-in-rails4/">&lt;p&gt;在rails中有很多安全相关的特性保证我们的web应用足够安全，今天在学习rails时候碰到了这个，当我试图用一个create方法创建一个新话题的时候，我遇到了麻烦，我的controller如下：&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;ruby&quot; style=&quot;background-color:#282828;color:#fdf4c1aa;&quot; class=&quot;language-ruby &quot;&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;def &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8ec07c;&quot;&gt;new
+&lt;&#x2F;span&gt;&lt;span&gt;  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;@topic &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fe8019;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8ec07c;&quot;&gt;Topic&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;new
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;end
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;def &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8ec07c;&quot;&gt;create
+&lt;&#x2F;span&gt;&lt;span&gt;  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8ec07c;&quot;&gt;Topic&lt;&#x2F;span&gt;&lt;span&gt;.create(params[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;:topic&lt;&#x2F;span&gt;&lt;span&gt;])
+&lt;&#x2F;span&gt;&lt;span&gt;  redirect_to root_path
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;end
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;在用户提交新的话题后，rails会报错提示&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;code&gt;ActiveModel::ForbiddenAttributesError&lt;&#x2F;code&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;在查阅了railsguides后才知道，这里不能直接使用create(params[:topic])，因为如果这样写，在web应用中这样可以随便让任何参数都传进来从而导致不安全的结果。在这里我们要用的是strong_parameters，我们需要指定controller只允许接受哪几个参数&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;ruby&quot; style=&quot;background-color:#282828;color:#fdf4c1aa;&quot; class=&quot;language-ruby &quot;&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;def &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8ec07c;&quot;&gt;create
+&lt;&#x2F;span&gt;&lt;span&gt;  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8ec07c;&quot;&gt;Topic&lt;&#x2F;span&gt;&lt;span&gt;.create(params[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;:topic&lt;&#x2F;span&gt;&lt;span&gt;].permit(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;:title&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;:content&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;:node_id&lt;&#x2F;span&gt;&lt;span&gt;))
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;end
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;这样再刷新页面应该就ok了。不过在这个过程中我还遇到了一个问题，我当时只传入了title和content 2个参数，忘了把node_id传过去了，结果刷新页面就报错，怎么也找不到问题，后来尝试把默认传过去的参数打印出来，像这样&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;ruby&quot; style=&quot;background-color:#282828;color:#fdf4c1aa;&quot; class=&quot;language-ruby &quot;&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;def &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8ec07c;&quot;&gt;create
+&lt;&#x2F;span&gt;&lt;span&gt;  render &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;text:&lt;&#x2F;span&gt;&lt;span&gt; params[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;:topic&lt;&#x2F;span&gt;&lt;span&gt;].&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fabd2f;&quot;&gt;inspect
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;end
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;在提交之后就能在浏览器中看到传过去的参数以及取值，再来考虑create方法中应该怎么写了。&lt;&#x2F;p&gt;
+&lt;p&gt;但其实上面那个还不是最好的写法，你应该这样写&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;ruby&quot; style=&quot;background-color:#282828;color:#fdf4c1aa;&quot; class=&quot;language-ruby &quot;&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;def &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8ec07c;&quot;&gt;create
+&lt;&#x2F;span&gt;&lt;span&gt;  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8ec07c;&quot;&gt;Topic&lt;&#x2F;span&gt;&lt;span&gt;.create(topic_params)
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;end
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;private
+&lt;&#x2F;span&gt;&lt;span&gt;  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;def &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8ec07c;&quot;&gt;topic_params
+&lt;&#x2F;span&gt;&lt;span&gt;    params.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;require&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;:topic&lt;&#x2F;span&gt;&lt;span&gt;).permit(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;:title&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;:content&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;:node_id&lt;&#x2F;span&gt;&lt;span&gt;)
+&lt;&#x2F;span&gt;&lt;span&gt;  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;end
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;在这里我们定义一个私有方法&lt;code&gt;topic_params&lt;&#x2F;code&gt;，然后在create里调用这个方法来实现topic所带的参数的传递，这样就避免了通过修改hash传递给model来设置model属性的风险。更多的可以参考&lt;a href=&quot;http:&#x2F;&#x2F;weblog.rubyonrails.org&#x2F;2012&#x2F;3&#x2F;21&#x2F;strong-parameters&#x2F;&quot;&gt;这里&lt;&#x2F;a&gt;。&lt;&#x2F;p&gt;
+</description>
+      </item>
+      <item>
+          <title>Use twitter-bootstrap in a rails project</title>
+          <pubDate>Wed, 02 Oct 2013 00:00:00 +0000</pubDate>
+          <author>Unknown</author>
+          <link>https://blog.liangliu.me/use-twitter-bootstrap-in-a-rails-project/</link>
+          <guid>https://blog.liangliu.me/use-twitter-bootstrap-in-a-rails-project/</guid>
+          <description xml:base="https://blog.liangliu.me/use-twitter-bootstrap-in-a-rails-project/">&lt;p&gt;昨天在看&lt;a href=&quot;http:&#x2F;&#x2F;railscasts.com&#x2F;&quot;&gt;Railscasts&lt;&#x2F;a&gt;上看到了这个&lt;a href=&quot;http:&#x2F;&#x2F;railscasts.com&#x2F;episodes&#x2F;328-twitter-bootstrap-basics&quot;&gt;视频&lt;&#x2F;a&gt;，于是实践一把，新建一个demo项目&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;sh&quot; style=&quot;background-color:#282828;color:#fdf4c1aa;&quot; class=&quot;language-sh &quot;&gt;&lt;code class=&quot;language-sh&quot; data-lang=&quot;sh&quot;&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;liul85:RubyOnRails MAC$ rails new demo
+&lt;&#x2F;span&gt;&lt;span&gt;      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;create
+&lt;&#x2F;span&gt;&lt;span&gt;      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;create  README.rdoc
+&lt;&#x2F;span&gt;&lt;span&gt;      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;create  Rakefile
+&lt;&#x2F;span&gt;&lt;span&gt;      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;create  config.ru
+&lt;&#x2F;span&gt;&lt;span&gt;      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;create  .gitignore
+&lt;&#x2F;span&gt;&lt;span&gt;      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;create  Gemfile
+&lt;&#x2F;span&gt;&lt;span&gt;      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;create  app
+&lt;&#x2F;span&gt;&lt;span&gt;      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;create  app&#x2F;assets&#x2F;javascripts&#x2F;application.js
+&lt;&#x2F;span&gt;&lt;span&gt;      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;create  app&#x2F;assets&#x2F;stylesheets&#x2F;application.css
+&lt;&#x2F;span&gt;&lt;span&gt;      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;create  app&#x2F;controllers&#x2F;application_controller.rb
+&lt;&#x2F;span&gt;&lt;span&gt;      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;create  app&#x2F;helpers&#x2F;application_helper.rb
+&lt;&#x2F;span&gt;&lt;span&gt;      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;create  app&#x2F;views&#x2F;layouts&#x2F;application.html.erb
+&lt;&#x2F;span&gt;&lt;span&gt;      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;......
+&lt;&#x2F;span&gt;&lt;span&gt;      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;......
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;Using sdoc (0.3.20&lt;&#x2F;span&gt;&lt;span&gt;)
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;Using sqlite3 (1.3.8&lt;&#x2F;span&gt;&lt;span&gt;)
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;Using turbolinks (1.3.0&lt;&#x2F;span&gt;&lt;span&gt;)
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;Using uglifier (2.2.1&lt;&#x2F;span&gt;&lt;span&gt;)
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;Your bundle is complete!
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;Use `bundle show &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;gemname&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;]&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;` to see where a bundled gem is installed.
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;然后编辑Gemfile在其中加入bootstrap，再运行bundle安装gem&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;ruby&quot; style=&quot;background-color:#282828;color:#fdf4c1aa;&quot; class=&quot;language-ruby &quot;&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;gem &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b8bb26;&quot;&gt;&amp;#39;twitter-bootstrap-rails&amp;#39;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;gem &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b8bb26;&quot;&gt;&amp;quot;therubyracer&amp;quot;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;gem &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b8bb26;&quot;&gt;&amp;quot;less-rails&amp;quot;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;接下来可以进行自己的项目，比如利用脚手架创建一个简单的微博&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;sh&quot; style=&quot;background-color:#282828;color:#fdf4c1aa;&quot; class=&quot;language-sh &quot;&gt;&lt;code class=&quot;language-sh&quot; data-lang=&quot;sh&quot;&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;liul85:demo MAC$ rails g scaffold post title:string content:text --skip-stylesheets
+&lt;&#x2F;span&gt;&lt;span&gt;      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;invoke  active_record
+&lt;&#x2F;span&gt;&lt;span&gt;      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;create    db&#x2F;migrate&#x2F;20131002193338_create_posts.rb
+&lt;&#x2F;span&gt;&lt;span&gt;      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;create    app&#x2F;models&#x2F;post.rb
+&lt;&#x2F;span&gt;&lt;span&gt;      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;invoke    test_unit
+&lt;&#x2F;span&gt;&lt;span&gt;      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;create      test&#x2F;models&#x2F;post_test.rb
+&lt;&#x2F;span&gt;&lt;span&gt;      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;create      test&#x2F;fixtures&#x2F;posts.yml
+&lt;&#x2F;span&gt;&lt;span&gt;      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;invoke  resource_route
+&lt;&#x2F;span&gt;&lt;span&gt;       &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;route    resources :posts
+&lt;&#x2F;span&gt;&lt;span&gt;      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;invoke  scaffold_controller
+&lt;&#x2F;span&gt;&lt;span&gt;      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;create    app&#x2F;controllers&#x2F;posts_controller.rb
+&lt;&#x2F;span&gt;&lt;span&gt;      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;invoke    erb
+&lt;&#x2F;span&gt;&lt;span&gt;      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;create      app&#x2F;views&#x2F;posts
+&lt;&#x2F;span&gt;&lt;span&gt;      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;create      app&#x2F;views&#x2F;posts&#x2F;index.html.erb
+&lt;&#x2F;span&gt;&lt;span&gt;      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;create      app&#x2F;views&#x2F;posts&#x2F;edit.html.erb
+&lt;&#x2F;span&gt;&lt;span&gt;      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;create      app&#x2F;views&#x2F;posts&#x2F;show.html.erb
+&lt;&#x2F;span&gt;&lt;span&gt;      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;create      app&#x2F;views&#x2F;posts&#x2F;new.html.erb
+&lt;&#x2F;span&gt;&lt;span&gt;      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;create      app&#x2F;views&#x2F;posts&#x2F;_form.html.erb
+&lt;&#x2F;span&gt;&lt;span&gt;      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;invoke    test_unit
+&lt;&#x2F;span&gt;&lt;span&gt;      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;create      test&#x2F;controllers&#x2F;posts_controller_test.rb
+&lt;&#x2F;span&gt;&lt;span&gt;      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;invoke    helper
+&lt;&#x2F;span&gt;&lt;span&gt;      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;create      app&#x2F;helpers&#x2F;posts_helper.rb
+&lt;&#x2F;span&gt;&lt;span&gt;      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;invoke      test_unit
+&lt;&#x2F;span&gt;&lt;span&gt;      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;create        test&#x2F;helpers&#x2F;posts_helper_test.rb
+&lt;&#x2F;span&gt;&lt;span&gt;      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;invoke    jbuilder
+&lt;&#x2F;span&gt;&lt;span&gt;      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;create      app&#x2F;views&#x2F;posts&#x2F;index.json.jbuilder
+&lt;&#x2F;span&gt;&lt;span&gt;      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;create      app&#x2F;views&#x2F;posts&#x2F;show.json.jbuilder
+&lt;&#x2F;span&gt;&lt;span&gt;      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;invoke  assets
+&lt;&#x2F;span&gt;&lt;span&gt;      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;invoke    coffee
+&lt;&#x2F;span&gt;&lt;span&gt;      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;create      app&#x2F;assets&#x2F;javascripts&#x2F;posts.js.coffee
+&lt;&#x2F;span&gt;&lt;span&gt;      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;invoke    scss
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;liul85:demo MAC$
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;别忘了运行dg:migrate来创建迁移&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;sh&quot; style=&quot;background-color:#282828;color:#fdf4c1aa;&quot; class=&quot;language-sh &quot;&gt;&lt;code class=&quot;language-sh&quot; data-lang=&quot;sh&quot;&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;liul85:demo MAC$ rake db:migrate
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fe8019;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b8bb26;&quot;&gt;=  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;CreatePosts: migrating ====================================================
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;-- create_table(:posts&lt;&#x2F;span&gt;&lt;span&gt;)
+&lt;&#x2F;span&gt;&lt;span&gt;   &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;-&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fe8019;&quot;&gt;&amp;gt; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d3869b;&quot;&gt;0&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;.0019s
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fe8019;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b8bb26;&quot;&gt;=  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;CreatePosts: migrated (0.0020s&lt;&#x2F;span&gt;&lt;span&gt;) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fe8019;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b8bb26;&quot;&gt;==========================================
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;启动rails服务，你看到的是一个没有任何前端的页面，很土&lt;&#x2F;p&gt;
+&lt;p&gt;下来我们在assets中安装bootstrap-rails&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;sh&quot; style=&quot;background-color:#282828;color:#fdf4c1aa;&quot; class=&quot;language-sh &quot;&gt;&lt;code class=&quot;language-sh&quot; data-lang=&quot;sh&quot;&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;liul85:demo MAC$ rails g bootstrap:install
+&lt;&#x2F;span&gt;&lt;span&gt;      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;insert  app&#x2F;assets&#x2F;javascripts&#x2F;application.js
+&lt;&#x2F;span&gt;&lt;span&gt;      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;create  app&#x2F;assets&#x2F;javascripts&#x2F;bootstrap.js.coffee
+&lt;&#x2F;span&gt;&lt;span&gt;      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;create  app&#x2F;assets&#x2F;stylesheets&#x2F;bootstrap_and_overrides.css.less
+&lt;&#x2F;span&gt;&lt;span&gt;      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;create  config&#x2F;locales&#x2F;en.bootstrap.yml
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;gsub  app&#x2F;assets&#x2F;stylesheets&#x2F;application.css
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;gsub  app&#x2F;assets&#x2F;stylesheets&#x2F;application.css
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;liul85:demo MAC$
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;在我们的项目中使用全局布局，会提示与rails本身生成的布局视图有冲突，我们选择替换&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;sh&quot; style=&quot;background-color:#282828;color:#fdf4c1aa;&quot; class=&quot;language-sh &quot;&gt;&lt;code class=&quot;language-sh&quot; data-lang=&quot;sh&quot;&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;iul85:demo MAC$ rails g bootstrap:layout application fixed
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;conflict  app&#x2F;views&#x2F;layouts&#x2F;application.html.erb
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;Overwrite &#x2F;Users&#x2F;MAC&#x2F;Documents&#x2F;RubyOnRails&#x2F;demo&#x2F;app&#x2F;views&#x2F;layouts&#x2F;application.html.erb&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fe8019;&quot;&gt;?&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt; (enter &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b8bb26;&quot;&gt;&amp;quot;h&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt; for help&lt;&#x2F;span&gt;&lt;span&gt;) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;[Ynaqdh] y
+&lt;&#x2F;span&gt;&lt;span&gt;       &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;force  app&#x2F;views&#x2F;layouts&#x2F;application.html.erb
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;liul85:demo MAC$
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;然后重启rails s，是不是发现立马看到页面显示高端大气上档次了&lt;&#x2F;p&gt;
+&lt;p&gt;这样，bootstrap的基本使用就学会了，它提供了很方便的前端效果，对于学习rails的初学者来说很有用。接下来可以再修改bootstrap_and_overides.css.less文件来提升前端效果了。&lt;&#x2F;p&gt;
+&lt;p&gt;更多内容可以参考&lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;seyhunak&#x2F;twitter-bootstrap-rails&quot;&gt;这里&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+</description>
+      </item>
+      <item>
+          <title>Default http method of form_for</title>
+          <pubDate>Sun, 29 Sep 2013 00:00:00 +0000</pubDate>
+          <author>Unknown</author>
+          <link>https://blog.liangliu.me/default-http-method-of-form-for/</link>
+          <guid>https://blog.liangliu.me/default-http-method-of-form-for/</guid>
+          <description xml:base="https://blog.liangliu.me/default-http-method-of-form-for/">&lt;p&gt;在看RubyonRails Guides时候，在posts的new视图里用到了form_for方法来向控制器提交表单，在做了这节之后一直不明白这个表单是在哪里定义提交给控制器中的create动作的，因为我没有看到任何地方写了这个是提交给create动作.&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;erb&quot; style=&quot;background-color:#282828;color:#fdf4c1aa;&quot; class=&quot;language-erb &quot;&gt;&lt;code class=&quot;language-erb&quot; data-lang=&quot;erb&quot;&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;&amp;lt;%= form_for :post, url: posts_path &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;do &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;|f| %&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;&amp;lt;% &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;if &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;@post.errors.any? %&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#83a598;&quot;&gt;&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;font-weight:bold;color:#8ec07c;&quot;&gt;div &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b8bb26;&quot;&gt;id&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8ec07c;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b8bb26;&quot;&gt;&amp;quot;errorExplanation&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#83a598;&quot;&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#83a598;&quot;&gt;&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;font-weight:bold;color:#8ec07c;&quot;&gt;h2&lt;&#x2F;span&gt;&lt;span style=&quot;color:#83a598;&quot;&gt;&amp;gt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;&amp;lt;%= pluralize(@post.errors.count, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b8bb26;&quot;&gt;&amp;quot;error&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;) %&amp;gt;&lt;&#x2F;span&gt;&lt;span&gt; prohibited
+&lt;&#x2F;span&gt;&lt;span&gt;      this post from being saved:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#83a598;&quot;&gt;&amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;font-weight:bold;color:#8ec07c;&quot;&gt;h2&lt;&#x2F;span&gt;&lt;span style=&quot;color:#83a598;&quot;&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#83a598;&quot;&gt;&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;font-weight:bold;color:#8ec07c;&quot;&gt;ul&lt;&#x2F;span&gt;&lt;span style=&quot;color:#83a598;&quot;&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;&amp;lt;% @post.errors.full_messages.each &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;do &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;|msg| %&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#83a598;&quot;&gt;&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;font-weight:bold;color:#8ec07c;&quot;&gt;li&lt;&#x2F;span&gt;&lt;span style=&quot;color:#83a598;&quot;&gt;&amp;gt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;&amp;lt;%= msg %&amp;gt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#83a598;&quot;&gt;&amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;font-weight:bold;color:#8ec07c;&quot;&gt;li&lt;&#x2F;span&gt;&lt;span style=&quot;color:#83a598;&quot;&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;&amp;lt;% &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;end &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;%&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#83a598;&quot;&gt;&amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;font-weight:bold;color:#8ec07c;&quot;&gt;ul&lt;&#x2F;span&gt;&lt;span style=&quot;color:#83a598;&quot;&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#83a598;&quot;&gt;&amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;font-weight:bold;color:#8ec07c;&quot;&gt;div&lt;&#x2F;span&gt;&lt;span style=&quot;color:#83a598;&quot;&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;&amp;lt;% &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;end &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;%&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#83a598;&quot;&gt;&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;font-weight:bold;color:#8ec07c;&quot;&gt;p&lt;&#x2F;span&gt;&lt;span style=&quot;color:#83a598;&quot;&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;&amp;lt;%= f.label :title %&amp;gt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#83a598;&quot;&gt;&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;font-weight:bold;color:#8ec07c;&quot;&gt;br&lt;&#x2F;span&gt;&lt;span style=&quot;color:#83a598;&quot;&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;&amp;lt;%= f.text_field :title %&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#83a598;&quot;&gt;&amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;font-weight:bold;color:#8ec07c;&quot;&gt;p&lt;&#x2F;span&gt;&lt;span style=&quot;color:#83a598;&quot;&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt; 
+&lt;&#x2F;span&gt;&lt;span&gt;  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#83a598;&quot;&gt;&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;font-weight:bold;color:#8ec07c;&quot;&gt;p&lt;&#x2F;span&gt;&lt;span style=&quot;color:#83a598;&quot;&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;&amp;lt;%= f.label :text %&amp;gt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#83a598;&quot;&gt;&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;font-weight:bold;color:#8ec07c;&quot;&gt;br&lt;&#x2F;span&gt;&lt;span style=&quot;color:#83a598;&quot;&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;&amp;lt;%= f.text_area :text %&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#83a598;&quot;&gt;&amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;font-weight:bold;color:#8ec07c;&quot;&gt;p&lt;&#x2F;span&gt;&lt;span style=&quot;color:#83a598;&quot;&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt; 
+&lt;&#x2F;span&gt;&lt;span&gt;  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#83a598;&quot;&gt;&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;font-weight:bold;color:#8ec07c;&quot;&gt;p&lt;&#x2F;span&gt;&lt;span style=&quot;color:#83a598;&quot;&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;&amp;lt;%= f.submit %&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#83a598;&quot;&gt;&amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;font-weight:bold;color:#8ec07c;&quot;&gt;p&lt;&#x2F;span&gt;&lt;span style=&quot;color:#83a598;&quot;&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;&amp;lt;% &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;end &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;%&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt; 
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;&amp;lt;%= link_to &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b8bb26;&quot;&gt;&amp;#39;Back&amp;#39;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;, posts_path %&amp;gt;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;当再看到Updating Posts章节的时候，才看到一些解释，原来默认form_for是向POST提交表单，而如果我们用rake routes来看路由设置的话，会看到POST对应的就是控制器中的create方法。&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;sh&quot; style=&quot;background-color:#282828;color:#fdf4c1aa;&quot; class=&quot;language-sh &quot;&gt;&lt;code class=&quot;language-sh&quot; data-lang=&quot;sh&quot;&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;iul85:blog MAC$ rake routes
+&lt;&#x2F;span&gt;&lt;span&gt;   &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;Prefix Verb   URI Pattern               Controller#Action
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;posts GET    &#x2F;posts(.:format&lt;&#x2F;span&gt;&lt;span&gt;)          &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;posts#index
+&lt;&#x2F;span&gt;&lt;span&gt;          &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;POST   &#x2F;posts(.:format&lt;&#x2F;span&gt;&lt;span&gt;)          &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;posts#create
+&lt;&#x2F;span&gt;&lt;span&gt; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;new_post GET    &#x2F;posts&#x2F;new(.:format&lt;&#x2F;span&gt;&lt;span&gt;)      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;posts#new
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;edit_post GET    &#x2F;posts&#x2F;:id&#x2F;edit(.:format&lt;&#x2F;span&gt;&lt;span&gt;) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;posts#edit
+&lt;&#x2F;span&gt;&lt;span&gt;     &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;post GET    &#x2F;posts&#x2F;:id(.:format&lt;&#x2F;span&gt;&lt;span&gt;)      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;posts#show
+&lt;&#x2F;span&gt;&lt;span&gt;          &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;PATCH  &#x2F;posts&#x2F;:id(.:format&lt;&#x2F;span&gt;&lt;span&gt;)      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;posts#update
+&lt;&#x2F;span&gt;&lt;span&gt;          &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;PUT    &#x2F;posts&#x2F;:id(.:format&lt;&#x2F;span&gt;&lt;span&gt;)      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;posts#update
+&lt;&#x2F;span&gt;&lt;span&gt;          &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;DELETE &#x2F;posts&#x2F;:id(.:format&lt;&#x2F;span&gt;&lt;span&gt;)      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;posts#destroy
+&lt;&#x2F;span&gt;&lt;span&gt;     &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;root GET    &#x2F;                         welcome#index
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;同时也可以在form_for中指定要提交的方法，比如在update的时候，我们是提交给PATCH，转向用户的这条blog，可以这么写，在form_for中添加method，指定提交的方法就可以了，不过要注意method和后面url的对应关系，用update和destroy时候需要指定对象来操作.&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;erb&quot; style=&quot;background-color:#282828;color:#fdf4c1aa;&quot; class=&quot;language-erb &quot;&gt;&lt;code class=&quot;language-erb&quot; data-lang=&quot;erb&quot;&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;&amp;lt;%= form_for :post, url: post_path(@post.id) }, method: :patch &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;do &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;|f| %&amp;gt;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;这个在文档中说明如下，同时可以参考&lt;a href=&quot;http:&#x2F;&#x2F;guides.rubyonrails.org&#x2F;form_helpers.html&quot;&gt;form_helpers&lt;&#x2F;a&gt;文档。&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#282828;color:#fdf4c1aa;&quot;&gt;&lt;code&gt;&lt;span&gt;The method: :patch option tells Rails that we want this form to be submitted via the PATCH HTTP method which is the HTTP method you are expected to use to update resources according to the REST protocol.
+&lt;&#x2F;span&gt;&lt;span&gt;By default forms built with the form_for helper are sent via POST.
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+</description>
+      </item>
+    </channel>
+</rss>

@@ -1,0 +1,362 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+      <title>Liang&#x27;s blog - Rspec</title>
+      <link>https://blog.liangliu.me</link>
+      <description></description>
+      <generator>Zola</generator>
+      <language>en</language>
+      <atom:link href="https://blog.liangliu.me/tags/rspec/rss.xml" rel="self" type="application/rss+xml"/>
+      <lastBuildDate>Sat, 14 Sep 2013 00:00:00 +0000</lastBuildDate>
+      <item>
+          <title>The rspec book note 3</title>
+          <pubDate>Sat, 14 Sep 2013 00:00:00 +0000</pubDate>
+          <author>Unknown</author>
+          <link>https://blog.liangliu.me/the-rspec-book-note-3/</link>
+          <guid>https://blog.liangliu.me/the-rspec-book-note-3/</guid>
+          <description xml:base="https://blog.liangliu.me/the-rspec-book-note-3/">&lt;p&gt;BDD行为驱动开发，一般是指从软件的外在行为出发进行功能描述，从而推动代码开发并最终实现软件交付的过程。首先我们需要从客户的角度去理解需求，去搞清楚他们面临的问题，从他们对期望的软件描述中来获取有价值的信息。其次我们不要只关注主要客户的需求，任何对于我们将要做的项目有浓厚兴趣并提出一些看法的人我们都需要理解他们的意见。&lt;&#x2F;p&gt;
+&lt;p&gt;当我们向客户交付有价值的软件的时候，我们需要意识到，我们交付的东西要能够解决客户的问题，但是也不能过度设计。BDD有一系列自己的原则需要我们遵守：&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;enough-is-enough&quot;&gt;Enough is enough&lt;&#x2F;h2&gt;
+&lt;p&gt;从前期的需求分析，设计开始我们需要多做获取一个好的开始，但是也不能做过了，因为那样是一种浪费，刚刚好就是最好。&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;deliver-stakeholder-value&quot;&gt;Deliver stakeholder value&lt;&#x2F;h2&gt;
+&lt;p&gt;如果你做的东西既不能给客户带来价值也不能锻炼你交付有价值软件的能力，那么还是歇歇吧，干点别的啥。&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;it-s-all-behavior&quot;&gt;It&#x27;s all behavior&lt;&#x2F;h2&gt;
+&lt;p&gt;不管是从代码，应用程序，还是更高的层次来讲，我们都可以用相同的思维方式和语言结构从不同的颗粒度去描述我们的软件的外在行为。&lt;&#x2F;p&gt;
+&lt;p&gt;BDD中定义任何关心软件的人价值的人都可以作为利益相关者，当他们与BA讨论了他遇到的问题和面临的困境后，会与测试人员来决定故事场景，我理解的故事场景其实越简单越好，就是一个很简单的软件的对外呈现的行为，然后选择出优先级最高的故事，开发人员只需要实现故事中最简单的场景即可，不要做过多的开发工作。在开始写代码之前最重要的的事情就是我们要让这些故事场景全部自动化，我们需要Cucumber。然后我们就可以开始编码，使用rspec进行TDD直到场景实现，然后重构，然后再次迭代直到其他场景也都实现，最终整个故事全部完成。&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;yi-ge-gu-shi-ying-gai-shi-shen-me-yang-de&quot;&gt;一个故事应该是什么样的？&lt;&#x2F;h1&gt;
+&lt;h3 id=&quot;a-title&quot;&gt;A title&lt;&#x2F;h3&gt;
+&lt;p&gt;它应该有个标题，来说明我们做的是什么。&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;a-narrative&quot;&gt;A narrative&lt;&#x2F;h3&gt;
+&lt;p&gt;一般的描述是作为一个怎样的角色，我需要一个什么样的东西，这样我就能够干什么。&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;acceptance-criteria&quot;&gt;Acceptance criteria&lt;&#x2F;h3&gt;
+&lt;p&gt;有了验收标准我们才知道什么样的行为就算是ok了。&lt;&#x2F;p&gt;
+&lt;p&gt;在软件交付的节奏中我们把需求分解为特性然后再变成故事和一堆场景，我们把它们全都写成自动化测试用例，就可以作为验收用例来保证我们做的软件是我们期望的。&lt;&#x2F;p&gt;
+</description>
+      </item>
+      <item>
+          <title>The rspec book note 2</title>
+          <pubDate>Sat, 07 Sep 2013 00:00:00 +0000</pubDate>
+          <author>Unknown</author>
+          <link>https://blog.liangliu.me/the-rspec-book-note-2/</link>
+          <guid>https://blog.liangliu.me/the-rspec-book-note-2/</guid>
+          <description xml:base="https://blog.liangliu.me/the-rspec-book-note-2/">&lt;p&gt;在上一节中我们通过cucumber从外部对我们的Codebreaker程序行为进行了描述测试，通过step_definitions来描述了每个场景的步骤，在最后我们遗留了一个失败，我们期望Game向output发送一个消息，但是得到的结果消息是空的。这一节我们要用rspec来更细节的描述Game类的实例对象的行为。&lt;&#x2F;p&gt;
+&lt;p&gt;在工程目录下创建一个rspec目录，再创建一个codebreaker子目录，然后创建game_spec.rb文件，加入如下内容：&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;ruby&quot; style=&quot;background-color:#282828;color:#fdf4c1aa;&quot; class=&quot;language-ruby &quot;&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;require &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b8bb26;&quot;&gt;&amp;#39;spec_helper&amp;#39;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;module &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8ec07c;&quot;&gt;Codebreaker
+&lt;&#x2F;span&gt;&lt;span&gt;    describe &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;Game &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;do
+&lt;&#x2F;span&gt;&lt;span&gt;	describe &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b8bb26;&quot;&gt;&amp;quot;#start&amp;quot; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;do
+&lt;&#x2F;span&gt;&lt;span&gt;	    it &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b8bb26;&quot;&gt;&amp;quot;sends a welcome message&amp;quot;
+&lt;&#x2F;span&gt;&lt;span&gt;	    it &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b8bb26;&quot;&gt;&amp;quot;prompts for the first guess&amp;quot;
+&lt;&#x2F;span&gt;&lt;span&gt;	&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;end
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;end
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;end
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;在这个文件我们首先require了一个文件叫spec_helper，这个文件我们创建后保存在spec的目录下，rspec会自动将这个spec目录添加到$LOAD_PATH中。&lt;&#x2F;p&gt;
+&lt;p&gt;接下来我们定义了一个叫Codebreakder的module，个人感觉这个模块意义就是指出测试的是哪个代码吧。&lt;&#x2F;p&gt;
+&lt;p&gt;describe方法是RSpec的一个API，会返回一个RSpec::Core::ExampleGroup的子类，这里描述的就是一个Game对象的各种行为集合。然后it方法创建了一个行为，来描述具体的一个动作。&lt;&#x2F;p&gt;
+&lt;p&gt;接下来我们要做的就是将我们的rspec测试集与我们的代码连接起来，在第二行，我们需要加入&lt;code&gt;require &#x27;game&#x27;&lt;&#x2F;code&gt;，这样将我们的代码引用到了rspec测试集中。&lt;&#x2F;p&gt;
+&lt;p&gt;然后在终端执行命令：&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;bash&quot; style=&quot;background-color:#282828;color:#fdf4c1aa;&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;rspec spec&#x2F;codebreaker&#x2F;game_rspec.rb --format doc
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;我们会看到下面的输出：&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;ruby&quot; style=&quot;background-color:#282828;color:#fdf4c1aa;&quot; class=&quot;language-ruby &quot;&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span style=&quot;color:#8ec07c;&quot;&gt;Codebreaker&lt;&#x2F;span&gt;&lt;span&gt;::Game
+&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#928374;&quot;&gt;#start
+&lt;&#x2F;span&gt;&lt;span&gt;sends a welcome message (&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;PENDING: Not Yet Implemented&lt;&#x2F;span&gt;&lt;span&gt;)
+&lt;&#x2F;span&gt;&lt;span&gt;prompts &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;for&lt;&#x2F;span&gt;&lt;span&gt; the first guess (&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;PENDING: Not Yet Implemented&lt;&#x2F;span&gt;&lt;span&gt;)
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;Pending:
+&lt;&#x2F;span&gt;&lt;span&gt;  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8ec07c;&quot;&gt;Codebreaker&lt;&#x2F;span&gt;&lt;span&gt;::Game&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#928374;&quot;&gt;#start sends a welcome message
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#928374;&quot;&gt;# Not Yet Implemented
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#928374;&quot;&gt;# .&#x2F;spec&#x2F;codebreaker&#x2F;game_spec.rb:6
+&lt;&#x2F;span&gt;&lt;span&gt;  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8ec07c;&quot;&gt;Codebreaker&lt;&#x2F;span&gt;&lt;span&gt;::Game&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#928374;&quot;&gt;#start prompts for the first guess
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#928374;&quot;&gt;# Not Yet Implemented
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#928374;&quot;&gt;# .&#x2F;spec&#x2F;codebreaker&#x2F;game_spec.rb:7
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;&lt;code&gt;--format doc&lt;&#x2F;code&gt;参数让rspec按照我们spec文件中的格式来输出结果。在输出结果中我们可以看到&lt;code&gt;&quot;PENDING: Not yet implemented&quot;&lt;&#x2F;code&gt;，这是因为我们只是写了个测试标题而已，接下来我们补充第一个测试：&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;ruby&quot; style=&quot;background-color:#282828;color:#fdf4c1aa;&quot; class=&quot;language-ruby &quot;&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;require &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b8bb26;&quot;&gt;&amp;#39;spec_helper&amp;#39;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;require &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b8bb26;&quot;&gt;&amp;#39;game&amp;#39;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;module &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8ec07c;&quot;&gt;Codebreaker
+&lt;&#x2F;span&gt;&lt;span&gt;    describe &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;Game &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;do
+&lt;&#x2F;span&gt;&lt;span&gt;	describe &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b8bb26;&quot;&gt;&amp;quot;#start&amp;quot; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;do
+&lt;&#x2F;span&gt;&lt;span&gt;	    it &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b8bb26;&quot;&gt;&amp;quot;sends a welcome message&amp;quot; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;do
+&lt;&#x2F;span&gt;&lt;span&gt;		output &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fe8019;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span&gt; double(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b8bb26;&quot;&gt;&amp;#39;output&amp;#39;&lt;&#x2F;span&gt;&lt;span&gt;)
+&lt;&#x2F;span&gt;&lt;span&gt;		game &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fe8019;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8ec07c;&quot;&gt;Game&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;new&lt;&#x2F;span&gt;&lt;span&gt;(output)
+&lt;&#x2F;span&gt;&lt;span&gt;		output.should_receive(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;:puts&lt;&#x2F;span&gt;&lt;span&gt;).with(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b8bb26;&quot;&gt;&amp;#39;Welcome to Codebreaker!&amp;#39;&lt;&#x2F;span&gt;&lt;span&gt;)
+&lt;&#x2F;span&gt;&lt;span&gt;		game.start
+&lt;&#x2F;span&gt;&lt;span&gt;	    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;end
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;	    it &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b8bb26;&quot;&gt;&amp;quot;prompt for the first guess&amp;quot;
+&lt;&#x2F;span&gt;&lt;span&gt;	&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;end
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;end
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;end
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;这里用到了RSpec中的动态double测试框架，很显然我现在还不知道这个是怎么用的，不过我先跳过。然后创建了一个Game的对象，把output传给它，接下来是期望output能够接收到&lt;code&gt;&#x27;Welcome to Codebreaker!&#x27;&lt;&#x2F;code&gt;的输出消息。最后调用start方法让game跑起来，这样我们就能接收到消息。&lt;&#x2F;p&gt;
+&lt;p&gt;现在再跑一下rspec测试，加上--color参数，我们会看到输出显示&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;code&gt;sends a welcome message (FAILED - 1)&lt;&#x2F;code&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;很显然我们得到了一个红色的失败的结果，因为我们的代码还没有任何实现。一旦我们的到一个红色，我们就必须让他变绿~&lt;&#x2F;p&gt;
+&lt;p&gt;然后我们打开game.rb，来添加代码&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;ruby&quot; style=&quot;background-color:#282828;color:#fdf4c1aa;&quot; class=&quot;language-ruby &quot;&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;module &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8ec07c;&quot;&gt;Codebreaker
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;class &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8ec07c;&quot;&gt;Game
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;def &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8ec07c;&quot;&gt;initialize&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;output&lt;&#x2F;span&gt;&lt;span&gt;)
+&lt;&#x2F;span&gt;&lt;span&gt;	    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;@output &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fe8019;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span&gt; output
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;end
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;def &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8ec07c;&quot;&gt;start
+&lt;&#x2F;span&gt;&lt;span&gt;            &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;@output&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fabd2f;&quot;&gt;puts &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b8bb26;&quot;&gt;&amp;#39;Welcome to Codebreaker!&amp;#39;
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;end
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;end
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;end
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;我们创建了initialize和start方法，再进行一次rspec测试，yeah，我们得到了第一个通过的测试，接下来我们应该进行重构，但是由于当前我们代码还没有任何重复，所以先不做。&lt;&#x2F;p&gt;
+&lt;p&gt;接着再执行一下上一节遗留的cucumber feature，可以看到Then语句已经通过啦。&lt;&#x2F;p&gt;
+&lt;p&gt;第二个测试我们还没有完成，我们需要再修改game_rspec.rb加以下代码&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;ruby&quot; style=&quot;background-color:#282828;color:#fdf4c1aa;&quot; class=&quot;language-ruby &quot;&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span&gt;it &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b8bb26;&quot;&gt;&amp;quot;prompts for the first guess&amp;quot; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;do
+&lt;&#x2F;span&gt;&lt;span&gt;    output &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fe8019;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span&gt; double(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b8bb26;&quot;&gt;&amp;#39;output&amp;#39;&lt;&#x2F;span&gt;&lt;span&gt;)
+&lt;&#x2F;span&gt;&lt;span&gt;    game &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fe8019;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8ec07c;&quot;&gt;Game&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;new&lt;&#x2F;span&gt;&lt;span&gt;(output)
+&lt;&#x2F;span&gt;&lt;span&gt;    output.should_receive(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;:puts&lt;&#x2F;span&gt;&lt;span&gt;).with(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b8bb26;&quot;&gt;&amp;#39;Enter guess:&amp;#39;&lt;&#x2F;span&gt;&lt;span&gt;)
+&lt;&#x2F;span&gt;&lt;span&gt;    game.start
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;end
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;再进行rspec测试，我们会得到第二个红色，我们来修改game.rb代码，在start方法中再加一行输出&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;ruby&quot; style=&quot;background-color:#282828;color:#fdf4c1aa;&quot; class=&quot;language-ruby &quot;&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;def &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8ec07c;&quot;&gt;start
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;@output&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fabd2f;&quot;&gt;puts &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b8bb26;&quot;&gt;&amp;#39;Welcome to Codebreaker!&amp;#39;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;@output&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fabd2f;&quot;&gt;puts &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b8bb26;&quot;&gt;&amp;#39;Enter guess:&amp;#39;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;end
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;这样我们兴高采烈的再跑一次rspec测试，期待得到2个绿色，结果发现却2个测试全都红了，shit！&lt;&#x2F;p&gt;
+&lt;p&gt;让我们来看看到底哪里出了问题，我们发现在2个测试中我们期望输出的是不同的字符，我们程序输出对于2个测试也都是满足的，但是我们发现这2个字符在game.start后是会一起输出的，而我们的2个测试只能识别自己期望的部分，如果多出来的部分就不能识别的，就报失败了。&lt;&#x2F;p&gt;
+&lt;p&gt;我们使用RSpec框架中的&lt;code&gt;as_null_object()&lt;&#x2F;code&gt;方法来解决这个问题，使output匹配时候忽略其他字符，在2个测试中的double方法后面再引用&lt;code&gt;as_null_object&lt;&#x2F;code&gt;方法&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;ruby&quot; style=&quot;background-color:#282828;color:#fdf4c1aa;&quot; class=&quot;language-ruby &quot;&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span&gt;output &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fe8019;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span&gt; double(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b8bb26;&quot;&gt;&amp;#39;output&amp;#39;&lt;&#x2F;span&gt;&lt;span&gt;).as_null_object
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;这样再跑一次RSpec测试，我们得到了2个绿色~&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;ruby&quot; style=&quot;background-color:#282828;color:#fdf4c1aa;&quot; class=&quot;language-ruby &quot;&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span style=&quot;color:#8ec07c;&quot;&gt;Codebreaker&lt;&#x2F;span&gt;&lt;span&gt;::Game
+&lt;&#x2F;span&gt;&lt;span&gt;  &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#928374;&quot;&gt;#start
+&lt;&#x2F;span&gt;&lt;span&gt;    sends a welcome message
+&lt;&#x2F;span&gt;&lt;span&gt;    prompt &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;for&lt;&#x2F;span&gt;&lt;span&gt; the first guess
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;Finished &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;in &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d3869b;&quot;&gt;0.00128&lt;&#x2F;span&gt;&lt;span&gt; seconds
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d3869b;&quot;&gt;2&lt;&#x2F;span&gt;&lt;span&gt; examples, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d3869b;&quot;&gt;0&lt;&#x2F;span&gt;&lt;span&gt; failures
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;ul&gt;
+&lt;li&gt;Red -&amp;gt; Green -&amp;gt; Refactory&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;h2 id=&quot;zhong-gou&quot;&gt;重构&lt;&#x2F;h2&gt;
+&lt;p&gt;很明显，我们要开始考虑重构了，Martin Fowler在他的《重构》这本书里写道：“重构就是在不改变代码外部行为的前提下对内部代码的优化。” 那么我们怎么知道重构后没有改变代码的外在行为呢？这就依靠完整的测试保证，所以完整的测试是进行重构的前提。每当我们重构一处代码，我们跑一下测试得到绿色，说明我们的重构是成功的。&lt;&#x2F;p&gt;
+&lt;p&gt;最基本的重构就是消除重复代码，我们来看看game_spec.rb的代码，基本上每一个测试的前2行都是类似的，这也是某种意义上的重复，我们需要修改掉&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;before-each&quot;&gt;before(:each)&lt;&#x2F;h3&gt;
+&lt;pre data-lang=&quot;ruby&quot; style=&quot;background-color:#282828;color:#fdf4c1aa;&quot; class=&quot;language-ruby &quot;&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;require &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b8bb26;&quot;&gt;&amp;#39;spec_helper&amp;#39;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;require &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b8bb26;&quot;&gt;&amp;#39;game&amp;#39;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;module &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8ec07c;&quot;&gt;Codebreaker
+&lt;&#x2F;span&gt;&lt;span&gt;    describe &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;Game &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;do
+&lt;&#x2F;span&gt;&lt;span&gt;    	describe &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b8bb26;&quot;&gt;&amp;quot;#start&amp;quot; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;do
+&lt;&#x2F;span&gt;&lt;span&gt;    	    before(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;:each&lt;&#x2F;span&gt;&lt;span&gt;) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;do
+&lt;&#x2F;span&gt;&lt;span&gt;    	    	&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;@output &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fe8019;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span&gt; double(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b8bb26;&quot;&gt;&amp;#39;output&amp;#39;&lt;&#x2F;span&gt;&lt;span&gt;).as_null_object
+&lt;&#x2F;span&gt;&lt;span&gt;    	    	&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;@game &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fe8019;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8ec07c;&quot;&gt;Game&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;new&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;@output&lt;&#x2F;span&gt;&lt;span&gt;)
+&lt;&#x2F;span&gt;&lt;span&gt;    	    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;end
+&lt;&#x2F;span&gt;&lt;span&gt;    
+&lt;&#x2F;span&gt;&lt;span&gt;    	    it &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b8bb26;&quot;&gt;&amp;quot;sends a welcome message&amp;quot; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;do
+&lt;&#x2F;span&gt;&lt;span&gt;    	        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;@output&lt;&#x2F;span&gt;&lt;span&gt;.should_receive(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;:puts&lt;&#x2F;span&gt;&lt;span&gt;).with(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b8bb26;&quot;&gt;&amp;#39;Welcome to Codebreaker!&amp;#39;&lt;&#x2F;span&gt;&lt;span&gt;)
+&lt;&#x2F;span&gt;&lt;span&gt;    	        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;@game&lt;&#x2F;span&gt;&lt;span&gt;.start
+&lt;&#x2F;span&gt;&lt;span&gt;    	    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;end
+&lt;&#x2F;span&gt;&lt;span&gt;    
+&lt;&#x2F;span&gt;&lt;span&gt;    	    it &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b8bb26;&quot;&gt;&amp;quot;prompt for the first guess&amp;quot; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;do
+&lt;&#x2F;span&gt;&lt;span&gt;    	        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;@output&lt;&#x2F;span&gt;&lt;span&gt;.should_receive(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;:puts&lt;&#x2F;span&gt;&lt;span&gt;).with(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b8bb26;&quot;&gt;&amp;#39;Enter guess:&amp;#39;&lt;&#x2F;span&gt;&lt;span&gt;)
+&lt;&#x2F;span&gt;&lt;span&gt;    	        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;@game&lt;&#x2F;span&gt;&lt;span&gt;.start
+&lt;&#x2F;span&gt;&lt;span&gt;    	    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;end
+&lt;&#x2F;span&gt;&lt;span&gt;    	&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;end
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;end
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;end
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;这里我们引入了before方法，把每个测试前面的初始化实例放到了前面，这样在rspec执行每个测试之前，都会执行一下before来创建实例对象。&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;let-method&quot;&gt;let(:method)&lt;&#x2F;h3&gt;
+&lt;p&gt;一般当before块中的代码只是初始化实例对象和赋值的时候，我们会用RSpec的let(:method)方法，let方法用一个词语来代替要用的方法和代码块&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;ruby&quot; style=&quot;background-color:#282828;color:#fdf4c1aa;&quot; class=&quot;language-ruby &quot;&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;require &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b8bb26;&quot;&gt;&amp;#39;spec_helper&amp;#39;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;require &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b8bb26;&quot;&gt;&amp;#39;game&amp;#39;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;module &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8ec07c;&quot;&gt;Codebreaker
+&lt;&#x2F;span&gt;&lt;span&gt;    describe &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;Game &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;do
+&lt;&#x2F;span&gt;&lt;span&gt;    	describe &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b8bb26;&quot;&gt;&amp;quot;#start&amp;quot; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;do
+&lt;&#x2F;span&gt;&lt;span&gt;	    let(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;:output&lt;&#x2F;span&gt;&lt;span&gt;) { double(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b8bb26;&quot;&gt;&amp;#39;output&amp;#39;&lt;&#x2F;span&gt;&lt;span&gt;).as_null_object }
+&lt;&#x2F;span&gt;&lt;span&gt;	    let(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;:game&lt;&#x2F;span&gt;&lt;span&gt;)   { &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8ec07c;&quot;&gt;Game&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;new&lt;&#x2F;span&gt;&lt;span&gt;(output) }
+&lt;&#x2F;span&gt;&lt;span&gt;    
+&lt;&#x2F;span&gt;&lt;span&gt;    	    it &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b8bb26;&quot;&gt;&amp;quot;sends a welcome message&amp;quot; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;do
+&lt;&#x2F;span&gt;&lt;span&gt;    	        output.should_receive(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;:puts&lt;&#x2F;span&gt;&lt;span&gt;).with(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b8bb26;&quot;&gt;&amp;#39;Welcome to Codebreaker!&amp;#39;&lt;&#x2F;span&gt;&lt;span&gt;)
+&lt;&#x2F;span&gt;&lt;span&gt;    	        game.start
+&lt;&#x2F;span&gt;&lt;span&gt;    	    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;end
+&lt;&#x2F;span&gt;&lt;span&gt;    
+&lt;&#x2F;span&gt;&lt;span&gt;    	    it &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b8bb26;&quot;&gt;&amp;quot;prompt for the first guess&amp;quot; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;do
+&lt;&#x2F;span&gt;&lt;span&gt;    	        output.should_receive(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;:puts&lt;&#x2F;span&gt;&lt;span&gt;).with(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b8bb26;&quot;&gt;&amp;#39;Enter guess:&amp;#39;&lt;&#x2F;span&gt;&lt;span&gt;)
+&lt;&#x2F;span&gt;&lt;span&gt;    	        game.start
+&lt;&#x2F;span&gt;&lt;span&gt;    	    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;end
+&lt;&#x2F;span&gt;&lt;span&gt;    	&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;end
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;end
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;end
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;然后我们跑一下cucumber的测试，会看到第一个场景的用例已经通过了。
+总结一下：我们从上节遗留的cucumber的失败场景开始，遵循TDD的red，green，refactor的模式用RSpec写了2个测试，学习了按照BDD的cycle从程序外部行为的cucumber测试进入到代码内部的rspec测试。&lt;&#x2F;p&gt;
+</description>
+      </item>
+      <item>
+          <title>The rspec book note 1</title>
+          <pubDate>Thu, 05 Sep 2013 00:00:00 +0000</pubDate>
+          <author>Unknown</author>
+          <link>https://blog.liangliu.me/the-rspec-book-note-1/</link>
+          <guid>https://blog.liangliu.me/the-rspec-book-note-1/</guid>
+          <description xml:base="https://blog.liangliu.me/the-rspec-book-note-1/">&lt;p&gt;最近在看The rspec book这本书，由于平时工作不是这方面的，自己只是非常有兴趣，而且私下时间也不多，只靠每晚学习看的容易忘记，就在这里写一些笔记做复习。&lt;&#x2F;p&gt;
+&lt;p&gt;cucumber主要是由features目录下的多个.feature文件构成BDD场景测试内容，然后针对其中的Given,When,Then,And等语句在featurs目录下的step_definitions子目录中增加ruby语法的行为步骤定义，来实现针对场景的测试执行。&lt;&#x2F;p&gt;
+&lt;p&gt;参照书中的例子，逐步进行学习。&lt;&#x2F;p&gt;
+&lt;p&gt;首先选择一个有趣的游戏--&amp;gt; Codebreaker&lt;&#x2F;p&gt;
+&lt;p&gt;原文对游戏的介绍:&lt;&#x2F;p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Codebreaker is a logic game in which a code-breaker tries to break a secret code created by a code-maker. The code-maker, which will be played by the application we’re going to write, creates a secret code of four numbers between 1 and 6.&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;The code-breaker then gets some number of chances to break the code. In each turn, the code-breaker makes a guess of four numbers (again, 1 to 6). The code-maker then marks the guess with up to four + and - signs.&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;A + indicates an exact match: one of the numbers in the guess is the same as one of the numbers in the secret code and in the same position.&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;A - indicates a number match: one of the numbers in the guess is the same as one of the numbers in the secret code but in a different position.&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;For example, given a secret code 1234, a guess with 4256 would earn a +-. The + is for the 2 in the second position in the guess, which matches the 2 in the secret code in both number and position: an exact match. The - is for the 4 in the first position in the guess, which matches the 4 in the code but not in the same position: a number match.&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;简单的说就是计算机给出一个4位的随机数，然后我们输入我们猜想的数字，如果其中有数字和位置都匹配上，那么会返回一个+号，如果只有数字匹配上，那么则返回一个-号。&lt;&#x2F;p&gt;
+&lt;p&gt;然后开始我们的迭代一，选定以下story进行交付:&lt;&#x2F;p&gt;
+&lt;ol&gt;
+&lt;li&gt;Code-breaker starts game&lt;&#x2F;li&gt;
+&lt;li&gt;Code-breaker submits guess&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;p&gt;接下来就可以写cucumber场景测试，首先在features目录下创建一个codebreaker_starts_game.feature，这里我们要测试的是游戏启动:&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#282828;color:#fdf4c1aa;&quot;&gt;&lt;code&gt;&lt;span&gt;Feature: code-breaker starts the game
+&lt;&#x2F;span&gt;&lt;span&gt;         As a code-breaker
+&lt;&#x2F;span&gt;&lt;span&gt;         I want to start a game
+&lt;&#x2F;span&gt;&lt;span&gt;         So that I can break the code
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;         Scenario: start game
+&lt;&#x2F;span&gt;&lt;span&gt;	    Given I am not yet playing
+&lt;&#x2F;span&gt;&lt;span&gt;	    When I start a new game
+&lt;&#x2F;span&gt;&lt;span&gt;	    Then I should see &amp;quot;Welcome to Codebreaker!&amp;quot;
+&lt;&#x2F;span&gt;&lt;span&gt;	    And I should see &amp;quot;Enter guess:&amp;quot;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;再创建一个codebreaker_submits_guess.feature，来测试输入猜想的数字，并看到结果:&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#282828;color:#fdf4c1aa;&quot;&gt;&lt;code&gt;&lt;span&gt;Feature: code-breaker submits guess
+&lt;&#x2F;span&gt;&lt;span&gt;	In order to play this game
+&lt;&#x2F;span&gt;&lt;span&gt;	As a code breaker
+&lt;&#x2F;span&gt;&lt;span&gt;	I want to submit a guess
+&lt;&#x2F;span&gt;&lt;span&gt;	So that I can try to breake the code
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;        Scenario: all exact matches
+&lt;&#x2F;span&gt;&lt;span&gt;          Given the secret code is &amp;quot;1234&amp;quot;
+&lt;&#x2F;span&gt;&lt;span&gt;          When I guess &amp;quot;1234&amp;quot;
+&lt;&#x2F;span&gt;&lt;span&gt;          Then the mark should be &amp;quot;++++&amp;quot;
+&lt;&#x2F;span&gt;&lt;span&gt;            
+&lt;&#x2F;span&gt;&lt;span&gt;        Scenario: 2 exact matches and 2 number matches
+&lt;&#x2F;span&gt;&lt;span&gt;          Given the secret code is &amp;quot;1234&amp;quot;
+&lt;&#x2F;span&gt;&lt;span&gt;          When I guess &amp;quot;1243&amp;quot;
+&lt;&#x2F;span&gt;&lt;span&gt;          Then the mark should be &amp;quot;++--&amp;quot;
+&lt;&#x2F;span&gt;&lt;span&gt;            
+&lt;&#x2F;span&gt;&lt;span&gt;        Scenario: 1 exact match and 3 number matches
+&lt;&#x2F;span&gt;&lt;span&gt;          Given the secret code is &amp;quot;1234&amp;quot;
+&lt;&#x2F;span&gt;&lt;span&gt;          When I guess &amp;quot;1342&amp;quot;
+&lt;&#x2F;span&gt;&lt;span&gt;          Then the mark should be &amp;quot;+---&amp;quot;
+&lt;&#x2F;span&gt;&lt;span&gt;            
+&lt;&#x2F;span&gt;&lt;span&gt;        Scenario: 4 number matches
+&lt;&#x2F;span&gt;&lt;span&gt;          Given the secret code is &amp;quot;1234&amp;quot;
+&lt;&#x2F;span&gt;&lt;span&gt;          When I guess &amp;quot;4321&amp;quot;
+&lt;&#x2F;span&gt;&lt;span&gt;          Then the mark should be &amp;quot;----&amp;quot;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;这样看来，没写几个测试场景呢，用例就已经很复杂了，而且很重复，DRY，我们可以用Scenario Outline来实现简洁:&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#282828;color:#fdf4c1aa;&quot;&gt;&lt;code&gt;&lt;span&gt;Feature: code-breaker submits guess
+&lt;&#x2F;span&gt;&lt;span&gt;	In order to play this game
+&lt;&#x2F;span&gt;&lt;span&gt;	As a code breaker
+&lt;&#x2F;span&gt;&lt;span&gt;	I want to submit a guess
+&lt;&#x2F;span&gt;&lt;span&gt;	So that I can try to breake the code
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;	Scenario Outline: submit guess
+&lt;&#x2F;span&gt;&lt;span&gt;	    Given the secret code is &amp;quot;&amp;lt;code&amp;gt;&amp;quot;
+&lt;&#x2F;span&gt;&lt;span&gt;	    When I guess &amp;quot;&amp;lt;guess&amp;gt;&amp;quot;
+&lt;&#x2F;span&gt;&lt;span&gt;	    Then the mark should be &amp;quot;&amp;lt;mark&amp;gt;&amp;quot;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;	    Scenarios: no matches
+&lt;&#x2F;span&gt;&lt;span&gt;	      | code | guess | mark |
+&lt;&#x2F;span&gt;&lt;span&gt;	      | 1234 | 5678  |      |
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;	    Scenarios: 1 number correct
+&lt;&#x2F;span&gt;&lt;span&gt;	      | code | guess | mark |
+&lt;&#x2F;span&gt;&lt;span&gt;	      | 1234 | 1555  | +    |
+&lt;&#x2F;span&gt;&lt;span&gt;	      | 1234 | 2555  | _    |
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;	    Scenarios: 2 number correct
+&lt;&#x2F;span&gt;&lt;span&gt;	      | code | guess | mark |
+&lt;&#x2F;span&gt;&lt;span&gt;	      | 1234 | 5254  | ++   |
+&lt;&#x2F;span&gt;&lt;span&gt;	      | 1234 | 5154  | +-   |
+&lt;&#x2F;span&gt;&lt;span&gt;	      | 1234 | 2545  | --   |
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;	    Scenarios: 3 mumber correct
+&lt;&#x2F;span&gt;&lt;span&gt;	      | code | guess | mark |
+&lt;&#x2F;span&gt;&lt;span&gt;	      | 1234 | 5234  | +++  |
+&lt;&#x2F;span&gt;&lt;span&gt;	      | 1234 | 5134  | ++-  |
+&lt;&#x2F;span&gt;&lt;span&gt;	      | 1234 | 5124  | +--  |
+&lt;&#x2F;span&gt;&lt;span&gt;	      | 1234 | 5123  | ---  |
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;	    Scenarios: all number correct
+&lt;&#x2F;span&gt;&lt;span&gt;	      | code | guess | mark |
+&lt;&#x2F;span&gt;&lt;span&gt;	      | 1234 | 1234  | ++++ |
+&lt;&#x2F;span&gt;&lt;span&gt;	      | 1234 | 1243  | ++-- |
+&lt;&#x2F;span&gt;&lt;span&gt;	      | 1234 | 1423  | +--- |
+&lt;&#x2F;span&gt;&lt;span&gt;	      | 1234 | 4321  | ---- |
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;这样就好多了，容易读也好理解，就算是非技术人员也能看懂了。&lt;&#x2F;p&gt;
+&lt;p&gt;接下来我们要定义测试步骤了，在features目录下建立子文件夹step_definitions,再建立codebreaker_steps.rb文件。&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;ruby&quot; style=&quot;background-color:#282828;color:#fdf4c1aa;&quot; class=&quot;language-ruby &quot;&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;Given &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b8bb26;&quot;&gt;&#x2F;^I am not yet playing$&#x2F; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;do
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;end
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;When &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b8bb26;&quot;&gt;&#x2F;^I start a new game$&#x2F; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;do
+&lt;&#x2F;span&gt;&lt;span&gt;    game &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fe8019;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8ec07c;&quot;&gt;Codebreaker&lt;&#x2F;span&gt;&lt;span&gt;::&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8ec07c;&quot;&gt;Game&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;new&lt;&#x2F;span&gt;&lt;span&gt;(output)
+&lt;&#x2F;span&gt;&lt;span&gt;    game.start
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;end
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;Then &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b8bb26;&quot;&gt;&#x2F;^I should see &amp;quot;([^&amp;quot;]*)&amp;quot;$&#x2F; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;do &lt;&#x2F;span&gt;&lt;span&gt;|&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;message&lt;&#x2F;span&gt;&lt;span&gt;|
+&lt;&#x2F;span&gt;&lt;span&gt;    output.messages.should &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;include&lt;&#x2F;span&gt;&lt;span&gt;(message)
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;end
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;class &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8ec07c;&quot;&gt;Output
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;def &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8ec07c;&quot;&gt;messages
+&lt;&#x2F;span&gt;&lt;span&gt;      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;@messages &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fe8019;&quot;&gt;||= &lt;&#x2F;span&gt;&lt;span&gt;[]
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;end
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;def &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8ec07c;&quot;&gt;puts&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;message&lt;&#x2F;span&gt;&lt;span&gt;)
+&lt;&#x2F;span&gt;&lt;span&gt;      messages &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fe8019;&quot;&gt;&amp;lt;&amp;lt;&lt;&#x2F;span&gt;&lt;span&gt; message
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;end
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;end
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;def &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8ec07c;&quot;&gt;output
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;@output &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fe8019;&quot;&gt;||= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8ec07c;&quot;&gt;Output&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;new
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;end
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;测试会失败，我们需要写我们game.rb程序了&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;ruby&quot; style=&quot;background-color:#282828;color:#fdf4c1aa;&quot; class=&quot;language-ruby &quot;&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;module &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8ec07c;&quot;&gt;Codebreaker
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;class &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8ec07c;&quot;&gt;Game
+&lt;&#x2F;span&gt;&lt;span&gt;    	&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;def &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8ec07c;&quot;&gt;initialize&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;output&lt;&#x2F;span&gt;&lt;span&gt;)
+&lt;&#x2F;span&gt;&lt;span&gt;    	&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;end
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    	&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;def &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8ec07c;&quot;&gt;start
+&lt;&#x2F;span&gt;&lt;span&gt;    	&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;end
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;end
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;end
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;再进行测试我们会看到提示输出与期望的不一致&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#282828;color:#fdf4c1aa;&quot;&gt;&lt;code&gt;&lt;span&gt;Scenario: start game
+&lt;&#x2F;span&gt;&lt;span&gt;        Given I am not yet playing
+&lt;&#x2F;span&gt;&lt;span&gt;        When I start a new game
+&lt;&#x2F;span&gt;&lt;span&gt;        Then I should see &amp;quot;Welcome to Codebreaker!&amp;quot;
+&lt;&#x2F;span&gt;&lt;span&gt;          expected [] to include &amp;quot;Welcome to Codebreaker!&amp;quot;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;至于这里怎么再修改，我们会在后面进行学习。&lt;&#x2F;p&gt;
+&lt;p&gt;总结一下：这里我们了解了cucumber的基本目录结构，学习了gherkin语法，包括feature, Scenario, Given, When, Then以及Scenario Outline的用法，到此我们已经从Codebreaker游戏的行为出发点来用cucumber语法进行描述测试，下一节我们会学习使用rspec对每个独立对象的行为进行分析。&lt;&#x2F;p&gt;
+</description>
+      </item>
+    </channel>
+</rss>

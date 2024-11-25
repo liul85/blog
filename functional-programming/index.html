@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+<meta content="text/html; charset=UTF-8" http-equiv="content-type"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+<meta name="robots" content="index, follow">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<title>函数式编程笔记(1)-基本概念</title>
+
+
+
+
+<meta name="title" content="函数式编程笔记(1)-基本概念">
+
+
+<meta name="description" content="functional programming concepts">
+
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://blog.liangliu.me/functional-programming/">
+
+<meta property="og:site_name" content="Liang&#x27;s blog">
+
+
+<meta property="og:title" content="函数式编程笔记(1)-基本概念">
+
+
+<meta property="og:description" content="functional programming concepts">
+
+
+<link rel="canonical" href="https://blog.liangliu.me/functional-programming/">
+
+
+
+
+<link rel="alternate" type="application/atom+xml" title="RSS" href="https://blog.liangliu.me/rss.xml"> 
+
+
+
+
+<link rel="stylesheet" type="text/css" href="https://blog.liangliu.me/main.css">
+
+
+
+    </head>
+    <body>
+	<header>
+	    
+                <a class="title" href="https:&#x2F;&#x2F;blog.liangliu.me">
+                    <h1>Liang&#x27;s blog</h1>
+                </a>
+                <nav>
+                    <p>
+                    <a href="https:&#x2F;&#x2F;blog.liangliu.me">Home</a>
+                    <a href="/about">Me</a>
+                    <a href="/rss.xml">Rss</a>
+                    </p>
+                </nav>
+	    
+	</header>
+	<main>
+	    
+<h1 class="page-title">函数式编程笔记(1)-基本概念</h1>
+<p>
+    <span>2017-04-05</span>
+</p>
+
+<h2 id="yi-deng-gong-min">一等公民</h2>
+<p>不要把函数理解为特殊的一个类型，他们跟普通数据类型一样，可以被存在数组里，当作参数传递，赋值给变量等等。
+把函数当作普通数据类型这样的代码会更容易理解和维护，同时需要正确的为函数命名。</p>
+<h2 id="chun-han-shu">纯函数</h2>
+<blockquote>
+<p>纯函数是指对于一个函数，如果有相同的输入，那么输出永远都是相同的，并且没有任何副作用。</p>
+</blockquote>
+<p>比如一个map函数</p>
+<pre data-lang="javascript" style="background-color:#282828;color:#fdf4c1aa;" class="language-javascript "><code class="language-javascript" data-lang="javascript"><span style="color:#fa5c4b;">const </span><span style="color:#8ec07c;">double </span><span style="color:#fe8019;">= </span><span>(</span><span style="color:#fdf4c1;">x</span><span>) </span><span style="color:#fa5c4b;">=&gt; </span><span>{
+</span><span>  </span><span style="color:#fa5c4b;">return </span><span style="color:#fdf4c1;">x.</span><span style="color:#8ec07c;">map</span><span>(</span><span style="color:#fdf4c1;">n </span><span style="color:#fa5c4b;">=&gt; </span><span>{</span><span style="color:#fa5c4b;">return </span><span style="color:#fdf4c1;">n </span><span style="color:#fe8019;">* </span><span style="color:#d3869b;">2</span><span>});
+</span><span>}
+</span></code></pre>
+<p>如果输入一个数组a，就会得到一个double后的新数组，只要a是相同的，那么结果永远都是相同的，并且原来的数组a不会被修改。</p>
+<p>在函数式编程中，我们希望的都是这样的纯函数，他们在调用中是:</p>
+<ol>
+<li>可靠的；</li>
+<li>适合作cache；</li>
+<li>非常容易去测试；</li>
+</ol>
+<p>调用纯函数会很大程度减少bug的产生几率和你为了找到bug而花费的debug时间。</p>
+<p>当被调用的时候，纯函数一定可以被它的计算结果所替换掉，并且不会影响程序的运行结果，这被称为<code>透明引用</code> (<a href="https://en.wikipedia.org/wiki/Referential_transparency">referential transparency</a>)。</p>
+<p>纯函数只依赖于它被调用时候的输入。</p>
+<p>来看看几个不属于纯函数的例子：</p>
+<pre data-lang="javascript" style="background-color:#282828;color:#fdf4c1aa;" class="language-javascript "><code class="language-javascript" data-lang="javascript"><span style="font-style:italic;color:#928374;">//splice change the value of parameter
+</span><span style="color:#fa5c4b;">const </span><span style="color:#fdf4c1;">arr </span><span style="color:#fe8019;">= </span><span>[</span><span style="color:#d3869b;">1</span><span>,</span><span style="color:#d3869b;">2</span><span>,</span><span style="color:#d3869b;">3</span><span>];
+</span><span style="color:#fdf4c1;">arr.</span><span style="color:#fabd2f;">splice</span><span>(</span><span style="color:#d3869b;">0</span><span>, </span><span style="color:#d3869b;">2</span><span>);
+</span><span>
+</span><span style="font-style:italic;color:#928374;">//the result of add depends variable out of it&#39;s scope.
+</span><span style="color:#fa5c4b;">const </span><span style="color:#fdf4c1;">baseNum </span><span style="color:#fe8019;">= </span><span style="color:#d3869b;">8</span><span>;
+</span><span style="color:#fa5c4b;">const </span><span style="color:#8ec07c;">add </span><span style="color:#fe8019;">= </span><span>(</span><span style="color:#fdf4c1;">x</span><span>) </span><span style="color:#fa5c4b;">=&gt; </span><span>{
+</span><span>  </span><span style="color:#fa5c4b;">return </span><span style="color:#fdf4c1;">x </span><span style="color:#fe8019;">+ </span><span style="color:#fdf4c1;">baseNum</span><span>;
+</span><span>}
+</span><span>
+</span><span style="font-style:italic;color:#928374;">// impure function producing a side effect
+</span><span style="color:#fa5c4b;">function </span><span style="color:#8ec07c;">showAlert</span><span>() {
+</span><span>  </span><span style="color:#8ec07c;">alert</span><span>(</span><span style="color:#b8bb26;">&#39;This is a side effect!&#39;</span><span>);
+</span><span>  </span><span style="color:#8ec07c;">console</span><span style="color:#fdf4c1;">.</span><span style="color:#fabd2f;">log</span><span>(</span><span style="color:#b8bb26;">&#39;alert triggerd.&#39;</span><span>);
+</span><span>}
+</span><span>
+</span><span style="font-style:italic;color:#928374;">// impure function calling pure functions procedurally
+</span><span style="color:#fa5c4b;">function </span><span style="color:#8ec07c;">proceduralFn</span><span>() {
+</span><span>  </span><span style="color:#fa5c4b;">const </span><span style="color:#fdf4c1;">result1 </span><span style="color:#fe8019;">= </span><span style="color:#8ec07c;">pureFnFirst</span><span>(</span><span style="color:#d3869b;">1</span><span>);
+</span><span>  </span><span style="color:#fa5c4b;">const </span><span style="color:#fdf4c1;">result2 </span><span style="color:#fe8019;">= </span><span style="color:#8ec07c;">pureFnLast</span><span>(</span><span style="color:#d3869b;">2</span><span>);
+</span><span>  </span><span style="color:#8ec07c;">console</span><span style="color:#fdf4c1;">.</span><span style="color:#fabd2f;">log</span><span>(</span><span style="color:#b8bb26;">`Done with ${</span><span style="color:#fdf4c1;">result1</span><span style="color:#b8bb26;">} and ${</span><span style="color:#fdf4c1;">result2</span><span style="color:#b8bb26;">}!`</span><span>);
+</span><span>}
+</span><span>
+</span><span style="font-style:italic;color:#928374;">// impure function that resembles a pure function,
+</span><span style="font-style:italic;color:#928374;">// but returns different results given the same inputs
+</span><span style="color:#fa5c4b;">function </span><span style="color:#8ec07c;">getRandomRange</span><span>(</span><span style="color:#fdf4c1;">min</span><span>, </span><span style="color:#fdf4c1;">max</span><span>) {
+</span><span>  </span><span style="color:#fa5c4b;">return </span><span style="color:#fabd2f;">Math</span><span style="color:#fdf4c1;">.</span><span style="color:#fabd2f;">random</span><span>() </span><span style="color:#fe8019;">* </span><span>(</span><span style="color:#fdf4c1;">max </span><span style="color:#fe8019;">- </span><span style="color:#fdf4c1;">min</span><span>) </span><span style="color:#fe8019;">+ </span><span style="color:#fdf4c1;">min</span><span>;
+</span><span>}
+</span></code></pre>
+<p>总结一下纯函数的一些特征：</p>
+<ul>
+<li>纯函数必定要接收参数。</li>
+<li>相同的输入参数肯定会得到相同的结果。</li>
+<li>纯函数只依赖于自己的scope，并且不会对外部scope的状态做出改变。</li>
+<li>纯函数不会有任何副作用。</li>
+<li>纯函数不会调用任何非纯函数。</li>
+</ul>
+<p>非纯函数的一些特征：</p>
+<ul>
+<li>会修改它自己scope之外的状态。</li>
+<li>没有返回值。</li>
+<li>对于相同的输入，输出结果不确定。</li>
+</ul>
+<h4 id="guan-yu-fu-zuo-yong-side-effects">关于副作用(side effects)</h4>
+<p>副作用的关键部分在于“副”，大部分bug都是从这里出来的。对于副作用(side effects)在javascript里有下面一些定义:</p>
+<p>如果有函数或者表达式修改了它自己的scope之外的状态，那么这个结果就叫做副作用。一些常见例子有：</p>
+<ol>
+<li>调用API</li>
+<li>更改文件系统</li>
+<li>操作DOM</li>
+<li>弹出alert，或者调用console打印log</li>
+<li>写数据库等。</li>
+</ol>
+<h1 id="ke-li-hua-curry">柯里化(curry)</h1>
+<p>在了解了纯函数的概念后，我们肯定都期望后面运用函数式编程写出来的都是纯函数，我们需要一些工具来辅助我们做这些任务，柯里化(curry)就是一个非常重要的工具。</p>
+<blockquote>
+<p>柯里化后的函数可以接收一部分参数，返回一个新的函数来接收剩余的参数. 我们可以一次性传所有参数来得到计算结果，也可以顺序传递多次参数，分多次调用得最终到结果。</p>
+</blockquote>
+<p>举个例子：</p>
+<pre data-lang="javascript" style="background-color:#282828;color:#fdf4c1aa;" class="language-javascript "><code class="language-javascript" data-lang="javascript"><span style="color:#fa5c4b;">const </span><span style="color:#fdf4c1;">add </span><span style="color:#fe8019;">= </span><span style="color:#fdf4c1;">R.</span><span style="color:#8ec07c;">curry</span><span>((</span><span style="color:#fdf4c1;">x</span><span>, </span><span style="color:#fdf4c1;">y</span><span>) </span><span style="color:#fa5c4b;">=&gt; </span><span>{
+</span><span>  </span><span style="color:#fa5c4b;">return </span><span style="color:#fdf4c1;">x </span><span style="color:#fe8019;">+ </span><span style="color:#fdf4c1;">y</span><span>;
+</span><span>});
+</span><span>
+</span><span style="font-style:italic;color:#928374;">//get 3
+</span><span style="color:#8ec07c;">add</span><span>(</span><span style="color:#d3869b;">1</span><span>, </span><span style="color:#d3869b;">2</span><span>)
+</span><span>
+</span><span style="font-style:italic;color:#928374;">//get a new function
+</span><span style="color:#fa5c4b;">const </span><span style="color:#fdf4c1;">f1 </span><span style="color:#fe8019;">= </span><span style="color:#8ec07c;">add</span><span>(</span><span style="color:#d3869b;">1</span><span>)
+</span><span>
+</span><span style="font-style:italic;color:#928374;">//call the new function, get the result 3
+</span><span style="color:#8ec07c;">f1</span><span>(</span><span style="color:#d3869b;">2</span><span>)
+</span></code></pre>
+<p>我们定义了一个柯里化后的加法函数，可以直接传递2个参数给这个函数它会立即返回结果。也可以只传递一个参数，它会返回一个新的函数，这个函数接收一个参数，再次调用这个函数会返回最终结果。</p>
+<p>再看一个例子：</p>
+<pre data-lang="javascript" style="background-color:#282828;color:#fdf4c1aa;" class="language-javascript "><code class="language-javascript" data-lang="javascript"><span style="color:#fa5c4b;">const </span><span style="color:#fdf4c1;">formatName </span><span style="color:#fe8019;">= </span><span style="color:#fdf4c1;">R.</span><span style="color:#8ec07c;">curry</span><span>((</span><span style="color:#fdf4c1;">firstName</span><span>, </span><span style="color:#fdf4c1;">middleName</span><span>, </span><span style="color:#fdf4c1;">lastName</span><span>) </span><span style="color:#fa5c4b;">=&gt; </span><span>{
+</span><span>  </span><span style="color:#fa5c4b;">return </span><span style="color:#b8bb26;">`${</span><span style="color:#fdf4c1;">firstName</span><span style="color:#b8bb26;">} ${</span><span style="color:#fdf4c1;">middleName</span><span style="color:#b8bb26;">} ${</span><span style="color:#fdf4c1;">lastName</span><span style="color:#b8bb26;">}`</span><span>;
+</span><span>});
+</span><span>
+</span><span style="color:#fa5c4b;">const </span><span style="color:#fdf4c1;">formatDavid </span><span style="color:#fe8019;">= </span><span style="color:#8ec07c;">formatName</span><span>(</span><span style="color:#b8bb26;">&#39;David&#39;</span><span>, </span><span style="color:#b8bb26;">&#39;M&#39;</span><span>)
+</span><span>
+</span><span style="font-style:italic;color:#928374;">//get &#39;David M Xie&#39;
+</span><span style="color:#8ec07c;">formatDavid</span><span>(</span><span style="color:#b8bb26;">&#39;Xie&#39;</span><span>)
+</span><span>
+</span><span style="font-style:italic;color:#928374;">//get &#39;David M Dou&#39;
+</span><span style="color:#8ec07c;">formatDavid</span><span>(</span><span style="color:#b8bb26;">&#39;Dou&#39;</span><span>)
+</span><span>
+</span><span style="color:#fa5c4b;">const </span><span style="color:#fdf4c1;">formatJames </span><span style="color:#fe8019;">= </span><span style="color:#8ec07c;">formatName</span><span>(</span><span style="color:#b8bb26;">&#39;James&#39;</span><span>)
+</span><span>
+</span><span style="font-style:italic;color:#928374;">//get &#39;James L Jones&#39;
+</span><span style="color:#8ec07c;">formatJames</span><span>(</span><span style="color:#b8bb26;">&#39;L&#39;</span><span>, </span><span style="color:#b8bb26;">&#39;Jones&#39;</span><span>)
+</span><span style="font-style:italic;color:#928374;">//get &#39;James R Paul&#39;
+</span><span style="color:#8ec07c;">formatJames</span><span>(</span><span style="color:#b8bb26;">&#39;R&#39;</span><span>, </span><span style="color:#b8bb26;">&#39;Paul&#39;</span><span>)
+</span></code></pre>
+<p>会发现代码的reuse非常方便。而且我们特意把变化的数据，放在最后，函数的逻辑跟数据完全没有关系，让reuse会更方便，一会就能看到这样的好处。</p>
+<h4 id="shi-ji-ying-yong">实际应用</h4>
+<p>最近在写一个api通过solr来作搜索查询，需要从用户的requestModel中拿到请求的条件，然后转成solr的query去solr中作search，其中用了不少柯里化，使整个代码看起来清晰不少。</p>
+<pre data-lang="javascript" style="background-color:#282828;color:#fdf4c1aa;" class="language-javascript "><code class="language-javascript" data-lang="javascript"><span style="color:#fabd2f;">module</span><span>.</span><span style="color:#fabd2f;">exports </span><span style="color:#fe8019;">= </span><span>(</span><span style="color:#fdf4c1;">request</span><span>) </span><span style="color:#fa5c4b;">=&gt; </span><span>{
+</span><span> </span><span style="color:#fa5c4b;">let </span><span style="color:#fdf4c1;">query </span><span style="color:#fe8019;">= </span><span style="color:#fdf4c1;">solr.</span><span style="color:#8ec07c;">createClient</span><span>()</span><span style="color:#fdf4c1;">.</span><span style="color:#8ec07c;">query</span><span>()
+</span><span>
+</span><span> </span><span style="color:#fa5c4b;">return </span><span style="color:#fdf4c1;">R.</span><span style="color:#8ec07c;">compose</span><span>(
+</span><span>    </span><span style="color:#8ec07c;">buildRows</span><span>(</span><span style="color:#fdf4c1;">request</span><span>),
+</span><span>    </span><span style="color:#8ec07c;">buildStart</span><span>(</span><span style="color:#fdf4c1;">request</span><span>),
+</span><span>    </span><span style="color:#8ec07c;">buildSearchRange</span><span>(</span><span style="color:#b8bb26;">&#39;price&#39;</span><span>, </span><span style="color:#fdf4c1;">request</span><span>.</span><span style="color:#fdf4c1;">minPrice</span><span>, </span><span style="color:#fdf4c1;">request</span><span>.</span><span style="color:#fdf4c1;">maxPrice</span><span>),
+</span><span>    </span><span style="color:#8ec07c;">buildSearchRange</span><span>(</span><span style="color:#b8bb26;">&#39;area&#39;</span><span>, </span><span style="color:#fdf4c1;">request</span><span>.</span><span style="color:#fdf4c1;">minArea</span><span>, </span><span style="color:#fdf4c1;">request</span><span>.</span><span style="color:#fdf4c1;">maxArea</span><span>),
+</span><span>    </span><span style="color:#8ec07c;">buildSearchRooms</span><span>(</span><span style="color:#b8bb26;">&#39;bedroom&#39;</span><span>, </span><span style="color:#fdf4c1;">request</span><span>.</span><span style="color:#fdf4c1;">bedroom</span><span>),
+</span><span>    </span><span style="color:#8ec07c;">buildCustomText</span><span>(</span><span style="color:#fdf4c1;">request</span><span>),
+</span><span>    </span><span style="color:#fdf4c1;">buildSortBy</span><span>,
+</span><span>  )(</span><span style="color:#fdf4c1;">query</span><span>)
+</span><span>}
+</span><span>
+</span><span style="color:#fa5c4b;">const </span><span style="color:#fdf4c1;">buildRows </span><span style="color:#fe8019;">= </span><span style="color:#fdf4c1;">R.</span><span style="color:#8ec07c;">curry</span><span>((</span><span style="color:#fdf4c1;">request</span><span>, </span><span style="color:#fdf4c1;">query</span><span>) </span><span style="color:#fa5c4b;">=&gt; </span><span>{
+</span><span>  </span><span style="color:#fa5c4b;">if </span><span>(</span><span style="color:#fdf4c1;">request</span><span>.</span><span style="color:#fabd2f;">rows</span><span>) {
+</span><span>    </span><span style="color:#fdf4c1;">query.</span><span style="color:#8ec07c;">rows</span><span>(</span><span style="color:#fdf4c1;">request</span><span>.</span><span style="color:#fabd2f;">rows</span><span>)
+</span><span>  } </span><span style="color:#fa5c4b;">else </span><span>{
+</span><span>    </span><span style="color:#fdf4c1;">query.</span><span style="color:#8ec07c;">rows</span><span>(</span><span style="color:#d3869b;">20</span><span>)
+</span><span>  }
+</span><span>  </span><span style="color:#fa5c4b;">return </span><span style="color:#fdf4c1;">query
+</span><span>})
+</span><span>
+</span><span style="color:#fa5c4b;">const </span><span style="color:#fdf4c1;">buildStart </span><span style="color:#fe8019;">= </span><span style="color:#fdf4c1;">R.</span><span style="color:#8ec07c;">curry</span><span>((</span><span style="color:#fdf4c1;">request</span><span>, </span><span style="color:#fdf4c1;">query</span><span>) </span><span style="color:#fa5c4b;">=&gt; </span><span>{
+</span><span>  </span><span style="color:#fa5c4b;">if </span><span>(</span><span style="color:#fdf4c1;">request</span><span>.</span><span style="color:#fdf4c1;">offset</span><span>) {
+</span><span>    </span><span style="color:#fdf4c1;">query.</span><span style="color:#8ec07c;">start</span><span>(</span><span style="color:#fdf4c1;">request</span><span>.</span><span style="color:#fdf4c1;">offset</span><span>)
+</span><span>  }
+</span><span>  </span><span style="color:#fa5c4b;">return </span><span style="color:#fdf4c1;">query
+</span><span>})
+</span><span>
+</span><span style="color:#fa5c4b;">const </span><span style="color:#fdf4c1;">buildCustomText </span><span style="color:#fe8019;">= </span><span style="color:#fdf4c1;">R.</span><span style="color:#8ec07c;">curry</span><span>((</span><span style="color:#fdf4c1;">request</span><span>, </span><span style="color:#fdf4c1;">query</span><span>) </span><span style="color:#fa5c4b;">=&gt; </span><span>{
+</span><span>  </span><span style="color:#fa5c4b;">if </span><span>(</span><span style="color:#fdf4c1;">request</span><span>.</span><span style="color:#fdf4c1;">keyword</span><span>) {
+</span><span>    </span><span style="color:#fdf4c1;">query.</span><span style="color:#8ec07c;">q</span><span>(</span><span style="color:#fdf4c1;">request</span><span>.</span><span style="color:#fdf4c1;">keyword</span><span>)</span><span style="color:#fdf4c1;">.</span><span style="color:#8ec07c;">df</span><span>(</span><span style="color:#b8bb26;">&#39;keywords&#39;</span><span>)
+</span><span>  }
+</span><span>
+</span><span>  </span><span style="color:#fa5c4b;">return </span><span style="color:#fdf4c1;">query
+</span><span>})
+</span><span>
+</span><span style="color:#fa5c4b;">const </span><span style="color:#fdf4c1;">buildSearchRange </span><span style="color:#fe8019;">= </span><span style="color:#fdf4c1;">R.</span><span style="color:#8ec07c;">curry</span><span>((</span><span style="color:#fdf4c1;">fqField</span><span>, </span><span style="color:#fdf4c1;">min</span><span>, </span><span style="color:#fdf4c1;">max</span><span>, </span><span style="color:#fdf4c1;">query</span><span>) </span><span style="color:#fa5c4b;">=&gt; </span><span>{
+</span><span>  </span><span style="color:#fa5c4b;">if </span><span>(</span><span style="color:#fdf4c1;">min </span><span style="color:#fe8019;">&amp;&amp; </span><span style="color:#fdf4c1;">max</span><span>) {
+</span><span>    </span><span style="color:#fdf4c1;">query.</span><span style="color:#8ec07c;">matchFilter</span><span>(</span><span style="color:#fdf4c1;">fqField</span><span>, </span><span style="color:#b8bb26;">`[${</span><span style="color:#fdf4c1;">min</span><span style="color:#b8bb26;">} TO ${</span><span style="color:#fdf4c1;">max</span><span style="color:#b8bb26;">}]`</span><span>)
+</span><span>    </span><span style="color:#fa5c4b;">return </span><span style="color:#fdf4c1;">query
+</span><span>  }
+</span><span>
+</span><span>  </span><span style="color:#fa5c4b;">if </span><span>(</span><span style="color:#fdf4c1;">min</span><span>) {
+</span><span>    </span><span style="color:#fdf4c1;">query.</span><span style="color:#8ec07c;">matchFilter</span><span>(</span><span style="color:#fdf4c1;">fqField</span><span>, </span><span style="color:#b8bb26;">`[${</span><span style="color:#fdf4c1;">min</span><span style="color:#b8bb26;">} TO *]`</span><span>)
+</span><span>  }
+</span><span>
+</span><span>  </span><span style="color:#fa5c4b;">if </span><span>(</span><span style="color:#fdf4c1;">max</span><span>) {
+</span><span>    </span><span style="color:#fdf4c1;">query.</span><span style="color:#8ec07c;">matchFilter</span><span>(</span><span style="color:#fdf4c1;">fqField</span><span>, </span><span style="color:#b8bb26;">`[* TO ${</span><span style="color:#fdf4c1;">max</span><span style="color:#b8bb26;">}]`</span><span>)
+</span><span>  }
+</span><span>
+</span><span>  </span><span style="color:#fa5c4b;">return </span><span style="color:#fdf4c1;">query
+</span><span>})
+</span><span>
+</span><span style="color:#fa5c4b;">const </span><span style="color:#fdf4c1;">buildSearchRooms </span><span style="color:#fe8019;">= </span><span style="color:#fdf4c1;">R.</span><span style="color:#8ec07c;">curry</span><span>((</span><span style="color:#fdf4c1;">fqField</span><span>, </span><span style="color:#fdf4c1;">filterValue</span><span>, </span><span style="color:#fdf4c1;">query</span><span>) </span><span style="color:#fa5c4b;">=&gt; </span><span>{
+</span><span>  </span><span style="color:#fa5c4b;">if </span><span>(</span><span style="color:#fdf4c1;">filterValue</span><span>) {
+</span><span>    </span><span style="color:#fdf4c1;">query.</span><span style="color:#8ec07c;">matchFilter</span><span>(</span><span style="color:#fdf4c1;">fqField</span><span>, </span><span style="color:#fdf4c1;">filterValue</span><span>)
+</span><span>  }
+</span><span>
+</span><span>  </span><span style="color:#fa5c4b;">return </span><span style="color:#fdf4c1;">query
+</span><span>})
+</span><span>
+</span><span style="color:#fa5c4b;">const </span><span style="color:#8ec07c;">buildSortBy </span><span style="color:#fe8019;">= </span><span>(</span><span style="color:#fdf4c1;">query</span><span>) </span><span style="color:#fa5c4b;">=&gt; </span><span>{
+</span><span>  </span><span style="color:#fdf4c1;">query.</span><span style="color:#fabd2f;">sort</span><span>({feature: </span><span style="color:#b8bb26;">&#39;desc&#39;</span><span>, dorder: </span><span style="color:#b8bb26;">&#39;desc&#39;</span><span>})
+</span><span>  </span><span style="color:#fa5c4b;">return </span><span style="color:#fdf4c1;">query
+</span><span>}
+</span></code></pre>
+<p>在上面的代码中，主要逻辑是要根据requestModel中的不同field来构造不同的solr query条件，通过几个不同的函数来处理自己的逻辑，
+最后调用compose把她们组合起来得到最终的结果, 这几个函数都被柯里化了，在组合的时候只传给他们一部分参数，返回一个新的function，
+然后在组合调用最外面把最后一个参数传递进去，经过这一串的函数处理后，便得到了最终计算结果。
+其实compose中就是一个pipeline，我更倾向于使用pipe操作。</p>
+<h1 id="zu-he-compose">组合 (compose)</h1>
+<p>组合简单来看就是把多个函数通过组合让他们生成一个新的函数，然后传入数据进行处理得到最后结果。
+简单的例子</p>
+<pre data-lang="javascript" style="background-color:#282828;color:#fdf4c1aa;" class="language-javascript "><code class="language-javascript" data-lang="javascript"><span style="color:#fa5c4b;">const </span><span style="color:#8ec07c;">compose </span><span style="color:#fe8019;">= </span><span>(</span><span style="color:#fdf4c1;">f</span><span>, </span><span style="color:#fdf4c1;">g</span><span>) </span><span style="color:#fa5c4b;">=&gt; </span><span>{
+</span><span>  </span><span style="color:#fa5c4b;">return </span><span>(</span><span style="color:#fdf4c1;">x</span><span>) </span><span style="color:#fa5c4b;">=&gt; </span><span>{
+</span><span>    </span><span style="color:#fa5c4b;">return </span><span style="color:#8ec07c;">f</span><span>(</span><span style="color:#8ec07c;">g</span><span>(</span><span style="color:#fdf4c1;">x</span><span>));
+</span><span>  }
+</span><span>};
+</span><span>
+</span></code></pre>
+<p>这个例子中，f,g都是函数，x是要处理的数据。</p>
+<pre data-lang="javascript" style="background-color:#282828;color:#fdf4c1aa;" class="language-javascript "><code class="language-javascript" data-lang="javascript"><span style="font-style:italic;color:#928374;">//get &#39;T&#39;
+</span><span style="color:#8ec07c;">compose</span><span>(</span><span style="color:#fdf4c1;">upperCase</span><span>, </span><span style="color:#fdf4c1;">getFirst</span><span>)(</span><span style="color:#b8bb26;">&#39;test&#39;</span><span>)
+</span></code></pre>
+<p>函数g会先于f执行，因此从调用角度来看，数据'test'在一个函数处理pipeline中先进入<code>getFirst</code>, 处理后的结果再进入<code>upperCase</code>, 最后结果返回。
+在compose中数据是从右向左的顺序来在函数中流动。</p>
+<p>compose的顺序反过来就是pipeline，喜欢用pipe(f1, f2, f3, f4)(data)的方式来处理数据。</p>
+<h1 id="pointfree">PointFree</h1>
+<blockquote>
+<p>Pointfree style means never having to say your data</p>
+</blockquote>
+<p>永远不要说出你的数据除非你马上就要使用它，即函数式变成你无需提及你将要操作的数据是什么样子的，只有当你要处理这个数据时候它才需要出场。
+我们上面的那个构建solr query例子已经很明显，可以再看一个小例子：</p>
+<pre data-lang="javascript" style="background-color:#282828;color:#fdf4c1aa;" class="language-javascript "><code class="language-javascript" data-lang="javascript"><span style="font-style:italic;color:#928374;">// 非 pointfree，因为提到了数据：data
+</span><span style="color:#fa5c4b;">var </span><span style="color:#8ec07c;">snakeCase </span><span style="color:#fe8019;">= </span><span style="color:#fa5c4b;">function </span><span>(</span><span style="color:#fdf4c1;">name</span><span>) {
+</span><span>  </span><span style="color:#fa5c4b;">return </span><span style="color:#fdf4c1;">name.</span><span style="color:#fabd2f;">toLowerCase</span><span>()</span><span style="color:#fdf4c1;">.</span><span style="color:#fabd2f;">replace</span><span>(</span><span style="color:#b8bb26;">&#39;-&#39;</span><span>, </span><span style="color:#b8bb26;">&#39;_&#39;</span><span>);
+</span><span>};
+</span><span>
+</span><span style="font-style:italic;color:#928374;">// pointfree
+</span><span style="color:#fa5c4b;">var </span><span style="color:#fdf4c1;">snakeCase </span><span style="color:#fe8019;">= </span><span style="color:#8ec07c;">compose</span><span>(</span><span style="color:#8ec07c;">replace</span><span>(</span><span style="color:#b8bb26;">&#39;-&#39;</span><span>, </span><span style="color:#b8bb26;">&#39;_&#39;</span><span>), </span><span style="color:#fdf4c1;">toLowerCase</span><span>);
+</span><span>
+</span><span style="font-style:italic;color:#928374;">//调用时候才需要数据
+</span><span style="color:#8ec07c;">snakeCase</span><span>(</span><span style="color:#fdf4c1;">name</span><span>)
+</span></code></pre>
+<p>函数式编程和柯里化对于pointfree的实现帮助太大了，通过柯里化和组合或者管道你可以不用关心传进来的数据是什么，只需要关注处理它的规则即可，这也是 <code>Ramda</code>和<code>lodash</code>或者<code>underscore</code>的最大区别。</p>
+<h4 id="can-kao">参考</h4>
+<p>https://drboolean.gitbooks.io/mostly-adequate-guide/content/
+https://auth0.com/blog/glossary-of-modern-javascript-concepts</p>
+
+
+<p class="tags-data">
+
+
+<a href="/tags/function">#function</a>
+
+
+</p>
+
+	</main>
+	<footer>
+	    <span class="copyright">© Liang&#x27;s blog · Powered by <a target="_blank" href="https://getzola.org/">Zola</a></span>
+
+	</footer>
+    </body>
+</html>

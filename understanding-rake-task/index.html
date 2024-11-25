@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+<meta content="text/html; charset=UTF-8" http-equiv="content-type"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+<meta name="robots" content="index, follow">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<title>Understanding rake task</title>
+
+
+
+
+<meta name="title" content="Understanding rake task">
+
+
+<meta name="description" content="ruby learning notes">
+
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://blog.liangliu.me/understanding-rake-task/">
+
+<meta property="og:site_name" content="Liang&#x27;s blog">
+
+
+<meta property="og:title" content="Understanding rake task">
+
+
+<meta property="og:description" content="ruby learning notes">
+
+
+<link rel="canonical" href="https://blog.liangliu.me/understanding-rake-task/">
+
+
+
+
+<link rel="alternate" type="application/atom+xml" title="RSS" href="https://blog.liangliu.me/rss.xml"> 
+
+
+
+
+<link rel="stylesheet" type="text/css" href="https://blog.liangliu.me/main.css">
+
+
+
+    </head>
+    <body>
+	<header>
+	    
+                <a class="title" href="https:&#x2F;&#x2F;blog.liangliu.me">
+                    <h1>Liang&#x27;s blog</h1>
+                </a>
+                <nav>
+                    <p>
+                    <a href="https:&#x2F;&#x2F;blog.liangliu.me">Home</a>
+                    <a href="/about">Me</a>
+                    <a href="/rss.xml">Rss</a>
+                    </p>
+                </nav>
+	    
+	</header>
+	<main>
+	    
+<h1 class="page-title">Understanding rake task</h1>
+<p>
+    <span>2014-05-26</span>
+</p>
+
+<p>在新项目中接触ruby的Rake任务很多，自己还是不太了解Rake，闲了找了一些资料学习一下，做一些笔记。
+其实Rake就是ruby中的make，一个用ruby开发的构建工具。Rake真的是一个功能强大，又很贴心的工具，正如它的英文意思<em>耙子</em>--给力的劳动工具。</p>
+<h3 id="rakede-you-dian">Rake的优点</h3>
+<ul>
+<li>
+<p>通过Rake我们可以以任务的方式创建和运行脚本。对于大型的应用项目，我们总是会编写很多脚本用来实现自动化，比如数据迁移，清空缓存，清理数据库等。Rake就是一个非常好的任务脚本管理工具，会让你的任务脚本管理非常轻松。</p>
+</li>
+<li>
+<p>同时Rake还轻松提供了任务执行之间的依赖关系管理，加入任务1依赖于任务2，那么在执行任务1的时候任务2会自动被调用执行，非常方便。</p>
+</li>
+</ul>
+<h3 id="an-zhuang-rake">安装Rake</h3>
+<p>非常简单, gem 安装搞定！</p>
+<pre data-lang="sh" style="background-color:#282828;color:#fdf4c1aa;" class="language-sh "><code class="language-sh" data-lang="sh"><span style="color:#fdf4c1;">$ gem install rake
+</span></code></pre>
+<h3 id="xue-xie-rakejiao-ben">学写Rake脚本</h3>
+<ul>
+<li>简单rake任务</li>
+</ul>
+<p>创建一个Rakefile，写一个简单的rake任务，从hello world开始吧。</p>
+<pre data-lang="ruby" style="background-color:#282828;color:#fdf4c1aa;" class="language-ruby "><code class="language-ruby" data-lang="ruby"><span>desc </span><span style="color:#b8bb26;">&quot;say hello&quot;
+</span><span>task </span><span style="color:#fdf4c1;">:hello </span><span style="color:#fa5c4b;">do
+</span><span>  </span><span style="color:#fabd2f;">puts </span><span style="color:#b8bb26;">&quot;hello, world!&quot;
+</span><span style="color:#fa5c4b;">end
+</span></code></pre>
+<p>然后在文件目录下执行 rake -T 就能看到这个任务, rake hello就可以执行rake任务了。</p>
+<pre data-lang="sh" style="background-color:#282828;color:#fdf4c1aa;" class="language-sh "><code class="language-sh" data-lang="sh"><span style="color:#fdf4c1;">➜  rake -T
+</span><span style="color:#fdf4c1;">rake hello  </span><span style="font-style:italic;color:#928374;"># say hello
+</span><span style="color:#fdf4c1;">➜  rake hello
+</span><span style="color:#fdf4c1;">hello world!
+</span></code></pre>
+<ul>
+<li>指定默认任务</li>
+</ul>
+<p>在Rakefile中加入默认任务, 然后执行rake不指定任务名，就执行默认任务。</p>
+<pre data-lang="sh" style="background-color:#282828;color:#fdf4c1aa;" class="language-sh "><code class="language-sh" data-lang="sh"><span style="color:#fdf4c1;">task :default =</span><span style="color:#fe8019;">&gt;</span><span style="color:#fdf4c1;"> :hello
+</span></code></pre>
+<pre data-lang="sh" style="background-color:#282828;color:#fdf4c1aa;" class="language-sh "><code class="language-sh" data-lang="sh"><span style="color:#fdf4c1;">➜  rake
+</span><span style="color:#fdf4c1;">hello world!
+</span></code></pre>
+<ul>
+<li>创建具有依赖关系的任务</li>
+</ul>
+<p>一般我们在执行一些脚本时候，会有一些预制条件，比如跑测试时候，需要提前在数据库中插入一些测试数据。在rake中，可以把预制条件写为一个任务，其他任务依赖于这个时候，可以把它加到依赖关系中</p>
+<pre data-lang="ruby" style="background-color:#282828;color:#fdf4c1aa;" class="language-ruby "><code class="language-ruby" data-lang="ruby"><span>desc </span><span style="color:#b8bb26;">&quot;purchase vegetables&quot;
+</span><span>task </span><span style="color:#fdf4c1;">:purchase_vegetables </span><span style="color:#fa5c4b;">do
+</span><span>	</span><span style="color:#fabd2f;">puts </span><span style="color:#b8bb26;">&quot;Buy some potatoes from Walmart!&quot;
+</span><span style="color:#fa5c4b;">end
+</span><span>
+</span><span>desc </span><span style="color:#b8bb26;">&quot;cook&quot;
+</span><span>task </span><span style="color:#fdf4c1;">:cook </span><span>=&gt; </span><span style="color:#fdf4c1;">:purchase_vegetables </span><span style="color:#fa5c4b;">do
+</span><span>	</span><span style="color:#fabd2f;">puts </span><span style="color:#b8bb26;">&quot;I am cooking...&quot;
+</span><span style="color:#fa5c4b;">end
+</span></code></pre>
+<p>在这个例子中，做饭依赖于买菜，我们把给做饭加一个依赖任务， 这样在执行cook任务时候，purchase_vegetables 任务会被自动执行。</p>
+<ul>
+<li>命名空间</li>
+</ul>
+<p>如果在一个项目中有多个模块，由很多rake任务，那么我们可以用命名空间来防止rake任务名重复</p>
+<pre data-lang="ruby" style="background-color:#282828;color:#fdf4c1aa;" class="language-ruby "><code class="language-ruby" data-lang="ruby"><span>namespace </span><span style="color:#b8bb26;">&quot;main&quot; </span><span style="color:#fa5c4b;">do
+</span><span>	desc </span><span style="color:#b8bb26;">&quot;build the main programe&quot;
+</span><span>	task </span><span style="color:#fdf4c1;">:build </span><span style="color:#fa5c4b;">do
+</span><span>		</span><span style="font-style:italic;color:#928374;">#build the main programe.
+</span><span>	</span><span style="color:#fa5c4b;">end
+</span><span style="color:#fa5c4b;">end
+</span><span>
+</span><span>namespace </span><span style="color:#b8bb26;">&quot;module1&quot; </span><span style="color:#fa5c4b;">do
+</span><span>	desc </span><span style="color:#b8bb26;">&quot;build the module1&quot;
+</span><span>	task </span><span style="color:#fdf4c1;">:build </span><span style="color:#fa5c4b;">do
+</span><span>		</span><span style="font-style:italic;color:#928374;">#build the module1.
+</span><span>	</span><span style="color:#fa5c4b;">end
+</span><span style="color:#fa5c4b;">end
+</span></code></pre>
+<p>这样即使同名的任务在一个Rakefile里，由于它们属于不同的namespace，任务之间胡不相干。在调用的时候加上namespace名字即可。namespace还支持嵌套。</p>
+<ul>
+<li>带参数的rake任务</li>
+</ul>
+<p>很多情况我们需要rake任务能够接受参数来扩展可用性，在rake 0.8.0 版本后可以支持直接传入参数</p>
+<pre data-lang="ruby" style="background-color:#282828;color:#fdf4c1aa;" class="language-ruby "><code class="language-ruby" data-lang="ruby"><span>desc </span><span style="color:#b8bb26;">&quot;build the programe&quot;
+</span><span>task </span><span style="color:#fdf4c1;">:build</span><span>, [</span><span style="color:#fdf4c1;">:programename</span><span>, </span><span style="color:#fdf4c1;">:programeversion</span><span>] </span><span style="color:#fa5c4b;">do </span><span>|</span><span style="color:#fdf4c1;">t</span><span>, </span><span style="color:#fdf4c1;">args</span><span>|
+</span><span>	</span><span style="color:#fabd2f;">puts </span><span style="color:#b8bb26;">&quot;building programe </span><span>#{</span><span style="color:#fdf4c1;">args.programename</span><span>}</span><span style="color:#b8bb26;"> with version </span><span>#{</span><span style="color:#fdf4c1;">args.programeversion</span><span>}</span><span style="color:#b8bb26;"> successful!&quot;
+</span><span style="color:#fa5c4b;">end
+</span></code></pre>
+<p>查看rake任务时候可以看到build任务可以以数组的形式接受2个参数</p>
+<pre data-lang="sh" style="background-color:#282828;color:#fdf4c1aa;" class="language-sh "><code class="language-sh" data-lang="sh"><span style="color:#fdf4c1;">➜ rake -T
+</span><span style="color:#fdf4c1;">rake build</span><span style="color:#fa5c4b;">[</span><span style="color:#fdf4c1;">programename,programeversion</span><span style="color:#fa5c4b;">]  </span><span style="font-style:italic;color:#928374;"># build the programe
+</span><span style="color:#fdf4c1;">➜ rake build</span><span style="color:#fa5c4b;">[</span><span style="color:#fdf4c1;">mysite, 0.1.0</span><span style="color:#fa5c4b;">]
+</span><span style="color:#fdf4c1;">building programe mysite with version 0.1.0 successful!
+</span></code></pre>
+<p><em>Notes</em>
+如果你用的是zsh，那么可能会碰到zsh返回如下:</p>
+<pre data-lang="sh" style="background-color:#282828;color:#fdf4c1aa;" class="language-sh "><code class="language-sh" data-lang="sh"><span style="color:#fdf4c1;">zsh: no matches found: build</span><span style="color:#fa5c4b;">[</span><span style="color:#fdf4c1;">mysite,0.1.0</span><span style="color:#fa5c4b;">]
+</span></code></pre>
+<p>在zsh下必须用单引号把传递的参数引起来:</p>
+<pre data-lang="sh" style="background-color:#282828;color:#fdf4c1aa;" class="language-sh "><code class="language-sh" data-lang="sh"><span style="color:#fdf4c1;">rake build</span><span style="color:#b8bb26;">&#39;[mysite, 0.1.0]&#39;
+</span></code></pre>
+<p>如果不想每次都这么麻烦，可以在~/.zshrc中把glob对rake的扩展关掉:</p>
+<pre data-lang="sh" style="background-color:#282828;color:#fdf4c1aa;" class="language-sh "><code class="language-sh" data-lang="sh"><span style="color:#fabd2f;">alias </span><span style="color:#8ec07c;">rake</span><span style="color:#fe8019;">=</span><span style="color:#b8bb26;">&quot;noglob rake&quot;
+</span></code></pre>
+<p>这些都是rake的最基本用法，更多更高级的特性可以从rake<a href="http://rake.rubyforge.org/">官网</a>学习</p>
+
+
+<p class="tags-data">
+
+
+<a href="/tags/ruby">#Ruby</a>
+
+
+</p>
+
+	</main>
+	<footer>
+	    <span class="copyright">© Liang&#x27;s blog · Powered by <a target="_blank" href="https://getzola.org/">Zola</a></span>
+
+	</footer>
+    </body>
+</html>

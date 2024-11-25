@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+      <title>Liang&#x27;s blog - Pomodoro</title>
+      <link>https://blog.liangliu.me</link>
+      <description></description>
+      <generator>Zola</generator>
+      <language>en</language>
+      <atom:link href="https://blog.liangliu.me/tags/pomodoro/rss.xml" rel="self" type="application/rss+xml"/>
+      <lastBuildDate>Tue, 15 Oct 2013 00:00:00 +0000</lastBuildDate>
+      <item>
+          <title>Pomodoro time technique</title>
+          <pubDate>Tue, 15 Oct 2013 00:00:00 +0000</pubDate>
+          <author>Unknown</author>
+          <link>https://blog.liangliu.me/pomodoro-technique/</link>
+          <guid>https://blog.liangliu.me/pomodoro-technique/</guid>
+          <description xml:base="https://blog.liangliu.me/pomodoro-technique/">&lt;p&gt;如果你经常在工作学习的时候总是被各种事情分心，忍不住各种社交应用的诱惑，总是在多个事情之间来回跳转，一上午过去了你突然感觉到自己什么也没完成，番茄工作法应该比较适合你。&lt;&#x2F;p&gt;
+&lt;p&gt;如果你经常关注一些提高工作效率或者时间管理类的图书文章或者博客，或许你已经听说过Pomodoro时间管理方法，这是一种非常好的能让人在短时间内集中注意力工作学习，提高效率的方法。我第一次接触Pomodoro方法是在Railscast-china上看KevinWang做&lt;a href=&quot;http:&#x2F;&#x2F;railscasts-china.com&#x2F;episodes&#x2F;kevin-open-class&quot;&gt;live show&lt;&#x2F;a&gt;，他演示了如何用Rails做一个ruby-china的克隆版，在这个视频中他使用了Pomodoro将时间划成多个时间片，在每一个25分钟内给大家演示如何编程，然后在休息的5分钟内跟大家互动答疑，非常好的一个实践，让我在学习rails的同时也获取到了高效工作的时间管理方法。&lt;&#x2F;p&gt;
+&lt;p&gt;Pomodoro时间管理方法基本上是这样的&lt;&#x2F;p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;确定我们的目标(比如在codecademy学习完一节ruby课程)。&lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;设定一个25分钟的定时器。&lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;开始集中精力学习，直到定时器时间到提醒你。&lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;设定一个休息5分钟的定时器。&lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;休息时间到了之后，再进行下一个25分钟学习定时器。&lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;可以选择每4个25分钟后做一个长时间的休息，比如15分钟。&lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;p&gt;我觉得这就是在一个短期时间内给自己设定一个目标，然后集中精力去做完它，在这个过程中我们会努力避免一些分心的事情，你会告诉自己等这个番茄钟过后我再做其他事情，这就是番茄工作法有效的原因。试想一下如果你坐在电脑前想花1个小时来写篇博客，你认为你真的可以完成吗？事实上在这个过程中你会发现自己不断的分心，浏览微博，逛汽车论坛等等。而使用番茄钟后你会被某种目标自我督促在这25分钟集中精力完成你的工作。&lt;&#x2F;p&gt;
+&lt;p&gt;说说番茄钟工具吧，你可以去网上淘一个真正的番茄钟，或者像kevin那样使用&lt;a href=&quot;http:&#x2F;&#x2F;tomatoi.st&#x2F;&quot;&gt;pomodoro online&lt;&#x2F;a&gt;来做你的番茄钟。&lt;&#x2F;p&gt;
+&lt;p&gt;我在chrome中安装了一个叫做&lt;a href=&quot;https:&#x2F;&#x2F;chrome.google.com&#x2F;webstore&#x2F;detail&#x2F;strict-workflow&#x2F;cgmnfnmlficgeijcalkgnnkigkefkbhd?utm_source=plus&quot;&gt;Strict Workflow&lt;&#x2F;a&gt;的pomodoro扩展来做我的番茄钟，非常好用，到点提醒，而且在你工作的25分钟内这个小扩展会自动屏蔽一些网站，比如facebook,youtube,twitter等容易让你分心的网站，只有在休息的5分钟内才能访问，当然屏蔽的网站列表可以自己编辑，可以设为黑名单或者白名单。&lt;&#x2F;p&gt;
+</description>
+      </item>
+    </channel>
+</rss>
