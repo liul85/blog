@@ -4,7 +4,6 @@ title = "使用AWS ECS部署应用并自动扩展"
 description = "how to deploy to AWS ECS"
 
 [taxonomies]
-categories = ["Programming"]
 tags = ["AWS", "Container"]
 +++
 

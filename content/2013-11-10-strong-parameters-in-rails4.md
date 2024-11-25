@@ -4,7 +4,6 @@ description = "rails learning notes"
 title = "Strong parameters in rails4"
 
 [taxonomies]
-categories = ["Programming"]
 tags = ["Rails"]
 +++
 

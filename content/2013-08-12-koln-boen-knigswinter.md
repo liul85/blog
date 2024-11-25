@@ -4,7 +4,6 @@ description = "与小伙伴们出去玩"
 title = "happy Koln -> Boen -> königswinter"
 
 [taxonomies]
-categories = ["Travel"]
 tags = ["Koln", "Boen", "königswinte"]
 +++
 

@@ -4,7 +4,6 @@ title = "函数式编程笔记(2)-Hindley-Milner类型签名"
 description = "function signature"
 
 [taxonomies]
-categories = ["Programming"]
 tags = ["function"]
 +++
 

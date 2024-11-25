@@ -4,7 +4,6 @@ title = "Understanding rake task"
 description = "ruby learning notes"
 
 [taxonomies]
-categories = ["Programming"]
 tags = ["Ruby"]
 +++
 

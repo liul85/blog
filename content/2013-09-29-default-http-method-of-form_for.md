@@ -4,7 +4,6 @@ description = "rails learning notes"
 title = "Default http method of form_for"
 
 [taxonomies]
-categories = ["Programming"]
 tags = ["Ruby", "Rails"]
 +++
 

@@ -4,7 +4,6 @@ description = "rspec learning notes"
 title = "The rspec book note 1"
 
 [taxonomies]
-categories = ["Programming"]
 tags = ["Ruby", "Rspec", "Cucumber"]
 +++
 

@@ -1,14 +1,13 @@
 base_url = "https://blog.liangliu.me"
 title = "Liang's blog"
 
-theme = "prose"
+theme = "bearblog"
 compile_sass = true
 generate_feeds = true
 feed_filenames = ["rss.xml"]
 
 taxonomies = [
-    { name = "tags", feed = true},
-    { name = "categories", feed = true},
+    { name = "tags", feed = true}
 ]
 
 [markdown]

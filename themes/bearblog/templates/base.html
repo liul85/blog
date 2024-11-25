@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="{% if page %}{{ page.lang }}{% else %}{{ config.default_language }}{% endif %}">
+    <head>
+        {% include "head.html" %}
+    </head>
+    <body>
+	<header>
+	    {% block header %}
+                <a class="title" href="{{ config.base_url }}">
+                    <h1>{{ config.title }}</h1>
+                </a>
+                <nav>
+                    <p>
+                    <a href="{{ config.base_url }}">Home</a>
+                    <a href="/about">Me</a>
+                    <a href="/rss.xml">Rss</a>
+                    </p>
+                </nav>
+	    {% endblock header %}
+	</header>
+	<main>
+	    {% block content %}
+	    {% endblock content %}
+	</main>
+	<footer>
+	    {% include "footer.html" %}
+	</footer>
+    </body>
+</html>

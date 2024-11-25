@@ -4,7 +4,6 @@ description = "manage time, work effectively"
 title = "Pomodoro time technique"
 
 [taxonomies]
-categories = ["Learn"]
 tags = ["Pomodoro"]
 +++
 

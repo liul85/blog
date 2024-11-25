@@ -3,7 +3,6 @@ date = 2013-07-21
 title = "Lost in Germany"
 
 [taxonomies]
-categories = ["Travel"]
 tags = ["Dusseldorf", "Germany", "Golf"]
 +++
 

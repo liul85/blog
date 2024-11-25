@@ -4,7 +4,6 @@ description = "travelling in Dusseldorf"
 title = "杜塞街景"
 
 [taxonomies]
-categories = ["Travel"]
 tags = ["Dusseldorf"]
 +++
 

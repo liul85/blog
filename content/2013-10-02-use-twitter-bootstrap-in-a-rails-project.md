@@ -4,7 +4,6 @@ description = "twitter-bootstrap notes"
 title = "Use twitter-bootstrap in a rails project"
 
 [taxonomies]
-categories = ["Programming"]
 tags = ["Ruby", "Rails"]
 +++
 

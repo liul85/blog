@@ -4,7 +4,6 @@ date = 2020-04-22
 description = "最近一段时间的概况"
 
 [taxonomies]
-categories = ["Life"]
 tags = ["Covid-19", "Melbourne"]
 +++
 

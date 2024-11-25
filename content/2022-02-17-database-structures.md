@@ -4,7 +4,6 @@ title = "数据库背后的数据结构"
 description = "DDIA读书笔记"
 
 [taxonomies]
-categories = ["Database"]
 tags = ["database"]
 +++
 ### 来设计一个最简单的数据库

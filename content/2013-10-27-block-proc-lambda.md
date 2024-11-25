@@ -4,7 +4,6 @@ description = "ruby learning notes"
 title = "block, proc, lambda"
 
 [taxonomies]
-categories = ["Programming"]
 tags = ["Ruby"]
 +++
 

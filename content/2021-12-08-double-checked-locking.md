@@ -4,7 +4,6 @@ date = 2021-12-08
 description = ""
 
 [taxonomies]
-categories = ["Programming"]
 tags = ["synchronized", "java", "multi-thread"]
 +++
 

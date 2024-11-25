@@ -2,6 +2,8 @@
 title = "沟通 - 回答问题的原则"
 date = 2022-10-22
 description = "回答问题的原则"
+[taxonomies]
+  tags = ["communication"]
 +++
 
 最近在听王建硕的一系列关于web3的[视频](https://www.youtube.com/playlist?list=PLHdtP1fOoM5phfxUCuwdrMlia6fhQwjmy)以及播客，在他与Sarah做的[第二次播客](https://www.xiaoyuzhoufm.com/episode/6308b3ec4ee49e5ecd8b8f8e)的最后，有一个很有意思的讨论，也引起了我的一些共鸣和想法，值得记录一下。
